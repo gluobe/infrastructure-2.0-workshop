@@ -1,7 +1,7 @@
 # **LAB 4 - ELB** #
 
 ## Visual Interpretation ##
-Right now, we only have one server and it's carrying the full load of a savage Black Friday sale which we're blogging about. We'll need multiple servers and a Load Balancer to share the network load over the two instances.
+Right now, we only have one server and it's carrying the full load of a savage Black Friday sale which we're blogging about. We'll need multiple servers and an (elastic) Load Balancer to share the network load over the two instances.
 
 ![](../Images/Lab4.png?raw=true)
 

@@ -5,6 +5,7 @@ We've been slowly extracting every service used by what used to be one EC2 Insta
 
 ![](../Images/Lab7.png?raw=true)
 
+## 1. Cleanup ##
 ### 1.1. Deleting your EC2 Instances ###
 Using an Autoscaling Group we can automatically scale the amount of EC2 Instances we're running according to how big of a load the website is enduring. It'll create and configure or destroy them accordingly. Now let's destroy our old EC2 Instances.
 
@@ -91,16 +92,16 @@ Previously, your instances were manually linked to the Load Balancer. We cannot 
     * Click `Save (to the right)`.
         * You might have to refresh the page if it's stuck due to permission issues.
 
-### 6. Configuring the application ###
+### 5. Configuring the application ###
 We'll have to configure Wordpress again after having created a blank slate.
 
 1. Go to `<your_ID>.gluo.cloud`.
-    * **Make sure you do it through this link** and not on one of the instance's ip's. Wordpress' installation will go corrupt if you don't and then delete an instance.
+    * **Make sure you do it through this link or the load balancer's DNS name** and not on one of the instance's ip's. Wordpress' installation will go corrupt if you don't and then delete an instance.
 1. Configure the Wordpress site again using the RDS Endpoint.
     * If you're stuck doing this look back at `lab 2, step 5` and `lap 3, step 5`.
 
 
-### 5. Scaling your application (Optional) ###
+### 6. Scaling your application (Optional) ###
 Feeling like the load on your servers is getting too high? We can easily add another EC2 Instance by scaling up (or down) our Autoscaling Group. It will do this automatically as well, if you configure it right.
 
 1. Go to `Services -> EC2 -> Auto Scaling Groups`.
@@ -116,7 +117,7 @@ Feeling like the load on your servers is getting too high? We can easily add ano
 
 ![](../Images/ASGAndELBInstancesGoingUp.png?raw=true)
 
-### 6. Remove everything ###
+### 7. Remove everything ###
 Having everything configured properly feels good. Making a new stack for a different customer will still require you to set everything up manually again though. We have a solution for that in the next lab, but you can start by removing everything manually right now. :)
 
 Do **not** remove your private key yet (Services -> EC2 -> Key Pairs). We could use it in the next lab.

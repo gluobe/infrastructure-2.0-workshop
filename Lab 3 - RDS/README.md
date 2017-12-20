@@ -1,4 +1,4 @@
-# **LAB 3 - EC2 & RDS** #
+# **LAB 3 - RDS** #
 
 ## Visual Interpretation ##
 Next we'll create an RDS (Amazon Relational Database Service). This is an Amazon Managed Service, meaning Amazon takes more responsibility for the database being available. Previously on our EC2 instance we had pretty much no safeguards in place for making sure the database was kept running. Amazon's Service Level Agreement gives us an uptime of somewhere around 99.9%. Quite a bit better than our locally installed unscalable and volatile MySQL server.

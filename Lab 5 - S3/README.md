@@ -1,8 +1,8 @@
 # **LAB 5 - S3** #
 
 ## Visual Interpretation ##
+S3 is a file storing and sharing service a lot like Dropbox, Google Drive and OneDrive.
 Now that our Wordpress data is being stored in the RDS, we might as well synchronize our Wordpress files to the cloud as well.
-This is going to be a lot slower but it shows just how versatile AWS is.
 
 ![](../Images/Lab5.png?raw=true)
 

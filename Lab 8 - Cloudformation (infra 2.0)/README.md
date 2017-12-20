@@ -38,19 +38,19 @@ Creating every service will take about 10 to 15 minutes.
 This script will setup:
 
 * An RDS functioning as our Wordpress database.
-* An S3 Bucket.
+* An S3 Bucket functioning as our fileserver.
 * An Autoscaling Group that creates 2 EC2 Instances.
-* A Launch Configuration that uses scripts to 
+* A Launch Configuration that uses scripts on the ASG instances to 
     * install AWSCLI and S3FS.
     * push a fresh Wordpress installation to the new S3 Bucket.
-    * sync the "wordpress" web map to the Bucket on both instances.
+    * sync the S3 bucket to the wordpress/ webmap on both instances.
 * A Load Balancer that points to any amount of EC2 Instances linked to the Autoscaling Group.
 * A Route53 DNS Record pointing to the Load Balancer.
 
 The only thing you have to do still is configure Wordpress(, which can honestly also be easily automated).
 
 ### 2. Verify installation ###
-Once the installation is complete, we can navigate to the "Outputs" tab when having your cloudformation stack `lab-app-<your_ID>` selected. It provides some handy links to our created services.
+**Once the installation is complete, we can navigate to the "Outputs" tab** when having your cloudformation stack `lab-app-<your_ID>` selected. It provides some handy links to our created services.
 
 Connecting to `lab-app-<your_ID>.gluo.cloud` (the load balancer) could give you a nice "The connection was reset" for up to 5-10 minutes up until it's created. Verify the EC2 instances from the Autoscaling Group are connected to the Load Balancer (Services -> EC2 -> Load Balancers -> Click a Load Balancer -> Click the "Instances" tab). Once their status is "InService", you should be able to connect. 
 
