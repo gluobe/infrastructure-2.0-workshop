@@ -9,7 +9,7 @@ Chaos Monkey randomly terminates virtual machine instances and containers that r
 
 Yes, you read that right: **production**. The only true way to know your infrastructure is fool proof is to regularly destroy key services to see if things still regenerate and run properly. 
 
-![](../Images/InfrastructureAsCodeVisualised.png?raw=true)
+![](../Images/ChaosEngineeringVisualised.png?raw=true)
 
 ### 1. Remove an EC2 Instance in an Autoscaling Group ###
 If you have some time left, we can have some fun with the instances.
