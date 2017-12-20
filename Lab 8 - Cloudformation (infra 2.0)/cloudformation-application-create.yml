@@ -1,0 +1,486 @@
+Description: Wordpress application stack
+
+
+Parameters:
+
+  # Config Variables
+  
+  StudentIdParam:
+    Type: String
+    Default: "1"
+    Description: Student Id of Name
+    AllowedPattern: "[a-z0-9]+"
+    ConstraintDescription: Value must be lowercase letters or numbers.
+  KeyNameParam:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the AWS Elastic Beanstalk instance
+    ConstraintDescription: Value must be the name of an existing EC2 KeyPair.
+  AmiParam:
+    Type: String
+    Default: "ami-8fd760f6" 
+    Description: Ami Id to run the application.
+  Ec2InstanceTypeParam:
+    Type: String
+    Default: "t2.micro"
+    Description: InstanceType of the launched EC2 instance
+    AllowedValues:
+      - t2.nano
+      - t2.micro
+      - t2.small
+  DomainNameParam:
+    Type: String
+    Default: "gluo.cloud"
+    Description: hostname to create subdomain
+  VpcIdParam:
+    Type: AWS::EC2::VPC::Id
+    Description: The ID of the VPC
+  PublicSubnetsParam:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Select the different public subnet IDs
+  RDSUsernameParam:
+    Type: String
+    Default: "wordpress" # Temp Username admin
+    Description: Master username for the rds instance 
+  RDSPasswordParam:
+    Type: String
+    Default: "Cloud247" # Temp Password Admin
+    NoEcho: true
+    MinLength: 1
+    MaxLength: 41
+    AllowedPattern: ^[a-zA-Z0-9]*$
+    Description: Master password for the rds instance 
+  RDSInstanceClassParam:
+    Type: String
+    Default: "db.t2.micro" # Temp Username admin
+    Description: InstanceClass of the launched RDS instance
+    AllowedValues:
+      - db.t2.micro
+      - db.t2.small
+  RDSAllocatedStorageParam:
+    Type: String
+    Default: "20"
+    Description: Storage available to the RDS instance
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Required"
+        Parameters:
+          - StudentIdParam
+          - KeyNameParam
+          - AmiParam
+          - Ec2InstanceTypeParam
+          - DomainNameParam
+          - VpcIdParam
+          - PublicSubnetsParam
+          - RDSUsernameParam
+          - RDSPasswordParam
+          - RDSInstanceClassParam
+          - RDSAllocatedStorageParam
+
+Resources:
+
+  # RDS - define Database
+
+    # Add to DB-subnet-group
+
+  rdsSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnets in which the RDS will be available.
+      SubnetIds: !Ref PublicSubnetsParam
+
+    # SecurityGroup
+
+  rdsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "3306/TCP in from specific security group"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: "3306"
+          ToPort: "3306"
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VpcIdParam
+      Tags: 
+        - Key: Name
+          Value: !Sub "CloudFormation-${AWS::StackName}-RDSSecurityGroup"
+
+    # DB Parameter Group
+
+  rdsParameterGroup:
+    Type: AWS::RDS::DBParameterGroup
+    Properties:
+      Description: Database parameters
+      Family: MySQL5.6
+      Parameters:
+        character_set_server: utf8
+        collation_server: utf8_bin
+        #default_storage_engine: InnoDB # Cannot be changed whit CloudFormation
+        max_allowed_packet: "300000000" # >256M
+        innodb_log_file_size: "2100000000" # >2GB
+        tx_isolation: READ-COMMITTED
+      Tags: 
+        - Key: Name
+          Value: !Sub "CloudFormation-${AWS::StackName}-RDSParameterGroup"
+
+    # DB Instance
+
+  rdsInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      MasterUsername: !Ref RDSUsernameParam
+      MasterUserPassword: !Ref RDSPasswordParam
+      PubliclyAccessible: false
+      Engine: MySQL
+      EngineVersion: "5.6"
+      DBInstanceClass: !Ref RDSInstanceClassParam
+      StorageType: gp2
+      AllocatedStorage: !Ref RDSAllocatedStorageParam
+      DBSubnetGroupName: !Ref rdsSubnetGroup
+      DBParameterGroupName: !Ref rdsParameterGroup
+      VPCSecurityGroups:
+        - !Ref rdsSecurityGroup
+      Tags: 
+        - Key: Name
+          Value: !Sub "CloudFormation-${AWS::StackName}-RDS"
+
+  # S3 bucket 
+
+  appS3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Sub "cloudformation-${StudentIdParam}-bucket"
+      VersioningConfiguration:
+        Status: Suspended
+
+  # Role and Profile
+
+  appRole:
+    # Needs permission to push: S3, CloudWatch
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: !Sub "CloudFormation-${AWS::StackName}-RolePolicyDocument"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: 'S3BucketAccess'
+                Effect: "Allow"
+                Action:
+                  - "s3:Get*"
+                  - "s3:List*"
+                  - "s3:PutObject"
+                  - "s3:PutObjectAcl"
+                Resource: "*"
+
+  cfnInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref appRole
+
+# ELB
+
+  # SecurityGroup
+
+  appElbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow all/tcp out, http/tcp in"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: "80"
+          ToPort: "80"
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VpcIdParam
+      Tags: 
+        - Key: Name
+          Value: !Sub "CloudFormation-${AWS::StackName}-ElbSecurityGroup"
+
+    # LoadBalancer
+
+  appElb:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      SecurityGroups:
+        - !Ref appElbSecurityGroup
+      Listeners:
+      - LoadBalancerPort: '80'
+        InstancePort: '80'
+        Protocol: TCP
+      Subnets: !Ref PublicSubnetsParam
+      Tags: 
+        - Key: Name
+          Value: !Sub "CloudFormation-${AWS::StackName}-ElasticLoadBalancer"
+
+  # Instance
+
+    # Securitygroup
+
+  appSecuritygroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow all/tcp out and ssh/tcp, http/tcp in"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: "22"
+          ToPort: "22"
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp 
+          FromPort: "80"
+          ToPort: "80"
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VpcIdParam
+      Tags: 
+        - Key: Name
+          Value: !Sub "CloudFormation-${AWS::StackName}-AppSecurityGroup"
+
+    # AutoscalingGroup
+
+  appAutoscalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    # CreationPolicy is a 10 minute pause, waiting for a cfn-signal by the UserData of the Launch Configuration.
+    # Meaning it does not continue unless the launch configuration of at least one of the instances has started.
+    CreationPolicy:
+      ResourceSignal:
+        Count: "1"
+        Timeout: 'PT10M'
+    Properties:
+      HealthCheckType: EC2
+      LaunchConfigurationName: !Ref appLaunchConfiguration
+      LoadBalancerNames: 
+      - Ref: "appElb"
+      MinSize: "1"
+      DesiredCapacity: "2"
+      MaxSize: "3"
+      Tags:
+        - Key: Name
+          Value: !Sub "CloudFormation-${AWS::StackName}-AutoscalingGroup"
+          PropagateAtLaunch: 'true'
+      VPCZoneIdentifier: !Ref PublicSubnetsParam
+
+    # App LaunchConfiguration
+
+  appLaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Metadata:
+      AWS::CloudFormation::Init:
+        configSets:
+          ConfigSetScript:
+            - ExecuteScripts
+        ExecuteScripts:
+          files:
+            "/root/InstallAWSCLI.sh":
+              content: !Sub |
+                #!/bin/bash
+
+                # Install Python
+                apt install python wget -y
+                # Download Pip
+                wget https://bootstrap.pypa.io/get-pip.py
+                # Install Pip
+                python get-pip.py
+                # Remove Pip file
+                rm get-pip.py
+                # Install AWSCLI with pip
+                pip install awscli
+
+                # Completed.
+                echo -e "AWSCLI sucessfully installed."
+              mode: '000755'
+              owner: root
+              group: root
+            "/root/InstallS3FS.sh":
+              content: !Sub |
+                #!/bin/bash
+                # Installs S3FS and mounts a bucket on /s3. Make sure you've got privileges with the user you execute this as.
+
+                # Install packages
+                  apt-get install -y automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config
+
+                # Clone the s3fs git repo
+                  cd ~
+                  # More info on the S3FS project here: https://github.com/s3fs-fuse/s3fs-fuse/wiki/Fuse-Over-Amazon
+                  git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+
+                # Install s3fs
+                  cd s3fs-fuse/
+                  ./autogen.sh && ./configure && make && make install
+
+                # Go back to home dir
+                  cd ~
+
+                # Please go to /s3
+                  echo -e "S3FS successfully installed."
+              mode: '000755'
+              owner: root
+              group: root
+            "/root/InstallUploadSyncS3.sh":
+              content: !Sub |
+                #!/bin/bash
+                # Install of packages, upload of Wordpress to bucket, sync with bucket to local fs and Configuration of Apache. 
+                # Make sure you've got privileges with the user you execute this as.
+
+                # Param values
+                BUCKET=$1
+                HOST=$2
+                USER=$3
+                PASS=$4
+
+                if [[ ! $BUCKET || ! $HOST || ! $USER || ! $PASS ]]; then
+                    echo -e "Some parameters were not filled in!" 
+                    exit 1
+                else
+                    echo -e "Bucket name parameter received ($BUCKET). Continuing..."
+                fi
+
+                # Install packages and start services
+                  # Make sure MySQL server does not ask for a password
+                  export DEBIAN_FRONTEND=noninteractive
+                  export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+                  # dpkg fix
+                  dpkg --configure -a
+                  # Install packages
+                  apt-get install -y apache2 mysql-server php7.0 libapache2-mod-php7.0 php7.0-mysql wget unzip
+                  # Enable
+                  systemctl enable mysql apache2
+                  # Start
+                  systemctl start mysql apache2
+                  
+                # Make sure the wordpress database exists
+                  mysql -u $USER -h $HOST -P 3306 -e "create database wordpress;" --password=$PASS || true
+
+                # Download and install wordpress
+                  # Change to httpd folder
+                  cd /var/www/html
+                  # Download wordpress
+                  wget https://wordpress.org/latest.zip
+                  # Unzip file
+                  unzip latest.zip
+                  # Change owner to httpd user
+                  chgrp www-data wordpress/
+                  # Give privileges and make sure it's undeletable by non-users (I think)
+                  chmod 3770 wordpress/
+                  # Set all files under wordpress/ to have group execution rights
+                  chmod -R g+w wordpress/
+                  
+                # Upload to S3
+                  aws s3 sync wordpress/ s3://$BUCKET --region eu-west-1
+                # Remove local copy
+                  rm -rf wordpress/*
+                  
+                # Synchronize with S3 (give permissions to uid 33, www-data)
+                  s3fs -o iam_role=auto -ouid=33,gid=33,allow_other $BUCKET wordpress/
+                  
+                # Go back to home dir 
+                  cd ~
+
+                # Configure httpd and restart
+                  # Change a line in httpd config
+                  sed -i "s/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www\/html\/wordpress/g" /etc/apache2/sites-available/000-default.conf
+                  # Restart httpd
+                  systemctl restart apache2
+
+                # Complete!
+                  echo -e "Install of packages, upload of Wordpress to bucket, sync with bucket to local fs and Configuration of Apache complete."
+              mode: '000755'
+              owner: root
+              group: root
+          commands:
+            01_executeAWSCLI:
+              command: !Sub |
+                /root/InstallAWSCLI.sh
+              cwd: "~"
+            02_executeS3FS:
+              command: !Sub |
+                /root/InstallS3FS.sh
+              cwd: "~"
+            03_executeWORDPRESS:
+              command: "/root/InstallUploadSyncS3.sh \"$BUCKET\" \"$HOST\" \"$USER\" \"$PASS\""
+              env:
+                BUCKET: !Ref appS3Bucket
+                HOST: !GetAtt rdsInstance.Endpoint.Address
+                USER: !Ref RDSUsernameParam
+                PASS: !Ref RDSPasswordParam
+              cwd: "~"
+    Properties:
+      IamInstanceProfile: !GetAtt cfnInstanceProfile.Arn
+      AssociatePublicIpAddress: true
+      ImageId: !Ref AmiParam
+      InstanceMonitoring: true
+      InstanceType: !Ref Ec2InstanceTypeParam
+      KeyName: !Ref KeyNameParam
+      SecurityGroups:
+      - !Ref appSecuritygroup
+      UserData:  
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+
+          # Update and install pip and cfn-... commands to trigger asg wait and start executing scripts
+          apt-get update -y 
+          # upgrade was spawning interactive prompts ruining the automation.
+          # apt-get upgrade -y
+          apt-get install -y python-pip
+          pip install --upgrade pip
+          pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+          
+          # Start executing scripts defined above
+          /usr/local/bin/cfn-init -v \
+            --stack ${AWS::StackName} \
+            --resource appLaunchConfiguration \
+            --configsets ConfigSetScript \
+            --region ${AWS::Region}
+          
+          # Signal ASG to continue only when error signal is 0
+          /usr/local/bin/cfn-signal -e $? \
+            --stack ${AWS::StackName} \
+            --resource appAutoscalingGroup \
+            --region ${AWS::Region}
+      
+  # Route 53 Record
+      
+  appRoute53Record:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub "${DomainNameParam}."
+      Name: !Sub "${AWS::StackName}.${DomainNameParam}."
+      Type: CNAME
+      TTL: '300'
+      ResourceRecords:
+      - !GetAtt appElb.DNSName
+
+        
+Outputs:
+  RdsEndpointExport:
+    Description: Export of the MySQL endpoint
+    Value: !GetAtt rdsInstance.Endpoint.Address
+    Export:
+      Name: !Sub "CloudFormation-${AWS::StackName}-RDSEndpoint"
+  ElbDnsNameExport:
+    Description: Export of the Elb endpoint
+    Value: !GetAtt appElb.DNSName
+    Export:
+      Name: !Sub "CloudFormation-${AWS::StackName}-ElbDnsUrl"
+  Route53NameExport:
+    Description: Export of the Route53 endpoint pointed to the load balancer
+    Value: !Sub "${AWS::StackName}.${DomainNameParam}"
+    Export:
+      Name: !Sub "CloudFormation-${AWS::StackName}-Route53DnsUrl"
+  S3BucketExport:
+    Description: Export of the name of the created S3 bucket
+    Value: !Ref appS3Bucket
+    Export:
+      Name: !Sub "CloudFormation-${AWS::StackName}-BucketName"
+      
