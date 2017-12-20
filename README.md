@@ -2,4 +2,4 @@
 
 ### Table of contents ###
 
-* [Lab 0 - Prerequisites](Lab 0 - Prerequisites/README.md)
+* [Lab 0 - Prerequisites](Lab%200%20-%20Prerequisites/README.md)
