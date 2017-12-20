@@ -16,7 +16,7 @@ AWS has a graphical user interface (GUI) that is accessible through a website.  
 ### 3. Verify SSH login ###
 
 We'll be logging into a bunch of instances using the SSH protocol in the commandline with private keys. 
-Please make sure you can log in to the machine that corresponds with your name and ID in the link above.
+Please make sure you can log in to the machine that corresponds with your ID!
 
 * In the AWS Console, go to `Services -> EC2 -> Instances` and find your instance's public IP-address.
 
