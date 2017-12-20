@@ -1,2 +1,5 @@
-# AWS-demo
-Demo showing some very powerful functionalities of cloud computing AWS. Form "infra 1.0" to "infra 2.0".
+# **Infrastructure 2.0 with AWS** #
+
+### Table of contents ###
+
+* [Lab 0 - Prerequisites](Lab 0 - Prerequisites/README.md)
