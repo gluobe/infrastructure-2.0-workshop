@@ -1,6 +1,6 @@
-__author__ = "Naeem Hasan"
+__author__ = "Naeem Hasan (https://github.com/naeem-hasan/meme-generator-python/blob/master/memegen.py), adapted by Gluo"
 __version__ = "0.1"
-# Usage: python memegen.py "Top line" "Bottom line" photo.jpg
+# Usage: python memegen.py "Top line" "Bottom line" originalphoto.jpg targetphoto.jpg
 
 import sys
 if (sys.version_info > (3, 0)):
@@ -25,11 +25,12 @@ MARGINS = [50, 130, 200, 270, 340]
 
 if not exists(join(getcwd(), MEME_FOLDER)):
     mkdir(join(getcwd(), MEME_FOLDER))
-
+    
+if not exists(join(getcwd(), TEMPLATES_FOLDER)):
+    mkdir(join(getcwd(), TEMPLATES_FOLDER))
 
 def get_warp_length(width):
     return int((33.0 / 1024.0) * (width + 0.0))
-
 
 def generate_meme(upper_text, lower_text, picture_name_orig, picture_name_target):
     main_image = Image(filename=join(TEMPLATES_FOLDER, picture_name_orig))
@@ -60,7 +61,7 @@ def generate_meme(upper_text, lower_text, picture_name_orig, picture_name_target
 if __name__ == "__main__":
     argv = sys.argv
     if len(argv) < 5:
-        print "Not enough arguments! First two arguments have to be texts, then original picture name, then outpur picture name."
+        print "Not enough arguments! (python memegen.py 'Top line' 'Bottom line' originalphoto.jpg targetphoto.jpg)"
         sys.exit()
     else:
         generate_meme(argv[1], argv[2], argv[3], argv[4])

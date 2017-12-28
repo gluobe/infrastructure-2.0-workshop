@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="author" content="Ben Leynen"/>
+		<meta name="author" content="Ben Leynen @ Gluo"/>
 		
 		<title>Gluo MemeGen</title>
 		
