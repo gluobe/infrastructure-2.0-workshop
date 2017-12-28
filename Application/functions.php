@@ -119,10 +119,12 @@ function generateMeme($remote, $top, $bot, $imgname){
     # Create full imagenames
     $rand = rand(1,999);
     $imgnameorig = $imgname . ".jpg";
+    # Remove nasty chars for meme picture
+    $top = preg_replace('/[\'\"]+/', '', $top);
+    $bot = preg_replace('/[\'\"]+/', '', $bot);
     # No extension variable image name
     $imgnametargetnoext = $imgname . "-" . $top . "-" . $bot . "-" . $rand;
-    # Replace nasty characters
-    $imgnametargetnoext = preg_replace('/[\'\"]+/', '', $imgnametargetnoext);
+    # Replace nasty characters for filename
     $imgnametargetnoext = preg_replace('/[^-.0-9\w]+/', '', $imgnametargetnoext);
     # With extension variable image name
     $imgnametargetwithext = $imgnametargetnoext . ".jpg";
