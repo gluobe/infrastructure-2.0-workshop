@@ -180,13 +180,37 @@
 								</button>
 								<ul class="dropdown-menu">
 									<li>
-										<a href="#" class="meme" name="successkid" title="Select successkid"><img src="meme-generator-python/templates/successkid.jpg" height="80">Success Kid</a>
+										<a href="#" class="meme" name="aliens" title="Select aliens"><img src="meme-generator-python/templates/aliens.jpg" height="80">Aliens</a>
+									</li>
+									<li>
+										<a href="#" class="meme" name="archer" title="Select archer"><img src="meme-generator-python/templates/archer.jpg" height="80">Archer</a>
 									</li>
 									<li>
 										<a href="#" class="meme" name="badluckbrian" title="Select badluckbrian"><img src="meme-generator-python/templates/badluckbrian.jpg" height="80">Bad Luck Brian</a>
 									</li>
 									<li>
+										<a href="#" class="meme" name="buzzlightyear" title="Select buzzlightyear"><img src="meme-generator-python/templates/buzzlightyear.jpg" height="80">Buzz Lightyear</a>
+									</li>
+									<li>
+										<a href="#" class="meme" name="goodguygreg" title="Select goodguygreg"><img src="meme-generator-python/templates/goodguygreg.jpg" height="80">Good Guy Greg</a>
+									</li>
+									<li>
+										<a href="#" class="meme" name="officespace" title="Select officespace"><img src="meme-generator-python/templates/officespace.jpg" height="80">Office Space</a>
+									</li>
+									<li>
+										<a href="#" class="meme" name="onedoesnotsimply" title="Select onedoesnotsimply"><img src="meme-generator-python/templates/onedoesnotsimply.jpg" height="80">One Does Not Simply</a>
+									</li>
+									<li>
+										<a href="#" class="meme" name="scumbagsteve" title="Select scumbagsteve"><img src="meme-generator-python/templates/scumbagsteve.jpg" height="80">Scumbag Steve</a>
+									</li>
+									<li>
+										<a href="#" class="meme" name="successkid" title="Select successkid"><img src="meme-generator-python/templates/successkid.jpg" height="80">Success Kid</a>
+									</li>
+									<li>
 										<a href="#" class="meme" name="willywonka" title="Select willywonka"><img src="meme-generator-python/templates/willywonka.jpg" height="80">Willy Wonka</a>
+									</li>
+									<li>
+										<a href="#" class="meme" name="yodawg" title="Select yodawg"><img src="meme-generator-python/templates/yodawg.jpg" height="80">Yo Dawg</a>
 									</li>
 								</ul>
 							</div>
