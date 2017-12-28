@@ -23,7 +23,7 @@ Do this for **both** instances.
 1. Press the `Actions` button above the instances list.
     * Hover over `Instance Settings`.
     * Press `Attach/Replace IAM Role`.
-1. Select `lab_S3Access`.
+1. Select `lab_InstanceAccess`.
 1. Press `Apply`.
 
 #### 2.2. Installing AWSCLI ####

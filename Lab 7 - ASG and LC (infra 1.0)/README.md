@@ -41,7 +41,7 @@ A Launch configuration will contain all the EC2 Instance details and can even be
 1. Select `t2.micro` and press `Next: Configure Details`.
 1. Fill in:
     * Name it `lab-LC-<your_ID>`.
-    * Assign it the role `lab_S3Access`.
+    * Assign it the role `lab_InstanceAccess`.
     * Now press `Advanced`:
         * Go to "Scripts/InstallAllManual.sh" and add your ID and RDS Endpoint URL with port to the parameters ([Change InstallAllManual.sh values](../Images/LCChangeValuesManually.png?raw=true)).
         * Copy and paste the whole script into the `User Data` field `As text`.
