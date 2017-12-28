@@ -122,6 +122,7 @@ function generateMeme($remote, $top, $bot, $imgname){
     # No extension variable image name
     $imgnametargetnoext = $imgname . "-" . $top . "-" . $bot . "-" . $rand;
     # Replace nasty characters
+    $imgnametargetnoext = preg_replace('/[\'\"]+/', '', $imgnametargetnoext);
     $imgnametargetnoext = preg_replace('/[^-.0-9\w]+/', '', $imgnametargetnoext);
     # With extension variable image name
     $imgnametargetwithext = $imgnametargetnoext . ".jpg";
