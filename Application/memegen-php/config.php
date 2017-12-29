@@ -15,15 +15,15 @@ $s3Bucket = "lab-$yourId-bucket";
 ###################
 
 # Wether to save the memes locally or remotely (s3)
-$remoteFiles = false; # locally
+$remoteFiles = true; # locally
 #$remoteFiles = true; # s3
 
 # Wether to save data locally (mongodb) or remotely (dynamodb)
-$remoteData = false; # MongoDB
+$remoteData = true; # MongoDB
 #$remoteData = true; # DynamoDB
 
 # Wether to set site color to blue or green (used to differentiate sites from ELB)
-$siteColorBlue = false; # Blue
+$siteColorBlue = true; # Blue
 #$siteColorBlue = true; # Green
 
 ?>

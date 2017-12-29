@@ -8,7 +8,7 @@
 
 ### Where is what? ###
 #### Folders ####
-* `meme-generator-python` houses the python app to create memes through the bash commandline. It is used in the backend to create memes by the PHP application's web interface. It also contains the meme templates and created memes in `meme-generator-python/templates` and `meme-generator-python/memes` respectively.
+* `meme-generator` houses the python app to create memes through the bash commandline. It is used in the backend to create memes by the PHP application's web interface. It also contains the meme templates and created memes in `meme-generator/templates` and `meme-generator/memes` respectively.
 * `site-files` houses the website's files. Bootstrap framework, images, css, fonts, jquery and js.
 
 #### Files ####

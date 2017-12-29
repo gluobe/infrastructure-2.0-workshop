@@ -1,7 +1,7 @@
 # github project
 https://github.com/naeem-hasan/meme-generator-python
 
-# meme-generator-python
+# meme-generator
 A simple Python script that generates meme.
 
 ### Requirements:
@@ -14,6 +14,6 @@ A simple Python script that generates meme.
 * ```python memegen.py "This is why I love this guy" "" photo.jpg```
 
 Meme(s) made with memegen:
-![meme](https://github.com/naeem-hasan/meme-generator-python/blob/master/made-with-memegen/%5BMEME%5D%20photo.jpg?raw=true "Python meme")
+![meme](https://github.com/naeem-hasan/meme-generator/blob/master/made-with-memegen/%5BMEME%5D%20photo.jpg?raw=true "Python meme")
 
 The code is so simple! Feel free to contribute to it. ^_^

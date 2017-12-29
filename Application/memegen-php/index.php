@@ -15,6 +15,26 @@
 		<script src="site-files/js/bootstrap.min.js"></script>
 		<script>
 				$( document ).ready(function() {
+						//////////////////////////////
+						///////// GLOBAL VAR /////////
+						//////////////////////////////
+					
+						// Declare memes dir
+						var dirname = "meme-generator/memes/";
+					
+						function refreshImages(ajaxResult){
+								// Remove all images
+								$(".createdMemes").html("");
+
+								// Sort by date (newest memes first)
+								var resultSorted = $.parseJSON(ajaxResult).sort(function(obj1, obj2) { return obj1.date.S - obj2.date.S; });
+								
+								// Add all images
+								$.each( resultSorted, function( key, value ) {
+										$("<div class=\"col-md-4\"><img src=\"" + dirname + value.name.S + ".jpg\" alt=\"" + dirname + value.name.S + ".jpg\" height=\"400\"/></div>").prependTo(".createdMemes");			
+								});
+						}
+					
 					
 						//////////////////////////////
 						///////// GET CONFIG ///////// (trigger: visit page)
@@ -65,18 +85,8 @@
 									// Log
 									console.log( "Memes gotten: " + result );
 									
-									// DELETE AND CREATE IMAGES
-											// Remove all images
-											$(".createdMemes").html("");
-											// Declare dir
-											var dirname = "meme-generator-python/memes/";
-											// Sort by date (newest memes first)
-											var resultSorted = $.parseJSON(result).sort(function(obj1, obj2) { return obj1.date.S - obj2.date.S; });
-											// Add all images
-											$.each( resultSorted, function( key, value ) {
-													$("<div class=\"col-md-4\"><img src=\"" + dirname + value.name.S + ".jpg\" alt=\"" + dirname + value.name.S + ".jpg\" height=\"400\"/></div>").prependTo(".createdMemes");			
-											});
-											
+									// Delete and recreate images on page
+									refreshImages(result);
 							},
 							error: function(result){
 								// Log
@@ -114,17 +124,8 @@
 												// Log
 												console.log( "Memes gotten: " + result );
 												
-												// DELETE AND CREATE IMAGES
-														// Remove all images
-														$(".createdMemes").html("");
-														// Declare dir
-													 	var dirname = "meme-generator-python/memes/";
-														// Sort by date (newest memes first)
-														var resultSorted = $.parseJSON(result).sort(function(obj1, obj2) { return obj1.date.S - obj2.date.S; });
-														// Add all images
-														$.each( resultSorted, function( key, value ) {
-																$("<div class=\"col-md-4\"><img src=\"" + dirname + value.name.S + ".jpg\" alt=\"" + dirname + value.name.S + ".jpg\" height=\"400\"/></div>").prependTo(".createdMemes");			
-														});
+												// Delete and recreate images on page
+												refreshImages(result);
 												
 												// Empty input fields
 												$(".generate-meme").find("#toptext").val("");
@@ -155,7 +156,7 @@
 								console.log( "New meme selected: " + selected );
 								
 								// Change picture of selected meme visually.
-								$("#showingImage").attr("src","meme-generator-python/templates/" + selected + ".jpg");
+								$("#showingImage").attr("src","meme-generator/templates/" + selected + ".jpg");
 								$("#showingMeme").html(selected);
 						});
 						
@@ -174,43 +175,43 @@
 							<div class="btn-group">
 								<input type="hidden" id="selectedMeme" value="successkid"/>
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<img id="showingImage" src="meme-generator-python/templates/successkid.jpg" height="100">
+									<img id="showingImage" src="meme-generator/templates/successkid.jpg" height="100">
 									<span id="showingMeme">successkid</span>
 									<span class="glyphicon glyphicon-chevron-down"></span>
 								</button>
 								<ul class="dropdown-menu">
 									<li>
-										<a href="#" class="meme" name="aliens" title="Select aliens"><img src="meme-generator-python/templates/aliens.jpg" height="80">Aliens</a>
+										<a href="#" class="meme" name="aliens" title="Select aliens"><img src="meme-generator/templates/aliens.jpg" height="80">Aliens</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="archer" title="Select archer"><img src="meme-generator-python/templates/archer.jpg" height="80">Archer</a>
+										<a href="#" class="meme" name="archer" title="Select archer"><img src="meme-generator/templates/archer.jpg" height="80">Archer</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="badluckbrian" title="Select badluckbrian"><img src="meme-generator-python/templates/badluckbrian.jpg" height="80">Bad Luck Brian</a>
+										<a href="#" class="meme" name="badluckbrian" title="Select badluckbrian"><img src="meme-generator/templates/badluckbrian.jpg" height="80">Bad Luck Brian</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="buzzlightyear" title="Select buzzlightyear"><img src="meme-generator-python/templates/buzzlightyear.jpg" height="80">Buzz Lightyear</a>
+										<a href="#" class="meme" name="buzzlightyear" title="Select buzzlightyear"><img src="meme-generator/templates/buzzlightyear.jpg" height="80">Buzz Lightyear</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="goodguygreg" title="Select goodguygreg"><img src="meme-generator-python/templates/goodguygreg.jpg" height="80">Good Guy Greg</a>
+										<a href="#" class="meme" name="goodguygreg" title="Select goodguygreg"><img src="meme-generator/templates/goodguygreg.jpg" height="80">Good Guy Greg</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="officespace" title="Select officespace"><img src="meme-generator-python/templates/officespace.jpg" height="80">Office Space</a>
+										<a href="#" class="meme" name="officespace" title="Select officespace"><img src="meme-generator/templates/officespace.jpg" height="80">Office Space</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="onedoesnotsimply" title="Select onedoesnotsimply"><img src="meme-generator-python/templates/onedoesnotsimply.jpg" height="80">One Does Not Simply</a>
+										<a href="#" class="meme" name="onedoesnotsimply" title="Select onedoesnotsimply"><img src="meme-generator/templates/onedoesnotsimply.jpg" height="80">One Does Not Simply</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="scumbagsteve" title="Select scumbagsteve"><img src="meme-generator-python/templates/scumbagsteve.jpg" height="80">Scumbag Steve</a>
+										<a href="#" class="meme" name="scumbagsteve" title="Select scumbagsteve"><img src="meme-generator/templates/scumbagsteve.jpg" height="80">Scumbag Steve</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="successkid" title="Select successkid"><img src="meme-generator-python/templates/successkid.jpg" height="80">Success Kid</a>
+										<a href="#" class="meme" name="successkid" title="Select successkid"><img src="meme-generator/templates/successkid.jpg" height="80">Success Kid</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="willywonka" title="Select willywonka"><img src="meme-generator-python/templates/willywonka.jpg" height="80">Willy Wonka</a>
+										<a href="#" class="meme" name="willywonka" title="Select willywonka"><img src="meme-generator/templates/willywonka.jpg" height="80">Willy Wonka</a>
 									</li>
 									<li>
-										<a href="#" class="meme" name="yodawg" title="Select yodawg"><img src="meme-generator-python/templates/yodawg.jpg" height="80">Yo Dawg</a>
+										<a href="#" class="meme" name="yodawg" title="Select yodawg"><img src="meme-generator/templates/yodawg.jpg" height="80">Yo Dawg</a>
 									</li>
 								</ul>
 							</div>

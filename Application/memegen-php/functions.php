@@ -81,7 +81,7 @@ function GetMemes($remoteData){
     // If files are stored remotely (s3), sync them first to local dir
     if($remoteFiles){
         // sync from s3
-        $command = "aws s3 sync s3://$s3Bucket meme-generator-python/memes/ 2>&1";
+        $command = "aws s3 sync s3://$s3Bucket meme-generator/memes/ 2>&1";
         $commandoutput = exec($command, $out, $status);
     }
   
@@ -114,7 +114,7 @@ function generateMeme($remote, $top, $bot, $imgname){
   
     # Save current dir and go into python dir
     $olddir = getcwd();
-    chdir("meme-generator-python");
+    chdir("meme-generator");
     
     # Create full imagenames
     $rand = rand(1,999);
@@ -139,7 +139,7 @@ function generateMeme($remote, $top, $bot, $imgname){
     # Sync images remotely (s3)
     if($remoteFiles){
         // sync to s3
-        $command = "aws s3 sync meme-generator-python/memes/ s3://$s3Bucket 2>&1";
+        $command = "aws s3 sync meme-generator/memes/ s3://$s3Bucket 2>&1";
         $commandoutput = exec($command, $out, $status);
     }
 
