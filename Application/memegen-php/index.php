@@ -215,7 +215,7 @@
 									</li>
 								</ul>
 							</div>
-		  				<input type="text" id="toptext" class="form-control" placeholder="Top Text" required/>
+		  				<input type="text" id="toptext" class="form-control marginTop" placeholder="Top Text" required/>
     					<input type="text" id="bottext" class="form-control" placeholder="Bottom Text" required/>
 							<input class="btn btn-lg btn-success btn-block marginTop generateButton" type="button" value="Generate!"/>
 						</div>
