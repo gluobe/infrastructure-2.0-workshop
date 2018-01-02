@@ -1,11 +1,7 @@
 #!/bin/bash
-# Installs Wordpress. Make sure you've got privileges with the user you execute this as.
+# Installs MemeGen, modified to be used in a Launch Configuration.
 
-# Make sure it's run as root
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root! use 'sudo su -'." 
-   exit 1
-fi
+YOURID="<your_ID>"
 
 # Set a settings for non interactive mode
   export DEBIAN_FRONTEND=noninteractive
@@ -15,7 +11,7 @@ fi
 # Install packages (apache, mongo, php, python and other useful packages)
   # Mongodb repo commands + apt refresh
   apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
-  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
   apt-get update -y
   # Install all
   apt-get install -y apache2 mongodb-org mongodb-org-server php7.0 php7.0-dev libapache2-mod-php7.0 php-pear pkg-config libssl-dev libsslcommon2-dev python-minimal python-pip imagemagick composer wget unzip
@@ -64,14 +60,26 @@ fi
   chown -R www-data:www-data /var/www/html/meme-generator/
   
 # Install aws sdk for DynamoDB
-  composer -d="/var/www/html" require aws/aws-sdk-php
+  until [ -f /var/www/html/vendor/autoload.php ]
+  do
+      export HOME=/root
+      export COMPOSER_HOME=/var/www/html
+      composer -d="/var/www/html" require aws/aws-sdk-php
+      sleep 2
+  done
   
 # Configure httpd and restart
   # Remove index.html
   rm -f /var/www/html/index.html
   # Restart httpd
   systemctl restart apache2
+  
+# Edit site's config.php file
+  sed -i 's@^$remoteData.*@$remoteData = true; # DynamoDB (Altered by sed)@g' /var/www/html/config.php
+  sed -i 's@^$remoteFiles.*@$remoteFiles = true; # S3 (Altered by sed)@g' /var/www/html/config.php
+  sed -i "s@^\$yourId.*@\$yourId = \"$YOURID\"; # (Altered by sed)@g" /var/www/html/config.php
 
 # Please go to http://
-  echo -e "Local MemeGen installation complete."
+  echo -e "Automatic MemeGen installation complete."
+  echo 'Automatic MemeGen installation complete.' | systemd-cat
 
