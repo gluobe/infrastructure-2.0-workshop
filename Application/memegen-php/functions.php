@@ -38,19 +38,17 @@ function ConnectDB($remoteData){
 // Inserts a meme name and current date into the database, either mongodb or dynamodb
 function InsertMemes($remoteData, $imageName){
     global $m;
-    global $yourId;
     global $remoteData;
+    global $dynamoDBTable;
     
     $rand = rand(1,99999999);
     $time = time();
       
     if($remoteData){
         // DynamoDB
-            $yourTable = "images-" . $yourId;
-            
             // Insert data in the images table
             $insertResult = $m->putItem(array(
-                'TableName' => "$yourTable",
+                'TableName' => "$dynamoDBTable",
                 'Item' => array(
                     'id'      => array('N' => (string)$rand),
                     'name'    => array('S' => $imageName),
@@ -73,8 +71,8 @@ function InsertMemes($remoteData, $imageName){
 // Gets all memes and encodes and echo's it so ajax can catch it.
 function GetMemes($remoteData){
     global $m;
-    global $yourId;
     global $s3Bucket;
+    global $dynamoDBTable;
     global $remoteFiles;
     global $remoteData;
   
@@ -88,10 +86,8 @@ function GetMemes($remoteData){
     // If data is stored remotely, use dynamodb, else mongodb
     if($remoteData){
         // DynamoDB
-        $yourTable = "images-" . $yourId;
-        
         $iterator = $m->getIterator('Scan', array(
-          'TableName' => "$yourTable"
+          'TableName' => "$dynamoDBTable"
         ));
         
         echo json_encode(iterator_to_array($iterator));

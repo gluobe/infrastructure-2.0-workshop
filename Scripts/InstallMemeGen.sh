@@ -64,7 +64,7 @@ fi
   chown -R www-data:www-data /var/www/html/meme-generator/
   
 # Install aws sdk for DynamoDB
-  cd /var/www/html && composer require aws/aws-sdk-php && cd ~
+  composer -d="/var/www/html" require aws/aws-sdk-php
   
 # Configure httpd and restart
   # Remove index.html

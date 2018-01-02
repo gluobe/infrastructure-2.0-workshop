@@ -91,6 +91,7 @@
 							error: function(result){
 								// Log
 								console.log( "Memes get failed: " + result );
+								Console.log( "Check if you ran `composer` right for the PHP AWS SDK.");
 							}
 						});
 					

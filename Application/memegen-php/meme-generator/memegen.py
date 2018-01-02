@@ -1,4 +1,4 @@
-__author__ = "Naeem Hasan (https://github.com/naeem-hasan/meme-generator-python/blob/master/memegen.py), adapted by Gluo"
+__author__ = "Naeem Hasan (https://github.com/naeem-hasan/meme-generator-python/blob/master/memegen.py), adapted by Ben Leynen @ Gluo"
 __version__ = "0.1"
 # Usage: python memegen.py "Top line" "Bottom line" originalphoto.jpg targetphoto.jpg
 
