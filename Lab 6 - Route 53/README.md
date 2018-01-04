@@ -1,7 +1,10 @@
 # **LAB 6 - Route 53** #
 
+## Start of Lab 6 ##
+You should have two Instances, both connected to a Load Balancer, DynamoDB and S3.
+
 ## Visual Interpretation ##
-Using the randomly generated ELB URL isn't too user friendly. That's why AWS' Route53 exists.
+Using the randomly generated ELB URL isn't too user friendly. That's why the AWS Route53 service exists.
 
 ![](../Images/Lab6.png?raw=true)
 
@@ -18,11 +21,12 @@ Using the randomly generated ELB URL isn't too user friendly. That's why AWS' Ro
         * This cannot contain `http://` or trailing slashes like `/` at the end.
 1. Click `Create`.
 
-The record can take up to 2-5 minutes to be registered by the top DNS servers. You can go to `<your_ID>.gluo.io` to view your Load Balanced Wordpress site.
-
-It will look something like this:
+The record can take up to 2-5 minutes to be registered by the top DNS servers. You can go to `<your_ID>.gluo.io` to view your Load Balanced MemeGen site.
 
 ![](../Images/Route53BrowseToLoadBalancer.png?raw=true)
+
+## End of Lab 6 ##
+Once you can reach both your instances via the Route53 records through the Load Balancer, you may continue to the next lab.
 
 ### More info ###
 

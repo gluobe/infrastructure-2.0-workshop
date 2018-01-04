@@ -1,8 +1,11 @@
 # **LAB 5 - S3** #
 
+## Start of Lab 5 ##
+You should have two Instances, both connected to the same ELB and DynamoDB.
+
 ## Visual Interpretation ##
 S3 is a file storing and sharing service a lot like Dropbox, Google Drive and OneDrive.
-Now that our Wordpress data is being stored in the RDS, we might as well synchronize our Wordpress files to the cloud as well.
+Now that our MemeGen data is being stored in DynamoDB, we might as well synchronize our memes to the cloud as well.
 
 ![](../Images/Lab5.png?raw=true)
 
@@ -11,9 +14,9 @@ S3 is a service for storing files in a folder like structure.
 
 1. Go to `Services -> S3`.
 1. Find your bucket. We've already created one for you, it should be named `lab-<your_ID>-bucket`.
-1. There's (almost) nothing in it! That'll soon change, when we upload all Wordpress files to it.
+1. There's (almost) nothing in it! That'll soon change, when we upload all our memes to it.
     
-### 2. Upload Wordpress to the bucket ###
+### 2. Synchronize files to the bucket ###
 #### 2.1. Giving EC2 Instances access to S3 via a Role ####
 We need to give both EC2 instances an access role. This role contains permissions to give read and write privileges to certain S3 buckets. This means the role will allow the EC2 Instances to read and write to your bucket in S3.
 
@@ -29,71 +32,45 @@ Do this for **both** instances.
 #### 2.2. Installing AWSCLI ####
 AWS has its AWS Console (which we've been working in) to access AWS via your browser, but it's also accessible via a commandline tool named AWSCLI. It's installed via a Python package called Pip.
 
-Do this **once** on your **first** instance.
+Do this on **both** instances. (it might already be installed on the second one.)
 
-1. Install Python `apt-get install python wget -y`.
-1. Download Pip `wget https://bootstrap.pypa.io/get-pip.py`.
-1. Install Pip `python get-pip.py`.
-1. Remove Pip install file `rm get-pip.py`.
-1. Install AWSCLI `pip install awscli`.
-1. Check if AWSCLI is installed correctly with `aws --version`:
+1. `pip install awscli`
+    *  Install AWSCLI with the python package manager pip.
+1. `aws --version`
+    *  Check if AWSCLI is installed correctly.
 
-```bash
-root@ip-192-168-16-213:~# aws --version
-aws-cli/1.14.9 Python/2.7.12 Linux/4.4.0-1041-aws botocore/1.8.13
-```
+> root@ip-192-168-16-213:~# **aws --version**
+>
+> aws-cli/1.14.9 Python/2.7.12 Linux/4.4.0-1041-aws botocore/1.8.13
 
-#### 2.3. Uploading Wordpress to S3 ####
-We'll be using AWSCLI to upload our local Wordpress files to the S3 bucket.
+#### 2.3. Uploading images to S3 ####
+We'll be using AWSCLI to upload our local memes to the S3 bucket.
 
-Do this **once** on your **first** instance.
+Do this **once**, just to try it out.
 
-1. Move to apache web directory `cd /var/www/html`.
-1. Upload the contents of your working Wordpress folder `aws s3 sync wordpress/ s3://lab-<your_ID>-bucket --region eu-west-1`.
-    * If something fails here you might not have linked the S3 role to your EC2 Instances, go back to Lab 5, step 2.
-1. Go back to your bucket, the Wordpress files should have been added!
+1. Upload a meme of your choosing to the bucket `aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-<your_ID>-bucket`.
+1. Go back to your bucket, the image should have been added!
 
-Your bucket should look something like this:
+    ![](../Images/S3BucketContents.png?raw=true)
 
-![](../Images/S3BucketContents.png?raw=true)
+### 3. Switch to using S3 ###
+#### 3.1. Change the site config ####
+Next we'll change the application configuration file on both instances one more time to synchronize the memes to the bucket.
 
-### 3. Synchronize the bucket to the FS ###
-#### 3.1. Install S3FS ####
-S3, being an AWS service, offers many ways to interconnect different AWS services with it. Mounting an S3 bucket as a filesystem on Linux however is still not natively possible, but naturally there exists a Github project doing the exact thing.
+Do this on **both** instances.
 
-Do this for **both** instances.
+1. `sed -i 's@^$remoteFiles.*@$remoteFiles = true; # S3 (Altered by sed)@g' /var/www/html/config.php`
+    * Change the $remoteFiles variable in config.php to true.
 
-1. Remove your local copy `rm -rf /var/www/html/wordpress`. We'll be syncing it with the S3 bucket soon.
-1. Install some packages with `apt-get install automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config -y`.
-1. Change to home directory `cd ~`.
-1. Clone the git repository with `git clone https://github.com/s3fs-fuse/s3fs-fuse.git`.
-1. Go into the project `cd s3fs-fuse/`.
-1. Compile the project from source `./autogen.sh && ./configure && make && make install`.
-1. Verify installation with `s3fs --version`.
+#### 3.2. Create another meme ####
+Your instances are now linked to each other not only by database but also by filesystem. Every time you create and display a meme, the memes folder will be synchronized in the php backend using awscli.
 
-The S3FS version command output should look something like this:
+1. Create a meme on **both** instances. This will ensure all images from all instances are uploaded.
+1. Refresh the load balancer page a couple of times. All images should load on both instances.
+1. Go and look at your bucket's contents again. All memes will have been uploaded.
 
-```bash
-root@ip-192-168-16-213:~/s3fs-fuse# s3fs --version
-Amazon Simple Storage Service File System V1.82(commit:566961c) with OpenSSL
-Copyright (C) 2010 Randy Rizun <rrizun@gmail.com>
-License GPL2: GNU GPL version 2 <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-```
-
-#### 3.2. Synchronize Bucket to Apache webfolder ####
-
-Do this for **both** instances.
-
-1. Go to your apache web folder `cd /var/www/html`.
-1. Create the wordpress folder again `mkdir wordpress`.
-1. Synchronize your bucket with the wordpress folder `s3fs -o iam_role=auto -ouid=33,gid=33,allow_other lab-<your_ID>-bucket wordpress/`.
-
-### 4. Log in to Wordpress ###
-
-1. Use your Load Balancer's DNS name to browse to your Wordpress site again. The site isn't as quick to load, since we're using S3 as a web- and fileserver and it's not really supposed to be used for that.
-1. Once you log in, go to your bucket and open the wp_config.php file. We were able to log in without configuring since our earlier configuration via the Wordpress web interface was generated into a .php file!
+## End of Lab 5 ##
+Once you have two Instances, both connected to a Load Balancer, DynamoDB and S3, you may continue to the next lab.
 
 ### More info ###
 

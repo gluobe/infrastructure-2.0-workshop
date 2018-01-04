@@ -1,7 +1,10 @@
 # **LAB 4 - ELB** #
 
+## Start of Lab 4 ##
+You should have one EC2 Instance with MemeGen installed on it which is reachable and works with the remote DynamoDB.
+
 ## Visual Interpretation ##
-Right now, we only have one server and it's carrying the full load of a savage Black Friday sale which we're blogging about. We'll need multiple servers and an (elastic) Load Balancer to share the network load over the two instances.
+Right now, we only have one server and it's carrying the full load of a savage Meme Economy boom. We'll need multiple servers and an (elastic) Load Balancer to share the network load over the two instances.
 
 ![](../Images/Lab4.png?raw=true)
 
@@ -14,7 +17,7 @@ We'll need a firewall configuration for the Load Balancer. It simply forwards po
 1. Fill in the Security Group information:
     * Name: `lab_SecGroup_ELB_<your_ID>`
     * Description: `Security Group for a Load Balancer`
-    * VPC: `lab_ManagementVpc`
+    * VPC: `defaultVPC`
     * Add an **inbound** rule:
         * `HTTP` on port `80`, `source anywhere`
 1. Click `Create`
@@ -22,7 +25,7 @@ We'll need a firewall configuration for the Load Balancer. It simply forwards po
 ### 2. Create a second EC2 Instance ###
 To gain the most out of the load balancer we're about to set up, we'll need another EC2 Instance to link the load balancer with so it can do its job properly. You can also do this with just one instance but the load balancer wouldn't really be load balancing anything, it would just be a glorified proxy.
 
-At this point we should still have one instance running. You can also just copy its settings and create another EC2 instance from it.
+At this point we should still have one instance running. We can copy the settings of an instance create another instance from it.
 
 1. Go to `Services -> EC2 -> Instances`
 1. Select your own instance named `lab_EC2_instance1_<your_ID>`.
@@ -34,20 +37,40 @@ At this point we should still have one instance running. You can also just copy 
 1. Choose your own key pair, acknowledge and press `Launch Instances`.
 
 ### 3. Configure your second EC2 Instance ###
+Next we'll install the MemeGen app on the second instance via a bash script instead of doing it all manually like in Lab 2 again.
 
-1. Make sure to execute the `Scripts/InstallWordpress.sh` script on the new EC2 Instance.
-    * If you're stuck doing this go back to Lab 3, step 2.
-1. Browse to your second Instance's IP-address and configure it to work with the RDS.
-    * You won't have to configure Wordpress anymore since all of that data was stored in the RDS we're now sharing with another instance.
-    * If you're stuck doing this go back to Lab 3, step 5.
+1. Log out of your first instance to the red prompt of your management instance.  
+    1. `exit`
+    1. `exit`
+1. `ssh -i ~/.ssh/id_rsa ubuntu@<IP-address-second-instance>`
+    * Log in to your second instance.
+1. `git clone https://github.com/gluobe/infrastructure-2.0-workshop.git ~/infra-workshop`
+    * Clone the repository to your home directory.
+1. `chmod 755 ~/infra-workshop/Scripts/InstallMemeGen-php.sh`
+    * Change permissions on the script to make it executable.
+1. `~/infra-workshop/Scripts/InstallMemeGen-php.sh`
+    * Execute it. It's done after it prints `Local MemeGen installation complete.`.
+1. `sed -i 's@^$remoteData.*@$remoteData = true; # DynamoDB (Altered by sed)@g' /var/www/html/config.php`
+    * Change the $remoteDate variable in config.php to true.
+1. **Change the site to have your ID.**
+    1. `vim /var/www/html/config.php`.
+    1. Press `i` (insert).
+    1. Change the `$yourId` variable to your own ID.
+    1. Press `ESC`, then type `:wq` (write and quit) and press `ENTER`.
     
-* After configuring the second Instance to link to the RDS you should get this message, meaning the RDS already has some Wordpress data stored from the first Instance we configured:
+* If you're stuck in `vim`, press `ESC`, `:q!`, `ENTER`.
 
-![](../Images/LinkSecondInstanceToRDSMessage.png?raw=true)
+* We should now have two separate Instances which are both linked to DynamoDB and will be reachable via the Load Balancer in a minute:
 
-* We should now have two separate Instances which we can login to with the same credentials:
+    ![](../Images/ELBTwoInstancesTwoApps1.png?raw=true)  
 
-![](../Images/TwoInstancesConnectedByRDS.png?raw=true)
+    ![](../Images/ELBTwoInstancesTwoApps2.png?raw=true)    
+
+* You'll note however that no images are synchronized between the instances... We'll fix that later.
+
+    ![](../Images/ELBMissingImagesNoSync1.png?raw=true)
+
+    ![](../Images/ELBMissingImagesNoSync2.png?raw=true)
 
 ### 4. Create a Load Balancer ###
 Now that our instances are connected to the same database, we can create our load balancer to share the network load.
@@ -56,10 +79,9 @@ Now that our instances are connected to the same database, we can create our loa
 1. Press the `Create Load Balancer` button.
     * Choose the `Classic Load Balancer (Previous Generation)` option.
     * Name it `lab-ELB-<your_ID>`.
-    * Make sure `lab_ManagementVpc` is selected as a VPC.
-    * Select all 3 subnets under `Select Subnets`.
+    * Make sure `defaultVPC` is selected as a VPC.
 1. Press `Next: Assign Security Groups`.
-    * Choose `lab_SecGroup_ELB_<your_ID>` as an existing security group.
+    * Choose `lab_SecGroup_ELB_<your_ID>` as an **existing** security group.
 1. Press `Next: Configure Security Settings`.
 1. Press `Next: Configure Health Check`.
     * Change `Ping Protocol` to `TCP`.
@@ -70,30 +92,29 @@ Now that our instances are connected to the same database, we can create our loa
 1. Press `Review and Create`.
 1. Press `Create`.
 
-Eventually it should look something like this:
-
-![](../Images/CreatedELBInstanceList.png?raw=true)
+    ![](../Images/ELBTwoInstancesLinked.png?raw=true)    
 
 ### 5. Connecting to the Website ###
 Now that we've linked both the instances to one load balancer we can browse to the load balancer and be directed to one of the instances.
 
 * Click on `lab-ELB-<your_ID>` and click the `Instances` tab to view the status of your instances being linked to the ELB.
-* Fill in the DNS name of your created load balancer in your web browser and press enter. It should redirect you to your Wordpress site. (The Load Balancer is pretty quick, but linking the instances and getting the DNS changes to take effect could take up to 5 minutes.)
-
+* Fill in the DNS name of your created load balancer in your web browser and press enter. It should redirect you to one of the MemeGen applications. (The Load Balancer is pretty quick, but linking the instances and getting the DNS changes to take effect could take up to 3-5 minutes.)
 
 ### 6. Differentiate the Instances ###
-To show both instances are actually being used by the Load Balancer we'll add a line to the second instance's index.php to differentiate the two instances from each other. 
+To show both instances are actually being used by the Load Balancer we'll change the site color of the second instance's app to differentiate the two instances from each other. 
 
-1. On the **second** instance do `echo 'echo "<script type=\"text/javascript\">alert(\"This is the second instance.\");</script>";' >> /var/www/html/wordpress/index.php`.
-1. Once the Load Balancer is fully operational, refresh the page a few times. About 50% of the time you'll get an alert saying `This is the second instance.`.
+1. `sed -i 's@^$siteColorBlue.*@$siteColorBlue = true; # Blue (Altered by sed)@g' /var/www/html/config.php`
+    * Alter one of the instance's app to use another site color by changing `config.php`.
+1. Once the Load Balancer is fully operational, hard refresh the page (`CTRL` + `SHIFT` + `R`) a few times. About 50% of the time the site color will visibly change meaning we've reached different instances.
 
-It should look something like this:
+    ![](../Images/ELBButtonChange1.png?raw=true)
+    
+    ![](../Images/ELBButtonChange2.png?raw=true)
 
-![](../Images/ELBSecondInstanceAlert.png?raw=true)
+Right now, you might note that only our database is synchronized between the two machines but none of our memes are synchronized. That's where the AWS S3 service comes in.  
 
-Right now, you might note that only our database is synchronized between the two machines, but as you can see the files clearly aren't. Suppose you're a Wordpress developer. Changing one of Wordpress' .php files on ONE instance will also have to be changed on the other one. 
-
-We're looking for a way to have both the instances use the same Wordpress files. That's where AWS' S3 service comes in handy.  
+## End of Lab 4 ##
+Once you have two Instances, both connected to the same ELB and DynamoDB, you may continue to the next lab.
 
 ### More info ###
 

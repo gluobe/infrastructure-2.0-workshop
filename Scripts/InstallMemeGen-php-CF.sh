@@ -78,11 +78,15 @@ REGION=$2
   systemctl restart apache2
   
 # Edit site's config.php file
+  # Put remote on.
   sed -i 's@^$remoteData.*@$remoteData = true; # DynamoDB (Altered by sed)@g' /var/www/html/config.php
   sed -i 's@^$remoteFiles.*@$remoteFiles = true; # S3 (Altered by sed)@g' /var/www/html/config.php
+  
+  # Alter user id
   sed -i "s@^\$yourId.*@\$yourId = \"$YOURID\"; # (Altered by sed)@g" /var/www/html/config.php
   sed -i "s@^\$awsRegion.*@\$awsRegion = \"$REGION\"; # (Altered by sed)@g" /var/www/html/config.php
   sed -i "s@^\$dynamoDBTable.*@\$dynamoDBTable = \"cloudformation-images-\$yourId\"; # (Altered by sed)@g" /var/www/html/config.php
+  sed -i "s@^\$s3Bucket.*@\$s3Bucket = \"cloudformation-\$yourId\"-bucket; # (Altered by sed)@g" /var/www/html/config.php
 
 # Please go to http://
   echo -e "Automatic MemeGen installation complete."
