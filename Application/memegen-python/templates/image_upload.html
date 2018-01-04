@@ -1,8 +1,12 @@
-<center><h1>Upload new image</h1></center> <br>
-<form action ={{ url_for('post_images') }} method="post" enctype="multipart/form-data">
+<center><h3>Upload new image</h1></center> <br>
+<form action ={{ url_for('post_images') }} method="post" enctype="multipart/form-data" >
+    <label class="btn btn-default btn-file">
     <input type="file" name="image">
-    <input type="submit" value="Submit">
+    </label>
+    <div>
+    <input type="submit" value="Upload" class="btn btn-success btn-lg marginTop">
+    </div>
 </form>
 <br>
-<center><h1>Or Choose an Existing Image</h1></center><br>
+<center><h3>Or Choose an Existing Image</h1></center><br>
 

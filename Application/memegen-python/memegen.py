@@ -7,23 +7,24 @@ from flask_pymongo import PyMongo
 from pymongo import MongoClient
 import boto3
 import datetime
+from config import *
 
-DATABASE= '/var/www/html/memegen/memegen.db'
+DATABASE= '/var/www/html/memegen-python/memegen.db'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-
-#mongo = PyMongo(app)
 
 client = MongoClient()    #Configure the connection to the database
 db = client.memedb    #Select the database
 meme = db.memetable #Select the collection
 
-dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
+dynamodb = boto3.resource('dynamodb', region_name=awsRegion)
 
-table = dynamodb.Table('memepython')
+table = dynamodb.Table(dynamoTable)
 
-s3 = boto3.resource('s3', region_name='us-east-2')
+s3 = boto3.resource('s3', region_name=awsRegion)
+s3BucketBoto = s3.Bucket(s3Bucket)
+
 
 @app.route('/')
 def index():
@@ -42,6 +43,7 @@ def get_images():
         images.append(html_image)
     form_data['images'] = images
     form_data['to_upload'] = True
+    form_data['site_color'] = siteColorBlue
     return render_template('grid.html', form_data=form_data)
 
 @app.route('/image/<int:image_id>', methods=['GET'])
@@ -54,7 +56,7 @@ def get_image(image_id):
 @app.route('/image', methods=['POST'])
 def post_images():
     img = request.files['image']
-    img.save('/var/www/html/memegen/static/images/%s' % img.filename)
+    img.save('/var/www/html/memegen-python/static/images/%s' % img.filename)
     img_id = dao.create_image(get_db(), img.filename)
     return redirect(url_for("get_image", image_id=img_id))
 
@@ -94,15 +96,14 @@ def post_meme():
     if DynamoDB:
        table.put_item(
            Item={
-               'meme_id': meme_id,
-               'bottom': bottomtext,
-               'top': toptext,
-               'image': image_name,
-               'date': i,
+               dynamo_meme_id: meme_id,
+               dynamo_bottom: bottomtext,
+               dynamo_top: toptext,
+               dynamo_image: image_name,
+               dynamo_date: i,
            }
         )
     else:
-        #meme = mongo.db.memes
         meme.insert({'top': toptext, 'bottom': bottomtext, 'image_name': image_name}) 
 
     memegenerator.gen_meme(image_name,
@@ -111,8 +112,8 @@ def post_meme():
                            meme_id)
     Bucket = request.form.get('S3')
     if Bucket:
-        data = open('/var/www/html/memegen/static/memes/%s.png' % meme_id, 'rb')
-        s3.Bucket('lab-2-bucket').put_object(Key=str(meme_id), Body=data)
+        data = open('/var/www/html/memegen-python/static/memes/%s.png' % meme_id, 'rb')
+        s3BucketBoto.put_object(Key=str(meme_id), Body=data)
     return redirect(url_for('static', filename='memes/%s.png' % meme_id))
 
 @app.teardown_appcontext

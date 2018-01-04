@@ -4,11 +4,11 @@ from PIL import Image
 from PIL import ImageDraw
 import os
 
-font_path = "/var/www/html/memegen/static/fonts/Impact.ttf"
+font_path = "/var/www/html/memegen-python/static/fonts/Impact.ttf"
 def gen_meme(image_name, top, bottom, meme_id):
     top = top.upper()
     bottom = bottom.upper()
-    image_path = os.path.join('/var/www/html/memegen/static/images',image_name)
+    image_path = os.path.join('/var/www/html/memegen-python/static/images',image_name)
 
     img = Image.open(str(image_path))
     imageSize = img.size
@@ -47,7 +47,7 @@ def gen_meme(image_name, top, bottom, meme_id):
     draw.text(topTextPosition, top, (255,255,255), font=font)
     draw.text(bottomTextPosition, bottom, (255,255,255), font=font)
 
-    img.save("/var/www/html/memegen/static/memes/%s.png" % meme_id)
+    img.save("/var/www/html/memegen-python/static/memes/%s.png" % meme_id)
 
 if __name__ == '__main__':
     gen_meme("Hello", "World", "aliens")

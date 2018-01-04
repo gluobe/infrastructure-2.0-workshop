@@ -4,13 +4,16 @@
 ## Global Settings ##
 #####################
 
-$yourId = "1";
+$yourId = "<your_ID>";
 
-$awsRegion = "us-east-2";
+$awsRegion = "eu-west-1"; # Ohio
+#$awsRegion = "eu-west-1"; # Ireland
 
-$dynamoDBTable = "images-$yourId";
+$dynamoDBTable = "images-$yourId"; # not using cloudformation
+#$dynamoDBTable = "cloudformation-images-$yourId"; # using cloudformation
 
-$s3Bucket = "lab-$yourId-bucket";
+$s3Bucket = "lab-$yourId-bucket"; # not using cloudformation
+#$s3Bucket = "cloudformation-$yourId-bucket"; # using cloudformation 
 
 ###################
 ## Site Settings ##
