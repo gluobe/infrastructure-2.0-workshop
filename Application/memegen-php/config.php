@@ -6,8 +6,8 @@
 
 $yourId = "<your_ID>";
 
-$awsRegion = "us-east-2"; # Ohio
-#$awsRegion = "eu-west-1"; # Ireland
+#$awsRegion = "us-east-2"; # Ohio
+$awsRegion = "eu-west-1"; # Ireland
 
 $dynamoDBTable = "images-$yourId"; # not using cloudformation
 #$dynamoDBTable = "cloudformation-images-$yourId"; # using cloudformation
