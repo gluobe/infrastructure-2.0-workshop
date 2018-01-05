@@ -14,7 +14,7 @@ ini_set("display_errors", "On");
 #######################
 
 // Connect to the database, either mongodb or dynamodb
-function ConnectDB($remoteData){
+function ConnectDB(){
     global $m;
     global $awsRegion;
     global $remoteData;
@@ -36,7 +36,7 @@ function ConnectDB($remoteData){
 }
 
 // Inserts a meme name and current date into the database, either mongodb or dynamodb
-function InsertMemes($remoteData, $imageName){
+function InsertMemes($imageName){
     global $m;
     global $remoteData;
     global $dynamoDBTable;
@@ -69,7 +69,7 @@ function InsertMemes($remoteData, $imageName){
 }
 
 // Gets all memes and encodes and echo's it so ajax can catch it.
-function GetMemes($remoteData){
+function GetMemes(){
     global $m;
     global $s3Bucket;
     global $dynamoDBTable;
@@ -103,7 +103,7 @@ function GetMemes($remoteData){
 }
 
 // Generates a meme with the python script and either puts it locally or in an S3 bucket
-function generateMeme($remote, $top, $bot, $imgname){
+function generateMeme($top, $bot, $imgname){
     global $m;
     global $s3Bucket;
     global $remoteFiles;

@@ -1,6 +1,5 @@
 <?php 
 
-include 'config.php';
 include 'functions.php';
 
 ###############
@@ -8,9 +7,9 @@ include 'functions.php';
 ###############
 
     // Connect to db
-    ConnectDB($remoteData);
+    ConnectDB();
     
     // Get all memes, this function echo's the data so ajax can catch it.
-    getMemes($remoteData);
+    getMemes();
     
 ?>

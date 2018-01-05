@@ -1,6 +1,5 @@
 <?php 
 
-include 'config.php';
 include 'functions.php';
 
 ###################
@@ -10,16 +9,16 @@ include 'functions.php';
     // Verify input just to be sure
     if( isset($_POST['topText']) and isset($_POST['botText']) and isset($_POST['selectedMeme'])){
         // Connect to db
-        ConnectDB($remoteData);
+        ConnectDB();
         
         // Call python app to generate meme
-        $imagenametarget = generateMeme( $remoteFiles, $_POST['topText'], $_POST['botText'], $_POST['selectedMeme'] );
+        $imagenametarget = generateMeme( $_POST['topText'], $_POST['botText'], $_POST['selectedMeme'] );
         
         //insert meme info in db
-        InsertMemes($remoteData, $imagenametarget );
-              
+        InsertMemes( $imagenametarget );
+        
         //change website so it gets from db as well to show memes.
-        getMemes($remoteData);
+        getMemes();
               
       
     } else {
