@@ -71,7 +71,10 @@ Let's see if our app works.
 1. Verify the EC2 instances from the Autoscaling Group are connected to the Load Balancer in `Services -> EC2 -> Load Balancers -> Click your Load Balancer -> Click the "Instances" tab`. 
     * Once their status is `InService`, you should be able to connect to the MemeGen web app. 
 
-Et voilà!
+## End of Lab 8 ##
+Et voilà! This method is much easier, more consistent, readable and less prone to errors. 
+
+Now let's try to break things in the last lab. ([To last lab](../Lab%209%20-%20Chaos%20Engineering)) 
 
 ### More info ###
 

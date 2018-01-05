@@ -16,8 +16,8 @@ Parameters:
     ConstraintDescription: Value must be the name of an existing EC2 KeyPair.
   AmiParam:
     Type: String
-    Default: "ami-82f4dae7" # US-EAST-2
-    #Default: "ami-8fd760f6" # EU-WEST-1
+    #Default: "ami-82f4dae7" # US-EAST-2
+    Default: "ami-8fd760f6" # EU-WEST-1
     Description: Ami Id to run the application.
   Ec2InstanceTypeParam:
     Type: String
@@ -29,8 +29,8 @@ Parameters:
       - t2.small
   DomainNameParam:
     Type: String
-    Default: "gluo.io" # US-EAST-2
-    #Default: "gluo.cloud" # EU-WEST-1
+    #Default: "gluo.io" # US-EAST-2
+    Default: "gluo.cloud" # EU-WEST-1
     Description: Hostname to create Route53 subdomain
   VpcIdParam:
     Type: AWS::EC2::VPC::Id

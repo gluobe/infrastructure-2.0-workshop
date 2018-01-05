@@ -18,7 +18,7 @@ Using an Autoscaling Group we can automatically scale the amount of EC2 Instance
 1. Click on `Actions -> Instance State -> Terminate -> Yes, Terminate`.
 
 ### 2. Configuring an LC ###
-A Launch configuration will contain all the EC2 Instance details and can even be used to run scripts when the Instance is up and running for the first time.
+A Launch configuration will contain all the EC2 Instance details and can even be used to run scripts when the Instance starts running for the first time.
 
 1. Go to `Services -> EC2 -> Launch Configurations -> Create launch configuration`.
 1. Select `Ubuntu Server 16.04 LTS`.
@@ -26,28 +26,25 @@ A Launch configuration will contain all the EC2 Instance details and can even be
 1. Fill in:
     * Name it `lab-LC-<your_ID>`.
     * Assign it the role `lab_InstanceAccess`.
-    * Now press `Advanced`:
+    * Now press `Advanced Details`:
         * Go to "Scripts/InstallMemeGen-php-LC.sh" and add your ID to the parameters
         
-            ![](../Images/LCChangeIDParameter.png?raw=true)     
-        
+        ![](../Images/LCChangeIDParameter.png?raw=true)     
+            
         * Copy and paste the whole script into the `User Data` field `As text`.
         * Set `IP Address Type` to `Assign a public IP address to every instance.`.
-
-            ![](../Images/LCFullConfigurationPage.png?raw=true)
         
+        ![](../Images/LCFullConfigurationPage.png?raw=true)
+
 1. Press `Next: Add Storage`.
 1. Press `Next: Configure Security Group`.
 1. Select an **existing** Security group: `lab_SecGroup_EC2_<your_ID>` and press `Review`.
 1. Press `Create launch configuration`.
 1. Choose an **existing** key pair: `lab_key_<your_ID>`, acknowledge and press `Create launch configuration`.
 1. Click `Close`.
-    * You might get automatically redirected to create an autoscaling group here. You can go back to `Services -> EC2 -> Launch Configurations` to view your LC.
 
 ### 3. Configuring an ASG ###
 Next, we'll create the Autoscaling Group. It can scale the amount of EC2 Instances depending CPU or network load or just manually. If an instance goes down, the ASG will turn another back up again as well.
-
-Some errors can pop up in this or future parts, they're most probably permission issues so you can ignore them. 
 
 1. Go to `Services -> EC2 -> Auto Scaling Groups -> Create Auto Scaling Group`.
 1. Select from an **existing** LC: `lab-LC-<your_ID>` and press `Next Step`.
@@ -77,9 +74,8 @@ Previously, your instances were manually linked to the Load Balancer. We cannot 
     * In the `Details` tab, find `Load Balancers`.
     * Click the editable box and select `lab-ELB-<your_ID>`.
     * Click `Save (to the right)`.
-        * You might have to refresh the page if it's stuck due to permission issues.
 
-            ![](../Images/ASGChangeLinkedELB.png?raw=true)
+        ![](../Images/ASGChangeLinkedELB.png?raw=true)
 
 1. Go to `<your_ID>.gluo.cloud`.
 
@@ -100,7 +96,7 @@ Feeling like the load on your servers is getting too high? We can easily add ano
     ![](../Images/ASGInstancesInService.png?raw=true)  
 
 ## End of Lab 7 ##
-If not everything's working you may continue anyway, but you normally should have 2 autoscaling instances with the MemeGen application, which are both reachable via the Load Balancer and have DynamoDB and S3 as a backend.
+If not everything's working you may continue anyway, but you normally should have 2 autoscaling instances with the MemeGen application, which are both reachable via the Load Balancer and have DynamoDB and S3 as a backend. ([Next lab](../Lab%208%20-%20Cloudformation%20(infra%202.0))) 
 
 ### More info ###
 

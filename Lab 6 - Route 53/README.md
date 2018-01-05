@@ -12,6 +12,7 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
 
 1. Copy your Load Balancer's DNS record (in `Services -> EC2 -> Load Balancers`).
 1. Go to `Services -> Route 53` under `Networking and Content Delivery`.
+    * You might see some permission errors here. Ignore them.
 1. Under `DNS Management`, click `Hosted zones`.
 1. Click on `gluo.cloud.`.
 1. Click `Create Record Set`
@@ -21,12 +22,13 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
         * This cannot contain `http://` or trailing slashes like `/` at the end.
 1. Click `Create`.
 
-The record can take up to 2-5 minutes to be registered by the top DNS servers. You can go to `<your_ID>.gluo.io` to view your Load Balanced MemeGen site.
-
+* Go to `<your_ID>.gluo.io` to view your Load Balanced MemeGen site.
+    * The record can take up to 2-5 minutes to be registered by the top DNS servers. 
+    
 ![](../Images/Route53BrowseToLoadBalancer.png?raw=true)
 
 ## End of Lab 6 ##
-Once you can reach both your instances via the Route53 records through the Load Balancer, you may continue to the next lab.
+Once you can reach both your instances via the Route53 records through the Load Balancer, you may continue to the next lab. ([Next lab](../Lab%207%20-%20ASG%20and%20LC%20(infra%201.0))) 
 
 ### More info ###
 

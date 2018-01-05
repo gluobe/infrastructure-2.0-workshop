@@ -86,5 +86,5 @@ Please make sure you log in to the machine that corresponds with your ID!
     >**ubuntu@ip-192-168-0-134:~$**
   
 # End of Lab 0
-Once you're logged in to the Management Instance, you can continue to the next lab.    
+Once you're logged in to the Management Instance, you can continue to the next lab. ([Next lab](../Lab%201%20-%20AWS%20Console%20and%20EC2))
 

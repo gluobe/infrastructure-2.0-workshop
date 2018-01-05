@@ -16,23 +16,10 @@ S3 is a service for storing files in a folder like structure.
 1. Find your bucket. We've already created one for you, it should be named `lab-<your_ID>-bucket`.
 1. There's (almost) nothing in it! That'll soon change, when we upload all our memes to it.
     
-### 2. Synchronize files to the bucket ###
-#### 2.1. Giving EC2 Instances access to S3 via a Role ####
-We need to give both EC2 instances an access role. This role contains permissions to give read and write privileges to certain S3 buckets. This means the role will allow the EC2 Instances to read and write to your bucket in S3.
-
-Do this for **both** instances.
-
-1. Select one of your instances in `Services -> EC2 -> Instances`.
-1. Press the `Actions` button above the instances list.
-    * Hover over `Instance Settings`.
-    * Press `Attach/Replace IAM Role`.
-1. Select `lab_InstanceAccess`.
-1. Press `Apply`.
-
-#### 2.2. Installing AWSCLI ####
+### 2. Installing AWSCLI ###
 AWS has its AWS Console (which we've been working in) to access AWS via your browser, but it's also accessible via a commandline tool named AWSCLI. It's installed via a Python package called Pip.
 
-Do this on **both** instances. (it might already be installed on the second one.)
+Do this on **both** instances. (it might already be installed on your second instance.)
 
 1. `pip install awscli`
     *  Install AWSCLI with the python package manager pip.
@@ -43,36 +30,45 @@ Do this on **both** instances. (it might already be installed on the second one.
 >
 > aws-cli/1.14.9 Python/2.7.12 Linux/4.4.0-1041-aws botocore/1.8.13
 
-#### 2.3. Uploading images to S3 ####
-We'll be using AWSCLI to upload our local memes to the S3 bucket.
+### 3. Trying out AWSCLI ###
+PHP will be using AWSCLI to upload and download our local memes to the S3 bucket. We'll do it manually once just to try it out. 
 
-Do this **once**, just to try it out.
+1. `aws help`
+    * Look at all the services that are accessible via the commandline!
+1. `aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-<your_ID>-bucket`.
+    * Upload a meme of your choosing to the bucket 
+    
+    > root@ip-172-31-16-165:~# aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-2-bucket
+    >
+    > upload: ../var/www/html/meme-generator/memes/successkid.jpg to s3://lab-2-bucket/successkid.jpg
 
-1. Upload a meme of your choosing to the bucket `aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-<your_ID>-bucket`.
 1. Go back to your bucket, the image should have been added!
 
     ![](../Images/S3BucketContents.png?raw=true)
 
-### 3. Switch to using S3 ###
-#### 3.1. Change the site config ####
-Next we'll change the application configuration file on both instances one more time to synchronize the memes to the bucket.
+### 4. Change the site config ###
+Next we'll change the application configuration file on both instances one more time to switch it to using S3 instead of the local filesystem.
 
 Do this on **both** instances.
 
 1. `sed -i 's@^$remoteFiles.*@$remoteFiles = true; # S3 (Altered by sed)@g' /var/www/html/config.php`
     * Change the $remoteFiles variable in config.php to true.
 
-#### 3.2. Create another meme ####
+### 5. Create another meme ###
 Your instances are now linked to each other not only by database but also by filesystem. Every time you create and display a meme, the memes folder will be synchronized in the php backend using awscli.
 
-1. Create a meme on **both** instances. This will ensure all images from all instances are uploaded.
+1. Create a meme on **both the blue and green instance**. This will ensure all images from all instances are uploaded.
 1. Refresh the load balancer page a couple of times. All images should load on both instances.
 1. Go and look at your bucket's contents again. All memes will have been uploaded.
 
+* It might be that your image is not loaded immediately after creating it. This is because S3 is not very fast & we're not developers :).
+
 ## End of Lab 5 ##
-Once you have two Instances, both connected to a Load Balancer, DynamoDB and S3, you may continue to the next lab.
+Once you have two Instances, both connected to a Load Balancer, DynamoDB and S3, you may continue to the next lab. ([Next lab](../Lab%206%20-%20Route%2053)) 
 
 ### More info ###
 
 * What is S3? (https://aws.amazon.com/s3/).
+* The AWS commandline interface (https://aws.amazon.com/cli/).
+* AWSCLI available services (https://docs.aws.amazon.com/cli/latest/reference/index.html#available-services)
 * The S3 specific AWSCLI documentation (http://docs.aws.amazon.com/cli/latest/reference/s3/index.html).

@@ -32,9 +32,9 @@ Our application is a meme generator. It will create memes, store the files on th
 * If you're stuck in `vim`, press `ESC`, `:q!` (force quit), `ENTER`.
 
 ### 2. Install & configure MongoDB ###
-Our database is called MongoDB. It stores data in a NoSQL, document oriented manner. This means that it's not a relational SQL-like database and avoids joins. Instead it is more object oriented and group the data of one object together, without spreading it over a number of tables.
+Our database is called MongoDB. It stores data in a NoSQL, document oriented manner. This means that it's not a relational SQL-like database and avoids joins. Instead it is more object oriented and groups the data an object together, without spreading it over a number of tables. 
 
-For the purposes of this tutorial there isn't a real benefit to using SQL or NoSQL, we just like to switch it up.
+There's advantages and disadvantages to this type of database. For the purposes of this tutorial there isn't a real benefit to using SQL or NoSQL, we just like to switch it up.
 
 1. `apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5`
     * Install the Mongodb repository verification key.
@@ -48,8 +48,9 @@ For the purposes of this tutorial there isn't a real benefit to using SQL or NoS
     * Start MongoDB.
 1. `mongo`
     * Enter the MongoDB CLI without credentials. Your prompt will change.
+1. `use memegen`
+    * Switch to the "memegen" database.
 1. ```
-use memegen
 db.createUser(
    {
      user: "student",
@@ -58,13 +59,18 @@ db.createUser(
    }
 )
 ```
-    * Create a student user with root privileges to any db with default dadtabase memegen. It should say `Successfully added user`.
+    * Create a student user with default database named "memegen" and root privileges to any db. It should say `Successfully added user`.
 1. `exit`
     * Exit the shell.
 1. `echo "security:" >> /etc/mongod.conf && echo "  authorization: enabled" >> /etc/mongod.conf`
     * Enable MongoDB's access control.
 1. `systemctl restart mongod`
     * Restart MongoDB so access control is enabled.
+1. `mongo memegen -u student --password=Cloud247`
+    * Test access control by logging in with the right credentials...
+1. `exit`
+1. `mongo memegen -u student --password=wrongcredentials`
+    * ...and the wrong credentials.
     
 Our database with the student user is now up and running.
     
@@ -95,7 +101,7 @@ PHP is a server side language that will interact with the filesystem and databas
     * Download the PHP SDK for AWS, so php can interact with AWS.
 
 ### 5. (Re)Start & enable all services ###
-Everything has been installed but nothing is running yet. Start the Apache and MongoDB services with the following commands.
+Everything has been installed and running. Restart and check the status of the Apache and MongoDB services with the following commands to make sure it's stable.
 
 1. `systemctl enable mongod apache2`
     * Make sure the services start when the system reboots.
@@ -107,7 +113,7 @@ Everything has been installed but nothing is running yet. Start the Apache and M
     ![](../Images/ManualInstallStateRunning.png?raw=true)
 
 ### 6. Use Gluo MemeGen ###
-We can now go to the server's IP-address in your web browser. If everything works you should see the MemeGen application. Create a meme.
+We can now go to the server's public IP-address in your web browser. If everything works you should see the MemeGen application. Let's create a meme.
 
 1. Select a meme from the dropdown box.
 1. Fill in both fields.
@@ -118,29 +124,33 @@ We can now go to the server's IP-address in your web browser. If everything work
 ### 7. Verify MemeGen is working (Optional) ###
 If you're curious if MemeGen has actually written any data to the database or files to the filesystem we can check this out.
 
-* The application saves the meme on the EC2 instance under `/var/www/html/meme-generator/memes/`.
-    1. Show this folder with `ls /var/www/html/meme-generator/memes/`
-* The image name and timestamp is saved in the Mongo database, under the database `memegen` and collection `images`.
-    1. `mongo memegen -u student -p`
-        * Enter the MongoDB Shell in the database images as user student with password `Cloud247`.
-    1. `show databases`
-        * Show all databases.
-    1. `use memegen`
-        * Enter the memegen database.
-    1. `show collections`
-        * Show all collections from your current database.
-    1. `db.images.find()`
-        * Get all data from a specific collection in your current database.
-    1. `db.getUsers()`
-        * Get the users from your current database.
-    1. `exit`
-        * Exit the shell.
+Images are saved locally.
 
-    >root@ip-172-31-42-6:/var/www/html# **mongo memegen -u student -p**
+1. `ls /var/www/html/meme-generator/memes/`
+    * Look at your created meme.
+    
+The database will save the id (id), image name (name) and date of creation (date).
+    
+1. `mongo memegen -u student --password=Cloud247`
+    * Enter the MongoDB Shell in the database images.
+1. `show databases`
+    * Show all databases.
+1. `use memegen`
+    * Enter the memegen database.
+1. `db`
+    * Show current database.
+1. `show collections`
+    * Show all collections from your current database.
+1. `db.images.find()`
+    * Get all data from a specific collection in your current database.
+1. `db.getUsers()`
+    * Get the users from your current database.
+1. `exit`
+    * Exit the shell.
+
+    >root@ip-172-31-42-6:/var/www/html# **mongo memegen -u student --password=Cloud247**
     >
     >MongoDB shell version v3.6.1
-    >
-    >Enter password: 
     >
     >connecting to: mongodb://127.0.0.1:27017/memegen
     >
@@ -163,6 +173,10 @@ If you're curious if MemeGen has actually written any data to the database or fi
     > \> **use memegen**
     >
     >switched to db memegen
+    >
+    > \> **db**
+    >
+    >memegen
     >
     > \> **show collections**
     >
@@ -191,7 +205,7 @@ If you're curious if MemeGen has actually written any data to the database or fi
     > \> **exit**
 
 ## End of Lab 2 ##
-Once your MemeGen application works and your local MongoDB receives records, you can continue to the next lab. 
+Once your MemeGen application works and your local MongoDB receives records, you can continue to the next lab. ([Next lab](../Lab%203%20-%20DynamoDB))
 
 ### More info ###
 

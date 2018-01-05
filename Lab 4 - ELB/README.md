@@ -25,7 +25,7 @@ We'll need a firewall configuration for the Load Balancer. It simply forwards po
 ### 2. Create a second EC2 Instance ###
 To gain the most out of the load balancer we're about to set up, we'll need another EC2 Instance to link the load balancer with so it can do its job properly. You can also do this with just one instance but the load balancer wouldn't really be load balancing anything, it would just be a glorified proxy.
 
-At this point we should still have one instance running. We can copy the settings of an instance create another instance from it.
+At this point we should still have one instance running. We can copy the settings of an instance and create another instance from it. This won't copy the original instance's hard drive, we'll have to install MemeGen on this new instance again. 
 
 1. Go to `Services -> EC2 -> Instances`
 1. Select your own instance named `lab_EC2_instance1_<your_ID>`.
@@ -39,11 +39,23 @@ At this point we should still have one instance running. We can copy the setting
 ### 3. Configure your second EC2 Instance ###
 Next we'll install the MemeGen app on the second instance via a bash script instead of doing it all manually like in Lab 2 again.
 
-1. Log out of your first instance to the red prompt of your management instance.  
+* Log out of your first instance to the red prompt of your management instance.  
     1. `exit`
     1. `exit`
+    
+```diff
+root@ip-172-31-16-165:~# exit
+logout
++ ubuntu@ip-172-31-16-165:~$ exit
+logout
+Connection to 18.217.248.55 closed.
+- root@management-server:~$
+```
+
 1. `ssh -i ~/.ssh/id_rsa ubuntu@<IP-address-second-instance>`
     * Log in to your second instance.
+1. `sudo su -`
+    * Become the root user.
 1. `git clone https://github.com/gluobe/infrastructure-2.0-workshop.git ~/infra-workshop`
     * Clone the repository to your home directory.
 1. `chmod 755 ~/infra-workshop/Scripts/InstallMemeGen-php.sh`
@@ -66,7 +78,7 @@ Next we'll install the MemeGen app on the second instance via a bash script inst
 
     ![](../Images/ELBTwoInstancesTwoApps2.png?raw=true)    
 
-* You'll note however that no images are synchronized between the instances... We'll fix that later.
+* You'll note however that no images are synchronized between the instances... When a meme is made it just saves it locally on its own instance filesystem. We'll fix that later.
 
     ![](../Images/ELBMissingImagesNoSync1.png?raw=true)
 
@@ -84,7 +96,7 @@ Now that our instances are connected to the same database, we can create our loa
     * Choose `lab_SecGroup_ELB_<your_ID>` as an **existing** security group.
 1. Press `Next: Configure Security Settings`.
 1. Press `Next: Configure Health Check`.
-    * Change `Ping Protocol` to `TCP`.
+    * Change `Ping Path` to `/index.php`.
 1. Press `Next: Add EC2 Instances`.
     * Select your instances named `lab_EC2_instance1_<your_ID>` and `lab_EC2_instance2_<your_ID>`.
 1. Press `Next: Add Tags`.
@@ -92,29 +104,38 @@ Now that our instances are connected to the same database, we can create our loa
 1. Press `Review and Create`.
 1. Press `Create`.
 
+* Click on your load balancer `lab-ELB-<your_ID>` and click the `Instances` tab to view the status of your instances being linked to the ELB.
+
     ![](../Images/ELBTwoInstancesLinked.png?raw=true)    
 
-### 5. Connecting to the Website ###
-Now that we've linked both the instances to one load balancer we can browse to the load balancer and be directed to one of the instances.
+### 5. Connecting through the Load Balancer ###
+Now that we've linked both the instances to one load balancer we can browse to the load balancer URL and be redirected to one of the instances.
 
-* Click on `lab-ELB-<your_ID>` and click the `Instances` tab to view the status of your instances being linked to the ELB.
-* Fill in the DNS name of your created load balancer in your web browser and press enter. It should redirect you to one of the MemeGen applications. (The Load Balancer is pretty quick, but linking the instances and getting the DNS changes to take effect could take up to 3-5 minutes.)
+1. Copy the DNS URL provided by the Load Balancer.
+
+    ![](../Images/ELBCopyURL.png?raw=true) 
+
+1. Paste it into your browser titlebar.
+    * The Load Balancer is pretty quick, but linking the instances and getting the DNS changes to take effect could take up to 1-3 minutes.
+    
+    ![](../Images/ELBLinkIntoBrowser.png?raw=true) 
 
 ### 6. Differentiate the Instances ###
 To show both instances are actually being used by the Load Balancer we'll change the site color of the second instance's app to differentiate the two instances from each other. 
 
 1. `sed -i 's@^$siteColorBlue.*@$siteColorBlue = true; # Blue (Altered by sed)@g' /var/www/html/config.php`
     * Alter one of the instance's app to use another site color by changing `config.php`.
-1. Once the Load Balancer is fully operational, hard refresh the page (`CTRL` + `SHIFT` + `R`) a few times. About 50% of the time the site color will visibly change meaning we've reached different instances.
+1. Try to hard refresh the page (`CTRL` + `SHIFT` + `R`) a few times. About 50% of the time the site color will visibly change meaning we've reached different instances.
 
     ![](../Images/ELBButtonChange1.png?raw=true)
     
     ![](../Images/ELBButtonChange2.png?raw=true)
 
-Right now, you might note that only our database is synchronized between the two machines but none of our memes are synchronized. That's where the AWS S3 service comes in.  
+As you probably noted before none of our memes are synchronized. That's where the AWS S3 service comes in.  
 
 ## End of Lab 4 ##
-Once you have two Instances, both connected to the same ELB and DynamoDB, you may continue to the next lab.
+Once you have two Instances, both connected to the same Load Balancer and DynamoDB, you may continue to the next lab. ([Next lab](../Lab%205%20-%20S3))
+
 
 ### More info ###
 

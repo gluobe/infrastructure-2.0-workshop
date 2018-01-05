@@ -33,8 +33,8 @@ The key pair consists of a public and private key. The public key is put onto a 
 1. `ssh-keygen` (Press `Enter` a couple of times without filling in anything until your prompt returns.)
     * Generate a key pair.
 1. `ls -l ~/.ssh/`
-    * Look at the key pair. The private key is `id_rsa` and the public key is `id_rsa.pub` and they're located under your current user's home directory .ssh directory `/root/.ssh/`.
-    * Note the private key's permissions (~/.ssh/id_rsa). They're stricter than the public key's permissions (~/.ssh/id_rsa.pub).
+    * Look at the key pair. The private key is `id_rsa`, the public key is `id_rsa.pub` and they're located under your current user home's .ssh directory `/root/.ssh/`.
+    * Note that the private key's permissions (-rw-------) are stricter than the public key's permissions (-rw-r--r--). 
     
     > **ubuntu**@management-server:~$ **sudo su -**
     >
@@ -193,7 +193,7 @@ We'll be logging into our created EC2 Instance from the management EC2 Instance 
     >ubuntu@**ip-172-31-25-78:~$**
 
 ## End of Lab 1 ##
-Once you're logged in to your own created EC2 Instance, you can continue to the next lab.  
+Once you're logged in to your own created EC2 Instance, you can continue to the next lab. ([Next lab](../Lab%202%20-%20Manual%20installation%20(Infra%200.0)))
 
 ### More info ###
 
