@@ -86,7 +86,7 @@ REGION=$2
   sed -i "s@^\$yourId.*@\$yourId = \"$YOURID\"; # (Altered by sed)@g" /var/www/html/config.php
   sed -i "s@^\$awsRegion.*@\$awsRegion = \"$REGION\"; # (Altered by sed)@g" /var/www/html/config.php
   sed -i "s@^\$dynamoDBTable.*@\$dynamoDBTable = \"cloudformation-images-\$yourId\"; # (Altered by sed)@g" /var/www/html/config.php
-  sed -i "s@^\$s3Bucket.*@\$s3Bucket = \"cloudformation-\$yourId\"-bucket; # (Altered by sed)@g" /var/www/html/config.php
+  sed -i "s@^\$s3Bucket.*@\$s3Bucket = \"cloudformation-\$yourId-bucket\"; # (Altered by sed)@g" /var/www/html/config.php
 
 # Please go to http://
   echo -e "Automatic MemeGen installation complete."
