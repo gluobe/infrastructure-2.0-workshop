@@ -64,7 +64,7 @@ Let's see if our app works.
 1. In `Services -> Cloudformation`
     1. Click your cloudformation stack `lab-app-<your_ID>`. 
     1. Click the `Outputs` tab.
-        * This provides some handy links to you resources.
+        * This provides some handy links to your resources.
     1. Copy the Route53 record `lab-app-<your_ID>.gluo.cloud`
     1. Browse to it.
         * This could give you a nice "The connection was reset" for up to 5-10 minutes up until the stack is created. 
