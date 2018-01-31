@@ -45,17 +45,20 @@
 							success: function(result){
 									// Turn into vars
 									var config = jQuery.parseJSON(result);
+									var yourId = config.yourId;
 									var remoteFiles = config.remoteFiles;
 									var remoteData = config.remoteData;
 									var siteColorBlue = config.siteColorBlue;
 									
 									// Log
 									console.log( "Config file received:");
+									console.log( "> yourId: " + yourId );
 									console.log( "> remoteFiles: " + remoteFiles );
 									console.log( "> remoteData: " + remoteData );
 									console.log( "> siteColorBlue: " + siteColorBlue );
 									
 									// Change site display
+									$("#yourId").html("yourId: " + yourId);
 									$("#remoteFiles").html("remoteFiles: " + remoteFiles);
 									$("#remoteData").html("remoteData: " + remoteData);
 									$("#siteColorBlue").html("siteColorBlue: " + siteColorBlue);
@@ -234,6 +237,7 @@
 			<div class="container-fluid text-center">
 					<div class="row">
 							<h2>Site Config</h2>
+							<p id="yourId">yourId: N/A</p>
 							<p id="remoteFiles">remoteFiles: N/A</p>
 							<p id="remoteData">remoteData: N/A</p>
 							<p id="siteColorBlue">siteColorBlue: N/A</p>
