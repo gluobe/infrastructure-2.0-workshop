@@ -72,7 +72,9 @@ Let's see if our app works.
     * Once their status is `InService`, you should be able to connect to the MemeGen web app. 
 
 ## End of Lab 8 ##
-Et voilà! This method is much easier, more consistent, readable and less prone to errors. 
+Et voilà! This method is much easier, more consistent, readable and less prone to errors than doing everything manually. 
+
+Run this command to update the scoring server: `/.checkScore.sh`.
 
 Now let's try to break things in the last lab. ([To last lab](../Lab%209%20-%20Chaos%20Engineering)) 
 

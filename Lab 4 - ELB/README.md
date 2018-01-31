@@ -134,8 +134,9 @@ To show both instances are actually being used by the Load Balancer we'll change
 As you probably noted before none of our memes are synchronized. That's where the AWS S3 service comes in.  
 
 ## End of Lab 4 ##
-Once you have two Instances, both connected to the same Load Balancer and DynamoDB, you may continue to the next lab. ([Next lab](../Lab%205%20-%20S3))
+Run this command to update the scoring server: `/.checkScore.sh`.
 
+Once you have two Instances, both connected to the same Load Balancer and DynamoDB, you may continue to the next lab. ([Next lab](../Lab%205%20-%20S3))
 
 ### More info ###
 

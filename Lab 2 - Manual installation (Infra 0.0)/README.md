@@ -205,6 +205,8 @@ The database will save the id (id), image name (name) and date of creation (date
     > \> **exit**
 
 ## End of Lab 2 ##
+Run this command to update the scoring server: `/.checkScore.sh`.
+
 Once your MemeGen application works and your local MongoDB receives records, you can continue to the next lab. ([Next lab](../Lab%203%20-%20DynamoDB))
 
 ### More info ###

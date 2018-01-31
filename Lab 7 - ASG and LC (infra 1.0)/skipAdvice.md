@@ -4,7 +4,8 @@ If something didn't work in this lab or you simply don't have enough time you ca
 If you created the following services already, please remove them first:
     * an autoscaling group.
     * a launch configuration. 
-
+    
+1. Delete your 2 EC2 instances.
 1. You should be logged in to your Management Instance.
 1. `export MYID=<your_ID> && export MYREGION=eu-west-1`
     * Set environment variables.

@@ -33,4 +33,8 @@ Now for deleting the Cloudformation Stack.
 1. Press `Actions`, then `Delete Stack` and confirm with `Yes, Delete`.
     * If the stack deletion fails, try again but do not check any boxes that could appear on this step, as doing so will skip the deletion of services. We don't want any stragglers, only total deletion.
     
+
+Run this command to update the scoring server: `/.checkScore.sh`.    
+
 That's it! Hope you learned something :)
+

@@ -193,7 +193,9 @@ We'll be logging into our created EC2 Instance from the management EC2 Instance 
     >ubuntu@**ip-172-31-25-78:~$**
 
 ## End of Lab 1 ##
-Once you're logged in to your own created EC2 Instance, you can continue to the next lab. ([Next lab](../Lab%202%20-%20Manual%20installation%20(Infra%200.0)))
+Once you're logged in to your own created EC2 Instance, run this command `/.checkScore.sh`.
+
+Then continue to the next lab. ([Next lab](../Lab%202%20-%20Manual%20installation%20(Infra%200.0)))
 
 ### More info ###
 

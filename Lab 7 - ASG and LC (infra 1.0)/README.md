@@ -96,7 +96,11 @@ Feeling like the load on your servers is getting too high? We can easily add ano
     ![](../Images/ASGInstancesInService.png?raw=true)  
 
 ## End of Lab 7 ##
-If not everything's working you may continue anyway, but you normally should have 2 autoscaling instances with the MemeGen application, which are both reachable via the Load Balancer and have DynamoDB and S3 as a backend. ([Next lab](../Lab%208%20-%20Cloudformation%20(infra%202.0))) 
+If not everything's working you may continue anyway, but normally you should have 2 autoscaling instances with the MemeGen application, which are both reachable via the Load Balancer and have DynamoDB and S3 as a backend.  
+
+Run this command to update the scoring server: `/.checkScore.sh`.
+
+Let's unleash the true power of infrastructure2.0 in the ([next lab](../Lab%208%20-%20Cloudformation%20(infra%202.0))).
 
 ### More info ###
 

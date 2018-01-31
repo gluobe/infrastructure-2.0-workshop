@@ -77,6 +77,8 @@ After you created a new meme we can go to DynamoDB and see the added record.
     ![](../Images/DynamoDBAddedRecordsOwnMeme.png?raw=true)
 
 ## End of Lab 3 ##
+Run this command to update the scoring server: `/.checkScore.sh`.
+
 Once your MemeGen application works and your remote DynamoDB receives records, you can continue to the next lab. ([Next lab](../Lab%204%20-%20ELB))
 
 ### More info ###

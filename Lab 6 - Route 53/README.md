@@ -28,6 +28,8 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
 ![](../Images/Route53BrowseToLoadBalancer.png?raw=true)
 
 ## End of Lab 6 ##
+Run this command to update the scoring server: `/.checkScore.sh`.
+
 Once you can reach both your instances via the Route53 records through the Load Balancer, you may continue to the next lab. ([Next lab](../Lab%207%20-%20ASG%20and%20LC%20(infra%201.0))) 
 
 ### More info ###

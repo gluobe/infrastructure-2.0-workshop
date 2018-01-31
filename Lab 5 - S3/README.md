@@ -64,6 +64,8 @@ Your instances are now linked to each other not only by database but also by fil
 * It might be that your image is not loaded immediately after creating it. This is because S3 is not very fast & we're not developers :).
 
 ## End of Lab 5 ##
+Run this command to update the scoring server: `/.checkScore.sh`.
+
 Once you have two Instances, both connected to a Load Balancer, DynamoDB and S3, you may continue to the next lab. ([Next lab](../Lab%206%20-%20Route%2053)) 
 
 ### More info ###

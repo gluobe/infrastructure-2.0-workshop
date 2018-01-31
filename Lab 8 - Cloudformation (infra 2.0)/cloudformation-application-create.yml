@@ -103,7 +103,7 @@ Resources:
               - "sts:AssumeRole"
       Path: "/"
       Policies:
-        - PolicyName: !Sub "CloudFormation-${AWS::StackName}-Policies"
+        - PolicyName: !Sub "Cloudformation-${AWS::StackName}-Policies"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:

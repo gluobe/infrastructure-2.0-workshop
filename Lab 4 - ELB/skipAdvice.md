@@ -19,6 +19,8 @@ If you created the following services already, please remove them first:
 
 #### Configure EC2 Instance2 
 1. You should be logged in to your second EC2 Instance.
+1. `sudo su -`
+    * Become the root user.
 1. `export MYID=<your_ID> && export MYREGION=eu-west-1`
     * Set environment variables.
 1. `git clone https://github.com/gluobe/infrastructure-2.0-workshop.git ~/infra-workshop`
