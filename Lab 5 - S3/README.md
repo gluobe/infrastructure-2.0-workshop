@@ -17,9 +17,9 @@ S3 is a service for storing files in a folder like structure.
 1. There's (almost) nothing in it! That'll soon change, when we upload all our memes to it.
     
 ### 2. Installing AWSCLI ###
-AWS has its AWS Console (which we've been working in) to access AWS via your browser, but it's also accessible via a commandline tool named AWSCLI. It's installed via a Python package called Pip.
+AWS has its AWS Console (which we've been working in) to access AWS via your browser, but it's also accessible via a commandline tool named AWSCLI. It's installed via a Python package manager called Pip.
 
-Do this on **both** instances. (it might already be installed on your second instance.)
+Do this on **both** instances. (It might already be installed on your second instance.)
 
 1. `pip install awscli`
     *  Install AWSCLI with the python package manager pip.
@@ -33,8 +33,6 @@ Do this on **both** instances. (it might already be installed on your second ins
 ### 3. Trying out AWSCLI ###
 PHP will be using AWSCLI to upload and download our local memes to the S3 bucket. We'll do it manually once just to try it out. 
 
-1. `aws help`
-    * Look at all the services that are accessible via the commandline!
 1. `aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-<your_ID>-bucket`.
     * Upload a meme of your choosing to the bucket 
     
@@ -51,8 +49,9 @@ Next we'll change the application configuration file on both instances one more 
 
 Do this on **both** instances.
 
-1. `sed -i 's@^$remoteFiles.*@$remoteFiles = true; # S3 (Altered by sed)@g' /var/www/html/config.php`
-    * Change the $remoteFiles variable in config.php to true.
+1. **Change config.php.**
+    1. Enter `/var/www/html/config.php` using your favorite editor.
+    1. Change the `$remoteFiles` variable to `true`.
 
 ### 5. Create another meme ###
 Your instances are now linked to each other not only by database but also by filesystem. Every time you create and display a meme, the memes folder will be synchronized in the php backend using awscli.
@@ -61,12 +60,14 @@ Your instances are now linked to each other not only by database but also by fil
 1. Refresh the load balancer page a couple of times. All images should load on both instances.
 1. Go and look at your bucket's contents again. All memes will have been uploaded.
 
-* It might be that your image is not loaded immediately after creating it. This is because S3 is not very fast & we're not developers :).
+* You might notice that your image is not loaded immediately after creating it now. This is because S3 is not very fast & our application is not very good :). Simply refresh the page to prevent this issue.
 
 ## End of Lab 5 ##
-Run this command to update the scoring server: `/.checkScore.sh`.
+Congratulations! You've successfully switched to using S3 as your storage device.
 
-Once you have two Instances, both connected to a Load Balancer, DynamoDB and S3, you may continue to the next lab. ([Next lab](../Lab%206%20-%20Route%2053)) 
+To update your score, `exit` to your management instance and run this command `/.checkScore.sh`. You needn't log back into your own instances.
+
+Once you have two Instances, both connected to a Load Balancer, DynamoDB and S3, you may continue to the [next lab](../Lab%206%20-%20Route%2053).
 
 ### More info ###
 

@@ -42,12 +42,8 @@ Next let's add some records that will pull some pre-fabricated memes from the re
 ### 3. Link MemeGen to DynamoDB ###
 In lab 2 we already installed the necessary PHP SDK that AWS provides so our code can interact with AWS' DynamoDB. The only thing we need to do now is change the configuration variable to switch the application over to using DynamoDB instead of our local MongoDB.
 
-1. `vim /var/www/html/config.php`.
-1. Press `i` (insert).
+1. Enter `/var/www/html/config.php` using your favorite editor.
 1. Change `$remoteData` to `true`.
-1. Press `ESC`, then type `:wq` (write and quit) and press `ENTER`.
-
-* If you're stuck in `vim`, press `ESC`, `:q!`, `ENTER`.
 
 ### 4. Give your instance permissions ###
 Your account has restricted permissions. We're telling PHP to go and change data in DynamoDB, but nowhere have we specified any of our account credentials in the EC2 instance. This is why we have to give our EC2 instance a role so it has permissions to change things in other AWS services like adding a record in DynamoDB.
@@ -77,9 +73,11 @@ After you created a new meme we can go to DynamoDB and see the added record.
     ![](../Images/DynamoDBAddedRecordsOwnMeme.png?raw=true)
 
 ## End of Lab 3 ##
-Run this command to update the scoring server: `/.checkScore.sh`.
+Congratulations! You've successfully switched to using an AWS DynamoDB database instead of your local MongoDB.
 
-Once your MemeGen application works and your remote DynamoDB receives records, you can continue to the next lab. ([Next lab](../Lab%204%20-%20ELB))
+To update your score, `exit` to your management instance and run this command `/.checkScore.sh`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
+
+Once your MemeGen application works and your remote DynamoDB receives records, you can continue to the [next lab](../Lab%204%20-%20ELB).
 
 ### More info ###
 

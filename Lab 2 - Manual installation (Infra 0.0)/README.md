@@ -4,7 +4,7 @@
 You should be logged in to your own EC2 Instance.
 
 ## Visual Interpretation ##
-To really show the power of infrastructure 2.0 later on, we'll be starting very simply and traditionally by creating a simple apache webserver that's hosting our MemeGen application with MongoDB as our local database on one single instance.
+To really show the power of infrastructure 2.0 later on, we'll be starting very simply and traditionally by creating a simple apache webserver that's hosting our MemeGen application with MongoDB as our local database on one single instance. You might call it a LAMP stack, but with MongoDB instead of MySQL.
 
 ![](../Images/Lab2.png?raw=true)
 
@@ -12,7 +12,7 @@ To really show the power of infrastructure 2.0 later on, we'll be starting very 
 Our application is a meme generator. It will create memes, store the files on the local filesystem and store the image data in the local database.
 
 1. `sudo su -`
-    * Enter the superuser's shell
+    * Enter the superuser's shell. Your prompt should turn white (if red, you're still on your management instance).
 1. `mkdir -p /var/www/html`
     * Create the folder structure to house our application and host it with Apache.
 1. `git clone https://github.com/gluobe/infrastructure-2.0-workshop.git ~/infra-workshop`
@@ -24,15 +24,11 @@ Our application is a meme generator. It will create memes, store the files on th
 1. `ls /var/www/html/`
     * Show the meme generator application contents.
 1. **Change the site to have your ID.**
-    1. `vim /var/www/html/config.php`
-    1. Press `i` (insert).
+    1. Enter `/var/www/html/config.php` using your favorite editor.
     1. Change the `$yourId` variable to your own ID.
-    1. Press `ESC`, then type `:wq` (write and quit) and press `ENTER`.
-    
-* If you're stuck in `vim`, press `ESC`, `:q!` (force quit), `ENTER`.
 
 ### 2. Install & configure MongoDB ###
-Our database is called MongoDB. It stores data in a NoSQL, document oriented manner. This means that it's not a relational SQL-like database and avoids joins. Instead it is more object oriented and groups the data an object together, without spreading it over a number of tables. 
+Our database is called MongoDB. It stores data in a NoSQL, document oriented manner. This means that it's not a relational SQL-like database and avoids joins. Instead it is more object oriented and groups the data together, without spreading it over a number of tables. 
 
 There's advantages and disadvantages to this type of database. For the purposes of this tutorial there isn't a real benefit to using SQL or NoSQL, we just like to switch it up.
 
@@ -41,7 +37,7 @@ There's advantages and disadvantages to this type of database. For the purposes 
 1. `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list`
     * Install the Mongodb repository.
 1. `apt-get update -y`
-    * Update the package manager's cached packages.
+    * Update the package manager's cached repositories.
 1. `apt-get install -y mongodb-org mongodb-org-server`
     * Install MongoDB. 
 1. `systemctl start mongod`
@@ -59,7 +55,7 @@ db.createUser(
    }
 )
 ```
-    * Create a student user with default database named "memegen" and root privileges to any db. It should say `Successfully added user`.
+    * Create a student user with root privileges to any db. It should say `Successfully added user`.
 1. `exit`
     * Exit the shell.
 1. `echo "security:" >> /etc/mongod.conf && echo "  authorization: enabled" >> /etc/mongod.conf`
@@ -70,19 +66,21 @@ db.createUser(
     * Test access control by logging in with the right credentials...
 1. `exit`
 1. `mongo memegen -u student --password=wrongcredentials`
-    * ...and the wrong credentials.
+    * ...and the wrong credentials. 
     
-Our database with the student user is now up and running.
+Our database with the student user is now up and running and access control is enabled.
     
 ### 3. Install & configure Apache ###
 Apache is used to host web files and show web pages on the internet.
 
 1. `apt-get install -y apache2`
     * Install Apache.
-1. `chown -R www-data:www-data /var/www/html/meme-generator/`
-    * Set correct permissions so memes can be saved by Apache.
+1. `chown -R www-data:www-data /var/www/html/`
+    * Change the owner of the web directory so memes can be saved by the Apache user.
+1. `ls -la /var/www/html`
+    * The files now have a new group and owner.
 
-The application is now available from the web via the public IP-address but won't work yet.
+The application is now available from the web via the public IP-address but won't work yet since PHP hasn't been installed yet.
     
 ### 4. Install & configure PHP ###
 PHP is a server side language that will interact with the filesystem and database to make our application work.
@@ -90,18 +88,18 @@ PHP is a server side language that will interact with the filesystem and databas
 1. `apt-get install -y php7.0 php7.0-dev libapache2-mod-php7.0 php-pear pkg-config libssl-dev libsslcommon2-dev python-minimal python-pip imagemagick composer wget unzip`
     * Install PHP 7.0 & other application packages.
 1. `pip install --upgrade pip`
-    * Update the python package manager.
+    * Update the Python package manager.
 1. `pip install wand`
-    * Install a picture editor package.
+    * Install a Python picture editor package.
 1. `pecl install mongodb`    
-    * Install the mongodb php driver.
+    * Install the MongoDB PHP driver.
 1. `echo "extension=mongodb.so" >> /etc/php/7.0/apache2/php.ini && echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini`
-    * Enable the MongoDB extention for php.
+    * Enable the MongoDB extention for PHP.
 1. `composer -d="/var/www/html" require aws/aws-sdk-php`
-    * Download the PHP SDK for AWS, so php can interact with AWS.
+    * Download the PHP SDK for AWS, so PHP can interact with AWS.
 
 ### 5. (Re)Start & enable all services ###
-Everything has been installed and running. Restart and check the status of the Apache and MongoDB services with the following commands to make sure it's stable.
+Everything has been installed and may or may not be running. Restart and check the status of the Apache and MongoDB services with the following commands to make sure it's stable.
 
 1. `systemctl enable mongod apache2`
     * Make sure the services start when the system reboots.
@@ -122,7 +120,7 @@ We can now go to the server's public IP-address in your web browser. If everythi
     ![](../Images/ManualInstallCreatedMeme.png?raw=true)
 
 ### 7. Verify MemeGen is working (Optional) ###
-If you're curious if MemeGen has actually written any data to the database or files to the filesystem we can check this out.
+If you're curious if MemeGen has actually written any data to the database or saved files to the filesystem we can check this out.
 
 Images are saved locally.
 
@@ -205,9 +203,11 @@ The database will save the id (id), image name (name) and date of creation (date
     > \> **exit**
 
 ## End of Lab 2 ##
-Run this command to update the scoring server: `/.checkScore.sh`.
+Congratulations! You've successfully installed a 'LinuxApacheMongoPhp' application!
 
-Once your MemeGen application works and your local MongoDB receives records, you can continue to the next lab. ([Next lab](../Lab%203%20-%20DynamoDB))
+To update your score, `exit` to your management instance and run this command `/.checkScore.sh`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
+
+Once your MemeGen application works and your local MongoDB receives records, you can continue to the [next lab](../Lab%203%20-%20DynamoDB).
 
 ### More info ###
 

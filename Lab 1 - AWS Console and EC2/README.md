@@ -38,6 +38,7 @@ The key pair consists of a public and private key. The public key is put onto a 
     
     > **ubuntu**@management-server:~$ **sudo su -**
     >
+    >
     > **root**@management-server:~$ **ssh-keygen**
     >
     > Generating public/private rsa key pair.
@@ -58,27 +59,11 @@ The key pair consists of a public and private key. The public key is put onto a 
     >
     > The key's randomart image is:
     >
-    > +---[RSA 2048]----+
+    >...
     >
-    > |   ...* o. . o.  |
+    > ((((RANDOM ART))))
     >
-    > |  .  +.O. o +    |
-    >
-    > |  =.. ++oo + .   |
-    >
-    > | + +.oo.=.+ + o  |
-    >
-    > |. . ...oS. * o o |
-    >
-    > | . .    ..B o .  |
-    >
-    > |  .      = B .   |
-    >
-    > |        o o .    |
-    >
-    > |          E.     |
-    >
-    > +----[SHA256]-----+
+    >...
     >
     > root@management-server:~$ **ls -l ~/.ssh/**
     >
@@ -97,9 +82,10 @@ We then need to import this public key into AWS so we can link Instances to this
 
 1. Go to `Services -> EC2 -> Key Pairs` under `Network & Security`.
 1. Click the `Import Key Pair` button.
-1. Change the `Key pair name` to `lab_key_<your_ID>`.
-1. You can print a key's contents in the terminal with `cat ~/.ssh/id_rsa.pub`, paste the public key's contents in the multiline input box.
-1. Click `Import`.
+    1. Change the `Key pair name` to `lab_key_<your_ID>`.
+    1. Print the public key's contents with `cat ~/.ssh/id_rsa.pub`
+    1. Copy and paste the public key's contents in the multiline input box.
+    1. Click `Import`.
 
     ![](../Images/EC2PublicKeyUpload.png?raw=true)
 
@@ -132,7 +118,7 @@ Now we can finally spawn an instance and link it to our created security group a
     * Make sure to choose `t2.micro` and press `Next: Configure Instance Details`
 1. Press `Next: Add Storage`.
 1. Press `Next: Add Tags`
-1. With Tags, you can reference the instance from many different AWS services. The tag "Name" will make sure its properly named when looking at the EC2 Instances list.
+1. With Tags, you can reference the instance from many different AWS services. The tag "Name" will make sure it is properly named when looking at the EC2 Instances list.
     * Add a tag with key `Name` and value `lab_EC2_instance1_<your_ID>`.
 1. Press `Next: Configure Security Group`
 1. We opened port 22 for SSH access and port 80 for HTTP access via the browser. Let's link the Security Group to the instance.
@@ -146,7 +132,7 @@ Now we can finally spawn an instance and link it to our created security group a
     ![](../Images/EC2NewInstanceCreated.png?raw=true)
 
 ### 5. Log in the created Instance ###
-We'll be logging into our created EC2 Instance from the management EC2 Instance using our own private key (~/.ssh/id_rsa). 
+Let's log in to our EC2 Instance from the management EC2 Instance using our own private key (~/.ssh/id_rsa). 
 
 1. Copy the `IPv4 Public IP` of your new instance from the AWS console in `Services -> EC2 -> Instances`.
 1. From your management instance use the command `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
@@ -155,7 +141,12 @@ We'll be logging into our created EC2 Instance from the management EC2 Instance 
 
     >root@**management-server**:~$ **ls ~/.ssh**
     >
-    >authorized_keys  id_rsa  id_rsa.pub
+    >authorized_keys  
+    >
+    >id_rsa  
+    >
+    >id_rsa.pub
+    >
     >
     >root@**management-server**:~$ **ssh -i ~/.ssh/id_rsa ubuntu@18.218.40.45**
     >
@@ -190,12 +181,17 @@ We'll be logging into our created EC2 Instance from the management EC2 Instance 
     >To run a command as administrator (user "root"), use "sudo <command>".
     >See "man sudo_root" for details.
     >
+    >
     >ubuntu@**ip-172-31-25-78:~$**
 
 ## End of Lab 1 ##
-Once you're logged in to your own created EC2 Instance, run this command `/.checkScore.sh`.
+Congratulations! You're logged in to your own created EC2 Instance.
 
-Then continue to the next lab. ([Next lab](../Lab%202%20-%20Manual%20installation%20(Infra%200.0)))
+To update your score, `exit` to your management instance and run this command `/.checkScore.sh`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
+
+![](../Images/EC2RunScoringScript.png?raw=true)
+
+And then continue to the [next lab](../Lab%202%20-%20Manual%20installation%20(Infra%200.0)). 
 
 ### More info ###
 

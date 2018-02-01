@@ -16,7 +16,7 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
 1. Under `DNS Management`, click `Hosted zones`.
 1. Click on `gluo.cloud.`.
 1. Click `Create Record Set`
-    * Set `Name:` to `<your_ID>`.
+    * Set `Name:` to `<your_ID>`. (Example: 1.gluo.cloud)
     * Set `Type:` to `CNAME - Canonical name`.
     * Set `Value:` to `<Load Balancer DNS url>`.
         * This cannot contain `http://` or trailing slashes like `/` at the end.
@@ -28,9 +28,11 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
 ![](../Images/Route53BrowseToLoadBalancer.png?raw=true)
 
 ## End of Lab 6 ##
-Run this command to update the scoring server: `/.checkScore.sh`.
+Congratulations! You've successfully added a DNS record via Route53 to reach your website.
 
-Once you can reach both your instances via the Route53 records through the Load Balancer, you may continue to the next lab. ([Next lab](../Lab%207%20-%20ASG%20and%20LC%20(infra%201.0))) 
+Run this command on the management instance to update your score: `/.checkScore.sh`.
+
+Once you can reach both your instances via the Route53 records through the Load Balancer, you may continue to the [next lab](../Lab%207%20-%20ASG%20and%20LC%20(infra%201.0)).
 
 ### More info ###
 

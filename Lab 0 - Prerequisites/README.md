@@ -12,12 +12,12 @@ AWS has a graphical user interface (GUI) that is accessible through a website.  
     * `<AWS_Password>`
 1. [Login to the AWS Console](https://gluo-workshop.signin.aws.amazon.com/console).
     * Account: gluo-workshop
-    * Username: lab-student-<your_ID>
-    * Password: <AWS_Password>
+    * Username: lab-student-`<your_ID>`
+    * Password: `<AWS_Password>`
 
         ![](../Images/AWSConsoleLogin.png?raw=true)
 
-1. Once you're logged in, make sure you're in the `eu-west-1` or `Ireland` region by clicking the country in the top right corner of the console and selecting the right one. You'll have no permissions in any other region.
+1. Once you're logged in, make sure you're in the `eu-west-1` or `Ireland` region by clicking the country in the top right corner of the console and selecting the right one. You have no permissions in any other region.
 
     ![](../Images/AWSRegionSelection.png?raw=true)
     
@@ -38,9 +38,10 @@ Please make sure you log in to the machine that corresponds with your ID!
     1. Click `Browse`.
     1. Choose the .ppk file: `lab_ManagementKey.ppk`.
 1. Under `Session`
-    1. Fill in `ubuntu@<server ip>`.
+    1. Fill in `ubuntu@<server_public_ip>`.
     1. Click `Open`.
-1. Accept the fingerprint.
+1. Accept the fingerprint (if needed).
+1. You're now logged in as the `ubuntu` user!
   
     ![](../Images/AWSPuttyLoginWindows.png?raw=true)
     
@@ -49,9 +50,10 @@ Please make sure you log in to the machine that corresponds with your ID!
 1. Open your Terminal.
 1. `chmod 400 lab_ManagementKey` 
     * Make sure the key file has no permissions on anyone but the owner.
-1. `ssh -i lab_ManagementKey ubuntu@<server ip>` 
+1. `ssh -i lab_ManagementKey ubuntu@<server_public_ip>` 
     * Log in to the server with the private key.
-1. Accept the fingerprint.
+1. Accept the fingerprint (if needed).
+1. You're now logged in as the `ubuntu` user!
 
     >**[root@gluo Downloads]# ssh -i lab_ManagementKey ubuntu@34.242.163.180**
     >
@@ -83,9 +85,12 @@ Please make sure you log in to the machine that corresponds with your ID!
     >
     >See "man sudo_root" for details.
     >
+    >
     >**ubuntu@ip-192-168-0-134:~$**
   
 # End of Lab 0
+
+Congratulations! You successfully logged in to an AWS EC2 instance using a private key.
 
 Continue to the next lab, where we'll explore the AWS console and create an EC2 instance. ([Next lab](../Lab%201%20-%20AWS%20Console%20and%20EC2))
 
