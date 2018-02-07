@@ -81,7 +81,7 @@ Resources:
   appS3Bucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Sub "cloudformation-${StudentIdParam}-bucket"
+      BucketName: !Sub "cloudformation-images-bucket-${StudentIdParam}"
       VersioningConfiguration:
         Status: Suspended
 

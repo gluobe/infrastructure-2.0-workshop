@@ -15,7 +15,7 @@ Do **not** remove your __private key__ (Services -> EC2 -> Key Pairs).
 1. Remove the __DynamoDB table__ (Services -> DynamoDB -> Tables -> Select `images-<your_ID>` -> Delete Table -> Delete)
 1. Remove the __Load Balancer__ (Services -> EC2 -> Load Balancers -> `lab-ELB-<your_ID>` -> Actions -> Delete -> Yes, Delete)
 1. Remove the __Route53 record__ (Services -> Route53 -> Hosted Zones -> gluo.cloud. -> `<your_ID>.gluo.cloud.` -> Delete Record Set)
-1. Remove the __S3 Bucket__ (Services -> S3 -> Click the record but do not open `lab-<your_ID>-bucket` -> Above the table click "Delete Bucket" -> Type the bucket name -> Confirm)
+1. Remove the __S3 Bucket__ (Services -> S3 -> Click the record but do not open `lab-images-bucket-<your_ID>` -> Above the table click "Delete Bucket" -> Type the bucket name -> Confirm)
 1. Remove 3 __Security Groups__ (Services -> EC2 -> 
     * `lab_SecGroup_ELB_<your_ID>` -> Actions -> Delete Security Group -> Yes, Delete)
     * `lab_SecGroup_EC2_<your_ID>` -> Actions -> Delete Security Group -> Yes, Delete)

@@ -13,7 +13,7 @@ Now that our MemeGen data is being stored in DynamoDB, we might as well synchron
 S3 is a service for storing files in a folder like structure. 
 
 1. Go to `Services -> S3`.
-1. Find your bucket. We've already created one for you, it should be named `lab-<your_ID>-bucket`.
+1. Find your bucket. We've already created one for you, it should be named `lab-images-bucket-<your_ID>`.
 1. There's (almost) nothing in it! That'll soon change, when we upload all our memes to it.
     
 ### 2. Installing AWSCLI ###
@@ -33,12 +33,12 @@ Do this on **both** instances. (It might already be installed on your second ins
 ### 3. Trying out AWSCLI ###
 PHP will be using AWSCLI to upload and download our local memes to the S3 bucket. We'll do it manually once just to try it out. 
 
-1. `aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-<your_ID>-bucket`.
+1. `aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-images-bucket-<your_ID>`.
     * Upload a meme of your choosing to the bucket 
     
-    > root@ip-172-31-16-165:~# aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-2-bucket
+    > root@ip-172-31-16-165:~# aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-images-bucket-2
     >
-    > upload: ../var/www/html/meme-generator/memes/successkid.jpg to s3://lab-2-bucket/successkid.jpg
+    > upload: ../var/www/html/meme-generator/memes/successkid.jpg to s3://lab-images-bucket-2/successkid.jpg
 
 1. Go back to your bucket, the image should have been added!
 
