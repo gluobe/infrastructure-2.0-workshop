@@ -2,7 +2,7 @@
 If something didn't work in this lab or you simply don't have enough time you can execute these commands to quickly go to the next lab.
 
 If you created the following services already, please remove them first:
-    * an instance security group.
+    * a security group.
     * an instance.
     * a key pair.
 

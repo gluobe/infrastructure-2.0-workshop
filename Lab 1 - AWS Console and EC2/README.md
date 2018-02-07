@@ -15,7 +15,7 @@ AWS provides many different Cloud services, of which we'll only see a small hand
 
     ![](../Images/AWSConsoleEC2Overview.png?raw=true)
 
-* We'll begin by creating a simple EC2 instance or cloud virtual machine, which has some simple firewall rules assigned via the EC2 Security Group service and has your own private SSH key assigned to login with instead of the lab_ManagementKey one. We'll always use the management instance as a proxy to access instances we've created.
+* We'll begin by creating a simple EC2 instance or cloud virtual machine, which has some simple firewall rules assigned via a EC2 Security Group and has your own private SSH key assigned to login with instead of the lab_ManagementKey one. We'll always use the management instance as a proxy to access instances we've created.
     * You are here:
     
     ![](../Images/ManagementProxyStep1.png?raw=true)
@@ -78,7 +78,7 @@ The key pair consists of a public and private key. The public key is put onto a 
     > root@management-server:~$
 
 ### 2. Import public key in AWS ###
-We then need to import this public key into AWS so we can link Instances to this key and then log in to the Instances with the private key.
+We then need to import this public key into AWS so we can link Instances to this key and log in to the Instances with the private key.
 
 1. Go to `Services -> EC2 -> Key Pairs` under `Network & Security`.
 1. Click the `Import Key Pair` button.

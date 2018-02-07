@@ -46,15 +46,7 @@ There's advantages and disadvantages to this type of database. For the purposes 
     * Enter the MongoDB CLI without credentials. Your prompt will change.
 1. `use memegen`
     * Switch to the "memegen" database.
-1. ```
-db.createUser(
-   {
-     user: "student",
-     pwd: "Cloud247",
-     roles: [ { role: "root", db: "admin" } ]
-   }
-)
-```
+1. `db.createUser({ user: "student", pwd: "Cloud247", roles: [ { role: "root", db: "admin" } ] })`
     * Create a student user with root privileges to any db. It should say `Successfully added user`.
 1. `exit`
     * Exit the shell.
