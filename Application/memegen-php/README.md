@@ -1,7 +1,7 @@
 # Application README #
 ### Application visual representation ###
 
-![](../Images/PHPApplicationSchema.png?raw=true)
+![](../../Images/PHPApplicationSchema.png?raw=true)
 
 ### What is? ###
 * This application folder houses the Gluo PHP Meme Generator.
@@ -14,5 +14,5 @@
 #### Files ####
 * `config.php` is the file where a student can change the save locations for meme files and meme data and change the site color.
 * `functions.php` contains all used functions by the other smaller php files in this dir. It contains the most logic and is the proxy to access the database or filesystem.
-* `index.php` is the site itself and container jquery and ajax logic.
+* `index.php` is the site itself and contains jquery and ajax logic to update the site dynamically.
 
