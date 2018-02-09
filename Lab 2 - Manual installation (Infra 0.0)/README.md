@@ -114,15 +114,10 @@ We can now go to the server's public IP-address in your web browser. If everythi
 ### 7. Verify MemeGen is working (Optional) ###
 If you're curious if MemeGen has actually written any data to the database or saved files to the filesystem we can check this out.
 
-Images are saved locally.
-
 1. `ls /var/www/html/meme-generator/memes/`
-    * Look at your created meme.
-    
-The database will save the id (id), image name (name) and date of creation (date).
-    
+    * Look at your created meme. Images are saved locally. 
 1. `mongo memegen -u student --password=Cloud247`
-    * Enter the MongoDB Shell in the database images.
+    * Enter the MongoDB Shell in the database images. The database will save the id (id), image name (name) and date of creation (date).
 1. `show databases`
     * Show all databases.
 1. `use memegen`
