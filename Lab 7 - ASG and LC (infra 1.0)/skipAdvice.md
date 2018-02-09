@@ -9,7 +9,7 @@ If you created the following services already, please remove them first:
 1. You should be logged in to your Management Instance.
 1. `export MYID=<your_ID> && export MYREGION=eu-west-1`
     * Set environment variables.
-1. `git clone https://github.com/gluobe/memegen-webapp.git ~/memegen-webapp`
+1. `git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
     * Git clone the repository for the launch configuration InstallMemeGen-php-LC.sh script.
 1. `sed -i "s@^YOURID=.*@YOURID=\"$MYID\"; (Altered by sed)@g" ~/memegen-webapp/scripts/InstallMemeGen-php-LC.sh`
     * Change the **id** of the script.

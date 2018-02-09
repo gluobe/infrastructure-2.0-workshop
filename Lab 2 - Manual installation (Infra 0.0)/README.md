@@ -15,7 +15,7 @@ Our application is a meme generator. It will create memes, store the files on th
     * Enter the superuser's shell. Your prompt should turn white (if red, you're still on your management instance).
 1. `mkdir -p /var/www/html`
     * Create the folder structure to house our application and host it with Apache.
-1. `git clone https://github.com/gluobe/memegen-webapp.git ~/memegen-webapp`
+1. `git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
     * Git clone the repository to the server under /var/www/html/.
 1. `ls ~/memegen-webapp`
     * Show local repository contents.

@@ -7,7 +7,7 @@ If you played around with lab 2 already please execute the following command fir
 1. You should be logged in to your own created instance.
 1. `export MYID=<your_ID> && export MYREGION=eu-west-1`
     * Set environment variables.
-1. `git clone https://github.com/gluobe/memegen-webapp.git ~/memegen-webapp`
+1. `git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
     * Clone the repository to your home directory.
 1. `chmod 755 ~/memegen-webapp/scripts/InstallMemeGen-php.sh`
     * Change permissions on the script to make it executable.

@@ -46,7 +46,7 @@ Next we'll install the MemeGen app on the second instance via a bash script inst
     * Log in to your **second** instance.
 1. `sudo su -`
     * Become the root user.
-1. `git clone https://github.com/gluobe/memegen-webapp.git ~/memegen-webapp`
+1. `git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
     * Clone the repository to your home directory.
 1. `chmod 755 ~/memegen-webapp/scripts/InstallMemeGen-php.sh`
     * Change permissions on the script to make it executable.
