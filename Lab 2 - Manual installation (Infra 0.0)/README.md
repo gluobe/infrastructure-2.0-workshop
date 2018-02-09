@@ -197,7 +197,7 @@ The database will save the id (id), image name (name) and date of creation (date
 ## End of Lab 2 ##
 Congratulations! You've successfully installed a 'LinuxApacheMongoPhp' application!
 
-To update your score, `exit` to your management instance and run this command `/.checkScore.sh`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
+To update your score, `exit` to your management instance and run this command `sudo checkscore`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
 
 Once your MemeGen application works and your local MongoDB receives records, you can continue to the [next lab](../Lab%203%20-%20DynamoDB).
 

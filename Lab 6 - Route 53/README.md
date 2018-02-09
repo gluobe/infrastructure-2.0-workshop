@@ -30,7 +30,7 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
 ## End of Lab 6 ##
 Congratulations! You've successfully added a DNS record via Route53 to reach your website.
 
-Run this command on the management instance to update your score: `/.checkScore.sh`.
+Run this command on the management instance to update your score: `sudo checkscore`.
 
 Once you can reach both your instances via the Route53 records through the Load Balancer, you may continue to the [next lab](../Lab%207%20-%20ASG%20and%20LC%20(infra%201.0)).
 

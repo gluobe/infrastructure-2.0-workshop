@@ -96,7 +96,7 @@ Feeling like the load on your servers is getting too high? We can easily add ano
 ## End of Lab 7 ##
 If not everything's working you may continue anyway, but normally you should have 2 autoscaling instances with the MemeGen application, which are both reachable via the Load Balancer and have DynamoDB and S3 as a backend.  
 
-Run this command on the management instance to update your score: `/.checkScore.sh`.
+Run this command on the management instance to update your score: `sudo checkscore`.
 
 Let's unleash the true power of infrastructure2.0 in the ([next lab](../Lab%208%20-%20Cloudformation%20(infra%202.0))).
 

@@ -28,18 +28,13 @@ AWS provides many different Cloud services, of which we'll only see a small hand
 Amazon Web Services does not allow default password access to new EC2 Instances. Instead, everything is done with key pairs, which is very safe (if used correctly) and not very difficult once you get the hang of it.
 The key pair consists of a public and private key. The public key is put onto a remote server and the private key is used to log in to these servers.
 
-1. `sudo su -`
-    * Switch to be superuser or root. Your prompt will turn red.
 1. `ssh-keygen` (Press `Enter` a couple of times without filling in anything until your prompt returns.)
     * Generate a key pair.
 1. `ls -l ~/.ssh/`
-    * Look at the key pair. The private key is `id_rsa`, the public key is `id_rsa.pub` and they're located under your current user home's .ssh directory `/root/.ssh/`.
+    * Look at the key pair. The private key is `id_rsa`, the public key is `id_rsa.pub` and they're located under your current user home's .ssh directory `/home/ubuntu/.ssh/`.
     * Note that the private key's permissions (-rw-------) are stricter than the public key's permissions (-rw-r--r--). 
     
-    > **ubuntu**@management-server:~$ **sudo su -**
-    >
-    >
-    > **root**@management-server:~$ **ssh-keygen**
+    > *ubuntu@management-server1:~$* **ssh-keygen**
     >
     > Generating public/private rsa key pair.
     >
@@ -49,33 +44,29 @@ The key pair consists of a public and private key. The public key is put onto a 
     >
     > Enter same passphrase again:
     >
-    > Your **identification** has been saved in **/root/.ssh/id_rsa**.
+    > Your **identification** has been saved in **/home/ubuntu/.ssh/id_rsa**.
     >
-    > Your **public key** has been saved in **/root/.ssh/id_rsa.pub**.
+    > Your **public key** has been saved in **/home/ubuntu/.ssh/id_rsa.pub**.
     >
     > The key fingerprint is:
     >
-    > SHA256:E2C2C+Jho1+VdPLUqXLhKFD9e6PZGTe1ATpV6CNbOq8 root@management-server
+    > SHA256:E2C2C+Jho1+VdPLUqXLhKFD9e6PZGTe1ATpV6CNbOq8 ubuntu@management-server1
     >
     > The key's randomart image is:
     >
     >...
     >
-    > ((((RANDOM ART))))
+    > [RANDOM ART]
     >
     >...
     >
-    > root@management-server:~$ **ls -l ~/.ssh/**
+    > *ubuntu@management-server1:~$* **ls -l ~/.ssh/**
     >
-    > total 12
+    > -rw------- 1 ubuntu ubuntu  554 Dec 22 12:21 authorized_keys
     >
-    > -rw------- 1 root root  554 Dec 22 12:21 authorized_keys
+    > **-rw-------** 1 ubuntu ubuntu 1679 Dec 22 13:12 **id_rsa** 
     >
-    > **-rw-------** 1 root root 1679 Dec 22 13:12 **id_rsa** 
-    >
-    > **-rw-r--r--** 1 root root  404 Dec 22 13:12 **id_rsa.pub**
-    >
-    > root@management-server:~$
+    > **-rw-r--r--** 1 ubuntu ubuntu  404 Dec 22 13:12 **id_rsa.pub**
 
 ### 2. Import public key in AWS ###
 We then need to import this public key into AWS so we can link Instances to this key and log in to the Instances with the private key.
@@ -139,7 +130,7 @@ Let's log in to our EC2 Instance from the management EC2 Instance using our own 
 1. Accept the fingerprint by entering `yes`.
 1. Once you see a green prompt you've logged in your new instance.
 
-    >root@**management-server**:~$ **ls ~/.ssh**
+    >ubuntu@*management-server1*:~$ **ls ~/.ssh**
     >
     >authorized_keys  
     >
@@ -148,7 +139,7 @@ Let's log in to our EC2 Instance from the management EC2 Instance using our own 
     >id_rsa.pub
     >
     >
-    >root@**management-server**:~$ **ssh -i ~/.ssh/id_rsa ubuntu@18.218.40.45**
+    >ubuntu@*management-server1*:~$ **ssh -i ~/.ssh/id_rsa ubuntu@18.218.40.45**
     >
     >The authenticity of host '18.218.40.45 (18.218.40.45)' can't be established.
     >ECDSA key fingerprint is SHA256:XltK5+RljF2cuUGG4bnB4b6SQ/UM1CSN5QONehFhynE.
@@ -182,12 +173,12 @@ Let's log in to our EC2 Instance from the management EC2 Instance using our own 
     >See "man sudo_root" for details.
     >
     >
-    >ubuntu@**ip-172-31-25-78:~$**
+    >ubuntu@*ip-172-31-25-78*:~$
 
 ## End of Lab 1 ##
 Congratulations! You're logged in to your own created EC2 Instance.
 
-To update your score, `exit` to your management instance and run this command `/.checkScore.sh`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
+To update your score, `exit` to your management instance and run this command `sudo checkscore`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
 
 ![](../Images/EC2RunScoringScript.png?raw=true)
 

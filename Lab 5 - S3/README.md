@@ -65,7 +65,7 @@ Your instances are now linked to each other not only by database but also by fil
 ## End of Lab 5 ##
 Congratulations! You've successfully switched to using S3 as your storage device.
 
-To update your score, `exit` to your management instance and run this command `/.checkScore.sh`. You needn't log back into your own instances.
+To update your score, `exit` to your management instance and run this command `sudo checkscore`. You needn't log back into your own instances.
 
 Once you have two Instances, both connected to a Load Balancer, DynamoDB and S3, you may continue to the [next lab](../Lab%206%20-%20Route%2053).
 

@@ -73,7 +73,7 @@ Let's see if our app works.
 ## End of Lab 8 ##
 Et voilà! This method is much easier, more consistent, readable and less prone to errors than doing everything manually. Our whole application is up and running in minutes without much effort. This is infrastructure2.0.
 
-Run this command on the management instance to update your score: `/.checkScore.sh`.
+Run this command on the management instance to update your score: `sudo checkscore`.
 
 Now let's try to break things in the last lab. ([To last lab](../Lab%209%20-%20Chaos%20Engineering)) 
 

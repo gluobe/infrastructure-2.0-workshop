@@ -34,7 +34,7 @@ Now for deleting the Cloudformation Stack.
     * If the stack deletion fails, try again but do not check any boxes that could appear on this step, as doing so will skip the deletion of services. We don't want any stragglers, only total deletion.
     
 
-Run this command on the management instance to update your score: `/.checkScore.sh`.  
+Run this command on the management instance to update your score: `sudo checkscore`.  
 
 ![](https://tinyurl.com/y78fzwla)
 

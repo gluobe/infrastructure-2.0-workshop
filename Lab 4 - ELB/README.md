@@ -121,7 +121,7 @@ To show both instances are actually being used by the Load Balancer we'll change
 ## End of Lab 4 ##
 Congratulations! You've successfully created a second instance and load balanced its network load using an AWS Elastic Load Balancer.
 
-To update your score, `exit` to your management instance and run this command `/.checkScore.sh`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
+To update your score, `exit` to your management instance and run this command `sudo checkscore`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
 
 Once you have two Instances, both connected to the same Load Balancer and DynamoDB, you may continue to the next lab. ([Next lab](../Lab%205%20-%20S3))
 
