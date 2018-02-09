@@ -46,11 +46,11 @@ Next we'll install the MemeGen app on the second instance via a bash script inst
     * Log in to your **second** instance.
 1. `sudo su -`
     * Become the root user.
-1. `git clone https://github.com/gluobe/infrastructure-2.0-workshop.git ~/infra-workshop`
+1. `git clone https://github.com/gluobe/memegen-webapp.git ~/memegen-webapp`
     * Clone the repository to your home directory.
-1. `chmod 755 ~/infra-workshop/Scripts/InstallMemeGen-php.sh`
+1. `chmod 755 ~/memegen-webapp/scripts/InstallMemeGen-php.sh`
     * Change permissions on the script to make it executable.
-1. `~/infra-workshop/Scripts/InstallMemeGen-php.sh`
+1. `~/memegen-webapp/scripts/InstallMemeGen-php.sh`
     * Execute it. It's done after it prints `Local MemeGen installation complete.` (this can take some time).
 1. **Change the site's config.php.**
     1. Enter `/var/www/html/config.php` using your favorite editor.

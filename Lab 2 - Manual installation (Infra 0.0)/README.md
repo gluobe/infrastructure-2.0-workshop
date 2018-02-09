@@ -15,11 +15,11 @@ Our application is a meme generator. It will create memes, store the files on th
     * Enter the superuser's shell. Your prompt should turn white (if red, you're still on your management instance).
 1. `mkdir -p /var/www/html`
     * Create the folder structure to house our application and host it with Apache.
-1. `git clone https://github.com/gluobe/infrastructure-2.0-workshop.git ~/infra-workshop`
+1. `git clone https://github.com/gluobe/memegen-webapp.git ~/memegen-webapp`
     * Git clone the repository to the server under /var/www/html/.
-1. `ls ~/infra-workshop`
+1. `ls ~/memegen-webapp`
     * Show local repository contents.
-1. `cp -r ~/infra-workshop/Application/memegen-php/* /var/www/html/`
+1. `cp -r ~/memegen-webapp/* /var/www/html/`
     * Move our application to the Apache web directory.
 1. `ls /var/www/html/`
     * Show the meme generator application contents.

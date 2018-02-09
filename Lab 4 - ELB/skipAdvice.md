@@ -23,11 +23,11 @@ If you created the following services already, please remove them first:
     * Become the root user.
 1. `export MYID=<your_ID> && export MYREGION=eu-west-1`
     * Set environment variables.
-1. `git clone https://github.com/gluobe/infrastructure-2.0-workshop.git ~/infra-workshop`
+1. `git clone https://github.com/gluobe/memegen-webapp.git ~/memegen-webapp`
     * Clone the repository to your home directory.
-1. `chmod 755 ~/infra-workshop/Scripts/InstallMemeGen-php.sh`
+1. `chmod 755 ~/memegen-webapp/scripts/InstallMemeGen-php.sh`
     * Change permissions on the script to make it executable.
-1. `~/infra-workshop/Scripts/InstallMemeGen-php.sh`
+1. `~/memegen-webapp/scripts/InstallMemeGen-php.sh`
     * Execute the script.
 1. Once `Local MemeGen installation complete.` is shown you've successfully installed MemeGen.
 1. `sed -i "s@^\$yourId.*@\$yourId = \"$MYID\"; # (Altered by sed)@g" /var/www/html/config.php`

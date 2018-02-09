@@ -280,12 +280,12 @@ Resources:
                     
                 # Download and install MemeGen
                   # Git clone the repository in your home directory
-                  git clone https://github.com/gluobe/infrastructure-2.0-workshop.git ~/infra-workshop
+                  git clone https://github.com/gluobe/memegen-webapp.git ~/memegen-webapp
                   # Clone the application out of the repo to the web folder.
-                  mv ~/infra-workshop/Application/memegen-php/* /var/www/html/
+                  cp -r ~/memegen-webapp/* /var/www/html/
                   # Set permissions for apache
                   chown -R www-data:www-data /var/www/html/meme-generator/
-                  
+
                 # Install aws sdk for DynamoDB
                   until [ -f /var/www/html/vendor/autoload.php ]
                   do
