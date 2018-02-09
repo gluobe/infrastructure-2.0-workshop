@@ -16,11 +16,11 @@ Our application is a meme generator. It will create memes, store the files on th
 1. `mkdir -p /var/www/html`
     * Create the folder structure to house our application and host it with Apache.
 1. `git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
-    * Git clone the repository to the server under /var/www/html/.
+    * Git clone the repository to the server in a specific directory.
 1. `ls ~/memegen-webapp`
     * Show local repository contents.
 1. `cp -r ~/memegen-webapp/* /var/www/html/`
-    * Move our application to the Apache web directory.
+    * Move our application to the Apache web directory /var/www/html/.
 1. `ls /var/www/html/`
     * Show the meme generator application contents.
 1. **Change the site to have your ID.**
