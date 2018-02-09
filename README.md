@@ -50,6 +50,6 @@ We do list every command you need to execute, but knowledge and some basic exper
 
 ### Contact ###
 
-If you liked what did or want to like what we do, please do contact us! Revelant links can always be found at http://www.gluo.be.
+If you liked what we did or want to like what we do, please do contact us! Revelant links can always be found at http://www.gluo.be.
 
 
