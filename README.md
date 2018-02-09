@@ -7,16 +7,6 @@ Amazon Web Services (AWS) is a secure cloud services platform, offering compute 
 
 This **VERY** hands-on workshop demonstrates the usefulness of Cloud Computing in AWS. We'll start by hosting a simple application manually and in each lab we'll integrate more and more AWS services until eventually we've built a virtually indestructible cloud infrastructure layer on which our application rests comfortably. Everything will be automated, self-healing, stable, reliable and ready for real world testing and use. In the last lab we'll also demonstrate this indestructibility with Chaos Engineering, a term invented and used by the streaming giant Netflix, used to make their infrastructure both reliable and disposable.
 
-In this workshop we'll discover the following AWS services:
-
-* Cloud instances:      EC2 (Elastic Compute Cloud) instances and Security Groups
-* Cloud databases:      DynamoDB 
-* Cloud load balancers: ELB (Elastic Load balancers)
-* Cloud storage:        S3 (Simple Storage Service)
-* Cloud DNS:            Route53
-* Cloud scaling:        ASG (autoscaling group) and LC (Launch Configuration)
-* Cloud scripting:      Cloudformation
-
 
 ### Table of contents ###
 
@@ -30,6 +20,19 @@ In this workshop we'll discover the following AWS services:
 * [Lab 7 - ASG and LC (infra 1.0)](Lab%207%20-%20ASG%20and%20LC%20(infra%201.0))
 * [Lab 8 - Cloudformation (infra 2.0)](Lab%208%20-%20Cloudformation%20(infra%202.0))
 * [Lab 9 - Chaos Engineering](Lab%209%20-%20Chaos%20Engineering)
+
+
+### Summed up contents ###
+
+In this workshop we'll discover the following AWS services:
+
+* Cloud instances:      EC2 (Elastic Compute Cloud) instances and Security Groups
+* Cloud databases:      DynamoDB 
+* Cloud load balancers: ELB (Elastic Load balancers)
+* Cloud storage:        S3 (Simple Storage Service)
+* Cloud DNS:            Route53
+* Cloud scaling:        ASG (autoscaling group) and LC (Launch Configuration)
+* Cloud scripting:      Cloudformation
 
 
 ### Target group ###
