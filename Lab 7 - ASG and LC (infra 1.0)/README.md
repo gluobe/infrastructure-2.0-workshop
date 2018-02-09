@@ -59,6 +59,7 @@ Using an Autoscaling Group (ASG) we can automatically scale up or down the amoun
 1. Click `Next: Configure scaling policies`.
 1. Click `Next: Configure Tags`.
     * Add Key `Name` and Value `lab-ASG-<your_ID>`.
+    * Add Key `Id` and Value `<your_ID>`.
 1. Click `Review`.
 1. Click `Create Auto Scaling group`.
 1. Click `Close`.

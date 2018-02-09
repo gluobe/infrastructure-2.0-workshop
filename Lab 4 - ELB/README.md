@@ -31,7 +31,8 @@ At this point we should still have one instance running. We can copy the setting
 1. Select your own instance named `lab_EC2_instance1_<your_ID>`.
 1. Press the `Actions` dropdown button above the EC2 Instances list and in the dropdown that appears press `Launch More Like This`.
 1. You immediately get the same launch configurations listed as your previous virtual machine.
-    * Go back to the `5. Add Tags` section and change the `Name` tag to `lab_EC2_instance2_<your_ID>`.
+1. Go back to the `5. Add Tags` section.
+    * Change the `Name` tag to `lab_EC2_instance2_<your_ID>`.
     * Press `Review and Launch`.
 1. Press `Launch`.
 1. Choose your own key pair, acknowledge and press `Launch Instances`.
@@ -55,6 +56,8 @@ Next we'll install the MemeGen app on the second instance via a bash script inst
     1. Enter `/var/www/html/config.php` using your favorite editor.
     1. Change the `$yourId` variable to your own ID.
     1. Change the `$remoteData` variable to `true`.
+    1. Change the `$siteColorBlue` variable to `true`.
+        * This is to differentiate the second instance from the first by coloring the button blue instead of green.
 
 * We should now have two separate Instances which are both linked to DynamoDB and will be reachable via the Load Balancer in a minute:
 
@@ -106,11 +109,8 @@ Now that we've linked both the instances to one load balancer we can browse to t
     ![](../Images/ELBLinkIntoBrowser.png?raw=true) 
 
 ### 6. Differentiate the Instances ###
-To show both instances are actually being used by the Load Balancer we'll change the site color of the second instance's app to differentiate the two instances from each other. 
+To show both instances are actually being used by the Load Balancer we've changed the site color of the second instance's app to differentiate the two instances from each other. 
 
-1. **Change the second instance's config.php.**
-    1. Enter `/var/www/html/config.php` using your favorite editor.
-    1. Change the `$siteColorBlue` variable to `true`.
 1. Try to hard refresh the Load Balancer site (`CTRL` + `SHIFT` + `R`) a few times. About 50% of the time the site color will visibly change meaning we've reached different instances.
 
     ![](../Images/ELBButtonChange1.png?raw=true)

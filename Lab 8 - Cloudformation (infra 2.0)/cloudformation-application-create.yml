@@ -205,6 +205,9 @@ Resources:
         - Key: Name
           Value: !Sub "CloudFormation-${AWS::StackName}-AutoscalingGroup"
           PropagateAtLaunch: 'true'
+        - Key: Id
+          Value: !Ref StudentIdParam
+          PropagateAtLaunch: 'true'
       VPCZoneIdentifier: !Ref PublicSubnetsParam
 
     # App LaunchConfiguration

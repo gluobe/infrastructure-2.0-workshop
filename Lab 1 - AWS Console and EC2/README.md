@@ -15,6 +15,10 @@ AWS provides many different Cloud services, of which we'll only see a small hand
 
     ![](../Images/AWSConsoleEC2Overview.png?raw=true)
 
+* You can list only your instances from the EC2 list by filtering on the `Id` tag and using `<your_id>` as the value.
+
+    ![](../Images/EC2FilterOnTag.png?raw=true)
+
 * We'll begin by creating a simple EC2 instance or cloud virtual machine, which has some simple firewall rules assigned via a EC2 Security Group and has your own private SSH key assigned to login with instead of the lab_ManagementKey one. We'll always use the management instance as a proxy to access instances we've created.
     * You are here:
     
@@ -111,6 +115,7 @@ Now we can finally spawn an instance and link it to our created security group a
 1. Press `Next: Add Tags`
 1. With Tags, you can reference the instance from many different AWS services. The tag "Name" will make sure it is properly named when looking at the EC2 Instances list.
     * Add a tag with key `Name` and value `lab_EC2_instance1_<your_ID>`.
+    * Add a tag with key `Id` and value `<your_ID>`.
 1. Press `Next: Configure Security Group`
 1. We opened port 22 for SSH access and port 80 for HTTP access via the browser. Let's link the Security Group to the instance.
     * Select `Select an existing security group`.
