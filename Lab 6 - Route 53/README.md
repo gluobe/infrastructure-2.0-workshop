@@ -22,7 +22,7 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
         * This cannot contain `http://` or trailing slashes like `/` at the end.
 1. Click `Create`.
 
-* Go to `<your_ID>.gluo.io` to view your Load Balanced MemeGen site.
+* Go to `<your_ID>.gluo.cloud` to view your Load Balanced MemeGen site.
     * The record can take up to 2-5 minutes to be registered by the top DNS servers. 
     
 ![](../Images/Route53BrowseToLoadBalancer.png?raw=true)
