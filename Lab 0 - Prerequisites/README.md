@@ -26,7 +26,8 @@ We'll be logging into a bunch of instances using the SSH protocol in the command
 Please make sure you log in to the machine that corresponds with your ID!
 
 1. First [download your ssh private key](http://studentinfo.gluo.cloud/index.html) which is used as authorization when logging into your Management Instance.
-1. Then in the AWS Console, go to `Services -> EC2 -> Instances` and find your instance's `public IP-address`.
+1. In the AWS Console, go to `Services -> EC2 -> Instances`.
+1. Find **the instance with your ID**'s `public IP-address`.
     * Follow the image below (top left, top right, bottom).
   
     ![](../Images/AWSGotoIntro.png?raw=true)
@@ -42,6 +43,7 @@ Please make sure you log in to the machine that corresponds with your ID!
     1. Click `Open`.
 1. Accept the fingerprint (if needed).
 1. You're now logged in as the `ubuntu` user!
+1. Please verify that the prompt's hostname number reflects your own ID! For example, if your ID is `1` the prompt should say `ubuntu@management-server1:~$`. If this is not the case you're not logged in to the wrong management instance.
   
     ![](../Images/AWSPuttyLoginWindows.png?raw=true)
     
@@ -54,6 +56,7 @@ Please make sure you log in to the machine that corresponds with your ID!
     * Log in to the server with the private key.
 1. Accept the fingerprint (if needed).
 1. You're now logged in as the `ubuntu` user!
+1. Please verify that the prompt's hostname number reflects your own ID! For example, if your ID is `1` the prompt should say `ubuntu@management-server1:~$`. If this is not the case you're not logged in to the wrong management instance.
 
     >**[root@gluo Downloads]# ssh -i lab_ManagementKey ubuntu@34.242.163.180**
     >
@@ -86,11 +89,16 @@ Please make sure you log in to the machine that corresponds with your ID!
     >See "man sudo_root" for details.
     >
     >
-    >**ubuntu@ip-192-168-0-134:~$**
-  
-# End of Lab 0
+    >**ubuntu@management-server2:~$**
+    
 
+    
+# End of Lab 0
 Congratulations! You successfully logged in to an AWS EC2 instance using a private key.
 
-Continue to the next lab, where we'll explore the AWS console and create an EC2 instance. ([Next lab](../Lab%201%20-%20AWS%20Console%20and%20EC2))
+To update your score, run this command `sudo checkscore`.
+
+![](../Images/EC2RunScoringScriptLab0.png?raw=true)
+
+Then continue to the next lab, where we'll explore the AWS console and create an EC2 instance. ([Next lab](../Lab%201%20-%20AWS%20Console%20and%20EC2))
 

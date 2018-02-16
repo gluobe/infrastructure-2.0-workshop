@@ -18,8 +18,15 @@ Let's destroy our old EC2 Instances.
 1. Click on `Actions -> Instance State -> Terminate -> Yes, Terminate`.
 
 ### 2. Configuring an LC ###
-A Launch configuration (LC) will contain all the EC2 Instance details and can even be used to run scripts when the Instance starts running for the first time (which we will do to install our MemeGen application).
+First we'll need the MemeGen installation script from the corresponding repository on github. You can `wget` and `cat` the script via the following commands, but you can also just copy and paste the link and copy it from your browser window.
 
+1. `wget https://raw.githubusercontent.com/gluobe/memegen-webapp-aws/master/scripts/InstallMemeGen-php-LC.sh -O ~/InstallMemeGen-php-LC.sh`
+    * Download the MemeGen installation script to be used in the LC from the memegen repository.
+1. `cat ~/InstallMemeGen-php-LC.sh`
+    * Print out the script using cat, and copy the script to your clipboard.
+
+A Launch configuration (LC) will contain all the EC2 Instance details and can even be used to run scripts when the Instance starts running for the first time (which we will do to install our MemeGen application).    
+    
 1. Go to `Services -> EC2 -> Launch Configurations -> Create launch configuration`.
 1. Select `Ubuntu Server 16.04 LTS`.
 1. Select `t2.micro` and press `Next: Configure Details`.
@@ -27,7 +34,7 @@ A Launch configuration (LC) will contain all the EC2 Instance details and can ev
     * Name it `lab-LC-<your_ID>`.
     * Assign it the role `lab_InstanceAccess`.
     * Now press `Advanced Details`:
-        * In this repository, go to "Scripts/InstallMemeGen-php-LC.sh" and add your ID to the parameters
+        * Paste the script we printed out in our terminal before and **make sure you add your own ID!**
         
         ![](../Images/LCChangeIDParameter.png?raw=true)     
             

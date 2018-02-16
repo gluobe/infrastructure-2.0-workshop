@@ -185,7 +185,7 @@ Congratulations! You're logged in to your own created EC2 Instance.
 
 To update your score, `exit` to your management instance and run this command `sudo checkscore`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
 
-![](../Images/EC2RunScoringScript.png?raw=true)
+![](../Images/EC2RunScoringScriptLab1.png?raw=true)
 
 And then continue to the [next lab](../Lab%202%20-%20Manual%20installation%20(Infra%200.0)). 
 

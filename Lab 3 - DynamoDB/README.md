@@ -31,6 +31,7 @@ Next let's add some records that will pull some pre-fabricated memes from the re
     1. `id`, Number: `1`
     1. `name`, String: `successkid`
     1. `date`, String: `1`
+    * These columns are all **uncapitalized**!
 1. Click `Save`.
 
     ![](../Images/DynamoDBAddRecord.png?raw=true)
