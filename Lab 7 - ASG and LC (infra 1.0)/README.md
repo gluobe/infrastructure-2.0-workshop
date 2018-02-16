@@ -13,8 +13,8 @@ Let's destroy our old EC2 Instances.
 
 1. Go to `Services -> EC2 -> Instances`.
 1. Select your 2 instances:
-    * `lab_EC2_instance1_<your_ID>`
-    * `lab_EC2_instance2_<your_ID>`
+    * `lab_instance1_<your_ID>`
+    * `lab_instance2_<your_ID>`
 1. Click on `Actions -> Instance State -> Terminate -> Yes, Terminate`.
 
 ### 2. Configuring an LC ###

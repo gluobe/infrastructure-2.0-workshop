@@ -114,7 +114,7 @@ Now we can finally spawn an instance and link it to our created security group a
 1. Press `Next: Add Storage`.
 1. Press `Next: Add Tags`
 1. With Tags, you can reference the instance from many different AWS services. The tag "Name" will make sure it is properly named when looking at the EC2 Instances list.
-    * Add a tag with key `Name` and value `lab_EC2_instance1_<your_ID>`.
+    * Add a tag with key `Name` and value `lab_instance1_<your_ID>`.
     * Add a tag with key `Id` and value `<your_ID>`.
 1. Press `Next: Configure Security Group`
 1. We opened port 22 for SSH access and port 80 for HTTP access via the browser. Let's link the Security Group to the instance.

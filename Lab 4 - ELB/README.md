@@ -28,11 +28,11 @@ To gain the most out of the load balancer we're about to set up, we'll need anot
 At this point we should still have one instance running. We can copy the settings of an instance and create another instance from it. This won't copy the original instance's hard drive, we'll have to install MemeGen on this new instance again. 
 
 1. Go to `Services -> EC2 -> Instances`
-1. Select your own instance named `lab_EC2_instance1_<your_ID>`.
+1. Select your own instance named `lab_instance1_<your_ID>`.
 1. Press the `Actions` dropdown button above the EC2 Instances list and in the dropdown that appears press `Launch More Like This`.
 1. You immediately get the same launch configurations listed as your previous virtual machine.
 1. Go back to the `5. Add Tags` section.
-    * Change the `Name` tag to `lab_EC2_instance2_<your_ID>`.
+    * Change the `Name` tag to `lab_instance2_<your_ID>`.
     * Press `Review and Launch`.
 1. Press `Launch`.
 1. Choose your own key pair, acknowledge and press `Launch Instances`.
@@ -86,7 +86,7 @@ Let's create a load balancer to share the network load between our two separate 
     * Change `Ping Path` to `/index.php`.
     * Change `Healthy threshold` to `4`.
 1. Press `Next: Add EC2 Instances`.
-    * Select your instances named `lab_EC2_instance1_<your_ID>` and `lab_EC2_instance2_<your_ID>`.
+    * Select your instances named `lab_instance1_<your_ID>` and `lab_instance2_<your_ID>`.
 1. Press `Next: Add Tags`.
     * Add a tag with key `Name` and value `lab-ELB-<your_ID>`.
 1. Press `Review and Create`.

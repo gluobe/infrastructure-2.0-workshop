@@ -10,9 +10,9 @@ If you created the following services already, please remove them first:
 1. You should be logged in to your Management Instance.
 1. `export MYID=<your_ID> && export MYREGION=eu-west-1`
     * Set environment variables.
-1. `aws ec2 run-instances --instance-type t2.micro --image-id ami-8fd760f6 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=lab_EC2_instance2_$MYID}]" --iam-instance-profile Name=lab_InstanceAccess --security-groups lab_SecGroup_EC2_$MYID --key-name lab_key_$MYID --region $MYREGION`
+1. `aws ec2 run-instances --instance-type t2.micro --image-id ami-8fd760f6 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=lab_instance2_$MYID}]" --iam-instance-profile Name=lab_InstanceAccess --security-groups lab_SecGroup_EC2_$MYID --key-name lab_key_$MYID --region $MYREGION`
     * Create a second instance.
-1. `aws ec2 describe-instances --filters "Name=tag:Name,Values=lab_EC2_instance2_$MYID" --region $MYREGION | jq '.Reservations[0].Instances[0].PublicIpAddress'`
+1. `aws ec2 describe-instances --filters "Name=tag:Name,Values=lab_instance2_$MYID" --region $MYREGION | jq '.Reservations[0].Instances[0].PublicIpAddress'`
     * Get the IP-address of your instance.
 1. `ssh -i ~/.ssh/id_rsa ubuntu@<ec2_public_ip_address>`
     * Log in to the second instance with private key and IP-address.
@@ -52,9 +52,9 @@ If you created the following services already, please remove them first:
     * Save the ID's of the default VPC's subnets.
 1. `aws elb create-load-balancer --load-balancer-name lab-ELB-$MYID --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=80" --subnets $subnetIds --security-groups $secGroupId --region $MYREGION`
     * Create a Load Balancer.
-1. `export instance1=$(aws ec2 describe-instances --region $MYREGION | jq '.Reservations[]' | jq ".Instances[] | select(.Tags[].Value==\"lab_EC2_instance1_$MYID\") | .InstanceId" | tr -d '"')`
+1. `export instance1=$(aws ec2 describe-instances --region $MYREGION | jq '.Reservations[]' | jq ".Instances[] | select(.Tags[].Value==\"lab_instance1_$MYID\") | .InstanceId" | tr -d '"')`
     * Get instance1 ID.
-1. `export instance2=$(aws ec2 describe-instances --region $MYREGION | jq '.Reservations[]' | jq ".Instances[] | select(.Tags[].Value==\"lab_EC2_instance2_$MYID\") | .InstanceId" | tr -d '"')`
+1. `export instance2=$(aws ec2 describe-instances --region $MYREGION | jq '.Reservations[]' | jq ".Instances[] | select(.Tags[].Value==\"lab_instance2_$MYID\") | .InstanceId" | tr -d '"')`
     * Get instance2 ID.
 1. `aws elb register-instances-with-load-balancer --load-balancer-name lab-ELB-$MYID --instances $instance1 $instance2 --region $MYREGION`
     * Add the instances to the load balancer.

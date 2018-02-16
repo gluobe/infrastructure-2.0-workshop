@@ -49,7 +49,7 @@ In lab 2 we already installed the necessary PHP SDK that AWS provides so our cod
 Your account has restricted permissions. We're telling PHP to go and change data in DynamoDB, but nowhere have we specified any of our account credentials in the EC2 instance. This is why we have to give our EC2 instance a role so it has permissions to change things in other AWS services like adding a record in DynamoDB.
 
 1. Go to `Services -> EC2 -> Instances`.
-1. Select your instance `lab_EC2_instance1_<your_ID>`.
+1. Select your instance `lab_instance1_<your_ID>`.
 1. Click `Actions`.
     1. Hover over `Instance Settings`.
     1. Click `Attach/Replace IAM Role`.

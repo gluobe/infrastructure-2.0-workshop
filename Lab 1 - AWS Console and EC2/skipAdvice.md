@@ -17,9 +17,9 @@ If you created the following services already, please remove them first:
     * Create a security group.
 1. `aws ec2 authorize-security-group-ingress --group-name lab_SecGroup_EC2_$MYID --protocol tcp --port 22 --cidr 0.0.0.0/0 --region $MYREGION && aws ec2 authorize-security-group-ingress --group-name lab_SecGroup_EC2_$MYID --protocol tcp --port 80 --cidr 0.0.0.0/0 --region $MYREGION`
     * Add port 22 and 80 as ingress to the Security Group.
-1. `aws ec2 run-instances --instance-type t2.micro --image-id ami-8fd760f6 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=lab_EC2_instance1_$MYID}]" --iam-instance-profile Name=lab_InstanceAccess --security-groups lab_SecGroup_EC2_$MYID --key-name lab_key_$MYID --region $MYREGION`
+1. `aws ec2 run-instances --instance-type t2.micro --image-id ami-8fd760f6 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=lab_instance1_$MYID}]" --iam-instance-profile Name=lab_InstanceAccess --security-groups lab_SecGroup_EC2_$MYID --key-name lab_key_$MYID --region $MYREGION`
     * Create the instance.
-1. `aws ec2 describe-instances --filters "Name=tag:Name,Values=lab_EC2_instance1_$MYID" --region $MYREGION | jq '.Reservations[0].Instances[0].PublicIpAddress'`
+1. `aws ec2 describe-instances --filters "Name=tag:Name,Values=lab_instance1_$MYID" --region $MYREGION | jq '.Reservations[0].Instances[0].PublicIpAddress'`
     * Get the IP-address of your instance.
 1. `ssh -i ~/.ssh/id_rsa ubuntu@<ec2_public_ip_address>`
     * Log in to the instance with private key and IP-address.
