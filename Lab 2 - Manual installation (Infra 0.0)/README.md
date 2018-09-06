@@ -79,7 +79,11 @@ PHP is a server side language that will interact with the filesystem and databas
 
 ![](../Images/upgradePip.png?raw=true)
 
+<<<<<<< HEAD
 __!!! Pip will notify you that there is a newer version available, however do not upgrade to this version since it will fail all other pip installations in this lab !!!__
+=======
+__!!! Pip will notify you that there is a newer version available, however do not upgrade to this version since it will fail all other pip installations in this lab !!! __
+>>>>>>> 0276af976835b202653a8141ef86d1617c8b3cb8
 
 1. `apt-get install -y php7.0 php7.0-dev libapache2-mod-php7.0 php-pear pkg-config libssl-dev libsslcommon2-dev python-minimal python-pip imagemagick composer wget unzip`
     * Install PHP 7.0 & other application packages.
