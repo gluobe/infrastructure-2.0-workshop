@@ -77,6 +77,10 @@ The application is now available from the web via the public IP-address but won'
 ### 4. Install & configure PHP ###
 PHP is a server side language that will interact with the filesystem and database to make our application work.
 
+![](../Images/upgradePip.png?raw=true)
+
+__!!! Pip will notify you that there is a newer version available, however do not upgrade to this version since it will fail all other pip installations in this lab !!!__
+
 1. `apt-get install -y php7.0 php7.0-dev libapache2-mod-php7.0 php-pear pkg-config libssl-dev libsslcommon2-dev python-minimal python-pip imagemagick composer wget unzip`
     * Install PHP 7.0 & other application packages.
 1. `pip install wand`
