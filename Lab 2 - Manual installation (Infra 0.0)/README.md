@@ -77,8 +77,6 @@ The application is now available from the web via the public IP-address but won'
 ### 4. Install & configure PHP ###
 PHP is a server side language that will interact with the filesystem and database to make our application work.
 
-![](../Images/upgradePip.png?raw=true?)
-
 <p align="center">
     <img src="../Images/upgradePip.png" alt="Image"/>
 </p>
