@@ -79,12 +79,6 @@ PHP is a server side language that will interact with the filesystem and databas
 
 1. `apt-get install -y php7.0 php7.0-dev libapache2-mod-php7.0 php-pear pkg-config libssl-dev libsslcommon2-dev python-minimal python-pip imagemagick composer wget unzip`
     * Install PHP 7.0 & other application packages.
-1. `curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
-    * Get the install script for pip.
-1. `python get-pip.py`
-    * Execute the get-pip.py script.
-1. `hash -r`
-    * Remember the full path name. 
 1. `pip install wand`
     * Install a Python picture editor package.
 1. `pecl install mongodb`    
