@@ -28,7 +28,7 @@ Our application is a meme generator. It will create memes, store the files on th
     1. Change the `$yourId` variable to your own ID.
 
 ### 2. Install & configure MongoDB ###
-Our database is called MongoDB. It stores data in a NoSQL, document oriented manner. This means that it's not a relational SQL-like database and avoids joins. Instead it is more object oriented and groups the data together, without spreading it over a number of tables. 
+Our database is called MongoDB. It stores data in a NoSQL, document oriented manner. This means that it's not a relational SQL-like database and avoids joins. Instead it is more object oriented and groups the data together, without spreading it over a number of tables.
 
 There's advantages and disadvantages to this type of database. For the purposes of this tutorial there isn't a real benefit to using SQL or NoSQL, we just like to switch it up.
 
@@ -39,7 +39,7 @@ There's advantages and disadvantages to this type of database. For the purposes 
 1. `apt-get update -y`
     * Update the package manager's cached repositories.
 1. `apt-get install -y mongodb-org mongodb-org-server`
-    * Install MongoDB. 
+    * Install MongoDB.
 1. `systemctl start mongod`
     * Start MongoDB.
 1. `mongo`
@@ -58,10 +58,10 @@ There's advantages and disadvantages to this type of database. For the purposes 
     * Test access control by logging in with the right credentials...
 1. `exit`
 1. `mongo memegen -u student --password=wrongcredentials`
-    * ...and the wrong credentials. 
-    
+    * ...and the wrong credentials.
+
 Our database with the student user is now up and running and access control is enabled.
-    
+
 ### 3. Install & configure Apache ###
 Apache is used to host web files and show web pages on the internet.
 
@@ -73,14 +73,18 @@ Apache is used to host web files and show web pages on the internet.
     * The files now have a new group and owner.
 
 The application is now available from the web via the public IP-address but won't work yet since PHP hasn't been installed yet.
-    
+
 ### 4. Install & configure PHP ###
 PHP is a server side language that will interact with the filesystem and database to make our application work.
 
 1. `apt-get install -y php7.0 php7.0-dev libapache2-mod-php7.0 php-pear pkg-config libssl-dev libsslcommon2-dev python-minimal python-pip imagemagick composer wget unzip`
     * Install PHP 7.0 & other application packages.
-1. `pip install --upgrade pip`
-    * Update the Python package manager.
+1. `curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
+    * Get the install script for pip.
+1. `python get-pip.py`
+    * Execute the get-pip.py script.
+1. `hash -r`
+    * Remember the full path name. 
 1. `pip install wand`
     * Install a Python picture editor package.
 1. `pecl install mongodb`    
@@ -115,7 +119,7 @@ We can now go to the server's public IP-address in your web browser. If everythi
 If you're curious if MemeGen has actually written any data to the database or saved files to the filesystem we can check this out.
 
 1. `ls /var/www/html/meme-generator/memes/`
-    * Look at your created meme. Images are saved locally. 
+    * Look at your created meme. Images are saved locally.
 1. `mongo memegen -u student --password=Cloud247`
     * Enter the MongoDB Shell in the database images. The database will save the id (id), image name (name) and date of creation (date).
 1. `show databases`

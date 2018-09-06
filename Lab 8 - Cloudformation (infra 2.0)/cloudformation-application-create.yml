@@ -3,7 +3,7 @@ Description: MemeGen application stack
 Parameters:
 
   # Config Variables
-  
+
   StudentIdParam:
     Type: String
     Default: "1"
@@ -56,27 +56,27 @@ Metadata:
 Resources:
 
   # DynamoDB table
-  
-  appDynamodbTable: 
+
+  appDynamodbTable:
     Type: "AWS::DynamoDB::Table"
-    Properties: 
+    Properties:
       TableName: !Sub "cloudformation-images-${StudentIdParam}"
-      AttributeDefinitions: 
-        - 
+      AttributeDefinitions:
+        -
           AttributeName: "id"
           AttributeType: "N"
-      KeySchema: 
-        - 
+      KeySchema:
+        -
           AttributeName: "id"
           KeyType: "HASH"
-      ProvisionedThroughput: 
+      ProvisionedThroughput:
         ReadCapacityUnits: "5"
         WriteCapacityUnits: "5"
       Tags:
         - Key: "Name"
           Value: !Sub "cloudformation-images-${StudentIdParam}"
 
-  # S3 bucket 
+  # S3 bucket
 
   appS3Bucket:
     Type: "AWS::S3::Bucket"
@@ -141,7 +141,7 @@ Resources:
           ToPort: "80"
           CidrIp: 0.0.0.0/0
       VpcId: !Ref VpcIdParam
-      Tags: 
+      Tags:
         - Key: Name
           Value: !Sub "CloudFormation-${AWS::StackName}-ElbSecurityGroup"
 
@@ -157,7 +157,7 @@ Resources:
         InstancePort: '80'
         Protocol: TCP
       Subnets: !Ref PublicSubnetsParam
-      Tags: 
+      Tags:
         - Key: Name
           Value: !Sub "CloudFormation-${AWS::StackName}-ElasticLoadBalancer"
 
@@ -174,12 +174,12 @@ Resources:
           FromPort: "22"
           ToPort: "22"
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp 
+        - IpProtocol: tcp
           FromPort: "80"
           ToPort: "80"
           CidrIp: 0.0.0.0/0
       VpcId: !Ref VpcIdParam
-      Tags: 
+      Tags:
         - Key: Name
           Value: !Sub "CloudFormation-${AWS::StackName}-AppSecurityGroup"
 
@@ -196,7 +196,7 @@ Resources:
     Properties:
       HealthCheckType: EC2
       LaunchConfigurationName: !Ref appLaunchConfiguration
-      LoadBalancerNames: 
+      LoadBalancerNames:
       - Ref: "appElb"
       MinSize: "1"
       DesiredCapacity: "2"
@@ -224,7 +224,7 @@ Resources:
             "/root/InstallMemeGen-php-CF.sh":
               content: !Sub |
                 #!/bin/bash
-                # Installs MemeGen, modified to be used for cloudformation. 
+                # Installs MemeGen, modified to be used for cloudformation.
 
                 YOURID=$1
                 REGION=$2
@@ -246,10 +246,10 @@ Resources:
                   echo "extension=mongodb.so" >> /etc/php/7.0/apache2/php.ini && echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
 
                 # Pip install meme creation packages and awscli for syncing s3 to local fs
-                  pip install --upgrade pip
+                # pip install --upgrade pip
                   pip install wand awscli
-                  
-                # Enable and start services  
+
+                # Enable and start services
                   # Enable
                   systemctl enable mongod apache2
                   # Start
@@ -277,7 +277,7 @@ Resources:
                   echo "security:" >> /etc/mongod.conf && echo "  authorization: enabled" >> /etc/mongod.conf
                   # Restart the mongodb service
                   systemctl restart mongod
-                    
+
                 # Download and install MemeGen
                   # Git clone the repository in your home directory
                   git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp
@@ -295,18 +295,18 @@ Resources:
                       composer -d="/var/www/html" require aws/aws-sdk-php
                       sleep 2
                   done
-                  
+
                 # Configure httpd and restart
                   # Remove index.html
                   rm -f /var/www/html/index.html
                   # Restart httpd
                   systemctl restart apache2
-                  
+
                 # Edit site's config.php file
                   # Put remote on.
                   sed -i 's@^$remoteData.*@$remoteData = true; # DynamoDB (Altered by sed)@g' /var/www/html/config.php
                   sed -i 's@^$remoteFiles.*@$remoteFiles = true; # S3 (Altered by sed)@g' /var/www/html/config.php
-                  
+
                   # Alter user id
                   sed -i "s@^\$yourId.*@\$yourId = \"$YOURID\"; # (Altered by sed)@g" /var/www/html/config.php
                   sed -i "s@^\$awsRegion.*@\$awsRegion = \"$REGION\"; # (Altered by sed)@g" /var/www/html/config.php
@@ -335,28 +335,28 @@ Resources:
       KeyName: !Ref KeyNameParam
       SecurityGroups:
       - !Ref appSecuritygroup
-      UserData:  
+      UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
 
           # Update and install pip and cfn-... commands to trigger asg wait and start executing scripts
-          apt-get -y update && apt-get -y install python-pip && pip install --upgrade pip && pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
-          
+          apt-get -y update && apt-get -y install python-pip && pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+
           # Start executing scripts defined above
           /usr/local/bin/cfn-init -v \
             --stack ${AWS::StackName} \
             --resource appLaunchConfiguration \
             --configsets ConfigSetScript \
             --region ${AWS::Region}
-          
+
           # Signal ASG to continue only when error signal is 0
           /usr/local/bin/cfn-signal -e $? \
             --stack ${AWS::StackName} \
             --resource appAutoscalingGroup \
             --region ${AWS::Region}
-      
+
   # Route 53 Record
-      
+
   appRoute53Record:
     Type: AWS::Route53::RecordSet
     Properties:
@@ -366,7 +366,7 @@ Resources:
       TTL: '300'
       ResourceRecords:
       - !GetAtt appElb.DNSName
-        
+
 Outputs:
   ElbDnsNameExport:
     Description: Export of the Elb endpoint
@@ -383,4 +383,3 @@ Outputs:
     Value: !Ref appS3Bucket
     Export:
       Name: !Sub "CloudFormation-${AWS::StackName}-BucketName"
-      

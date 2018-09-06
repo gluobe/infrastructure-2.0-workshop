@@ -26,7 +26,7 @@ First we'll need the MemeGen installation script from the corresponding reposito
     * Print out the script using cat, and copy the script to your clipboard.
 
 A Launch configuration (LC) will contain all the EC2 Instance details and can even be used to run scripts when the Instance starts running for the first time (which we will do to install our MemeGen application).    
-    
+
 1. Go to `Services -> EC2 -> Launch Configurations -> Create launch configuration`.
 1. Select `Ubuntu Server 16.04 LTS`.
 1. Select `t2.micro` and press `Next: Configure Details`.
@@ -35,12 +35,12 @@ A Launch configuration (LC) will contain all the EC2 Instance details and can ev
     * Assign it the role `lab_InstanceAccess`.
     * Now press `Advanced Details`:
         * Paste the script we printed out in our terminal before and **make sure you add your own ID!**
-        
+
         ![](../Images/LCChangeIDParameter.png?raw=true)     
-            
+
         * Copy and paste the whole script into the `User Data` field `As text`.
         * Set `IP Address Type` to `Assign a public IP address to every instance.`.
-        
+
         ![](../Images/LCFullConfigurationPage.png?raw=true)
 
 1. Press `Next: Add Storage`.
@@ -64,6 +64,7 @@ Using an Autoscaling Group (ASG) we can automatically scale up or down the amoun
         * `localSubnet16`
         * `localSubnet32`
 1. Click `Next: Configure scaling policies`.
+1. Click `Next: Configure notifications`. 
 1. Click `Next: Configure Tags`.
     * Add Key `Name` and Value `lab-ASG-<your_ID>`.
     * Add Key `Id` and Value `<your_ID>`.
@@ -95,7 +96,7 @@ Feeling like the load on your servers is getting too high? We can easily add ano
     * Change `Min` to `1`.
     * Change `Max` to `2`.
     * Click `Save (to the right)`.
-1. An `i` should appear in the `Instances` column of your ASG. This means an Instance is being started or stopped. 
+1. An `i` should appear in the `Instances` column of your ASG. This means an Instance is being started or stopped.
 1. You can go to `Services -> EC2 -> Instances` to verify the creation of your new Instance.
 1. You can also go to `Services -> EC2 -> Load Balancers` and look at your ELB's linked instances as they go into service (might take some time):
 
@@ -112,4 +113,3 @@ Let's unleash the true power of infrastructure2.0 in the ([next lab](../Lab%208%
 
 * What is an ASG & LC? (https://aws.amazon.com/autoscaling/).
 * The ASG & LC specific AWSCLI documentation (http://docs.aws.amazon.com/cli/latest/reference/autoscaling/index.html).
-    
