@@ -25,6 +25,7 @@ Our application is a meme generator. It will create memes, store the files on th
     * Show the meme generator application contents.
 1. **Change the site to have your ID.**
     1. Enter `/var/www/html/config.php` using your favorite editor.
+         * For example `nano /var/www/html/config.php`.
     1. Change the `$yourId` variable to your own ID.
 
 ### 2. Install & configure MongoDB ###
