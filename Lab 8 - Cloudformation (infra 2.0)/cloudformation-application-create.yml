@@ -16,7 +16,6 @@ Parameters:
     ConstraintDescription: Value must be the name of an existing EC2 KeyPair.
   AmiParam:
     Type: String
-    #Default: "ami-82f4dae7" # US-EAST-2
     Default: "ami-8fd760f6" # EU-WEST-1
     Description: Ami Id to run the application.
   Ec2InstanceTypeParam:
@@ -29,7 +28,6 @@ Parameters:
       - t2.small
   DomainNameParam:
     Type: String
-    #Default: "gluo.io" # US-EAST-2
     Default: "gluo.cloud" # EU-WEST-1
     Description: Hostname to create Route53 subdomain
   VpcIdParam:
@@ -81,6 +79,7 @@ Resources:
   appS3Bucket:
     Type: "AWS::S3::Bucket"
     Properties:
+      AccessControl: PublicRead
       BucketName: !Sub "cloudformation-images-bucket-${StudentIdParam}"
       VersioningConfiguration:
         Status: Suspended
@@ -243,6 +242,7 @@ Resources:
                   apt-get install -y apache2 mongodb-org mongodb-org-server php7.0 php7.0-dev libapache2-mod-php7.0 php-pear pkg-config libssl-dev libsslcommon2-dev python-minimal python-pip imagemagick composer wget unzip;
                   # Mongodb config
                   pecl install mongodb
+
                   echo "extension=mongodb.so" >> /etc/php/7.0/apache2/php.ini && echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
 
                 # Pip install meme creation packages and awscli for syncing s3 to local fs
