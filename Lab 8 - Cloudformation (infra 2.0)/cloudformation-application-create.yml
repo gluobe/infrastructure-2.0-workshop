@@ -76,10 +76,24 @@ Resources:
 
   # S3 bucket
 
+  appS3BucketPolicy: 
+    Type: AWS::S3::BucketPolicy
+    Properties: 
+      Bucket: 
+        Ref: "appS3Bucket"
+      PolicyDocument: 
+        Statement: 
+          - Effect: "Allow"
+            Principal:
+              AWS: "*"
+            Action:
+              - "s3:GetObject"
+            Resource: 
+              - !Sub "arn:aws:s3:::cloudformation-images-bucket-${StudentIdParam}/*"
+
   appS3Bucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      AccessControl: PublicRead
       BucketName: !Sub "cloudformation-images-bucket-${StudentIdParam}"
       VersioningConfiguration:
         Status: Suspended
