@@ -13,8 +13,8 @@ Let's destroy our old EC2 Instances.
 
 1. Go to `Services -> EC2 -> Instances`.
 1. Select your 2 instances:
-    * `lab_instance1_<your_ID>`
-    * `lab_instance2_<your_ID>`
+    * `server_instance1_student<your_ID>`
+    * `server_instance2_student<your_ID>`
 1. Click on `Actions -> Instance State -> Terminate -> Yes, Terminate`.
 
 ### 2. Configuring an LC ###
@@ -64,7 +64,7 @@ Using an Autoscaling Group (ASG) we can automatically scale up or down the amoun
         * `localSubnet16`
         * `localSubnet32`
 1. Click `Next: Configure scaling policies`.
-1. Click `Next: Configure notifications`. 
+1. Click `Next: Configure notifications`.
 1. Click `Next: Configure Tags`.
     * Add Key `Name` and Value `lab-ASG-<your_ID>`.
     * Add Key `Id` and Value `<your_ID>`.

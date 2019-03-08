@@ -10,12 +10,12 @@ Now that our MemeGen data is being stored in DynamoDB, we might as well synchron
 ![](../Images/Lab5.png?raw=true)
 
 ### 1. Going to your S3 bucket ###
-S3 is a service for storing files in a folder like structure. 
+S3 is a service for storing files in a folder like structure.
 
 1. Go to `Services -> S3`.
 1. Find your bucket. We've already created one for you, it should be named `lab-images-bucket-<your_ID>`.
 1. There's (almost) nothing in it! That'll soon change, when we upload all our memes to it.
-    
+
 ### 2. Installing AWSCLI ###
 AWS has its AWS Console (which we've been working in) to access AWS via your browser, but it's also accessible via a commandline tool named AWSCLI. It's installed via a Python package manager called Pip.
 
@@ -31,11 +31,11 @@ Do this on **both** instances. (It might already be installed on your second ins
 > aws-cli/1.14.9 Python/2.7.12 Linux/4.4.0-1041-aws botocore/1.8.13
 
 ### 3. Trying out AWSCLI ###
-PHP will be using AWSCLI to upload and download our local memes to the S3 bucket. We'll do it manually once just to try it out. 
+PHP will be using AWSCLI to upload and download our local memes to the S3 bucket. We'll do it manually once just to try it out.
 
 1. `aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-images-bucket-<your_ID>`.
-    * Upload a meme of your choosing to the bucket 
-    
+    * Upload a meme of your choosing to the bucket
+
     > root@ip-172-31-16-165:~# aws s3 cp /var/www/html/meme-generator/memes/successkid.jpg s3://lab-images-bucket-2
     >
     > upload: ../var/www/html/meme-generator/memes/successkid.jpg to s3://lab-images-bucket-2/successkid.jpg

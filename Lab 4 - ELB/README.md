@@ -25,14 +25,14 @@ We'll need a firewall configuration for the Load Balancer. It simply forwards po
 ### 2. Create a second EC2 Instance ###
 To gain the most out of the load balancer we're about to set up, we'll need another EC2 Instance to link the load balancer with so it can do its job properly. You can also do this with just one instance but the load balancer wouldn't really be load balancing anything, it would just be a glorified proxy.
 
-At this point we should still have one instance running. We can copy the settings of an instance and create another instance from it. This won't copy the original instance's hard drive, we'll have to install MemeGen on this new instance again. 
+At this point we should still have one instance running. We can copy the settings of an instance and create another instance from it. This won't copy the original instance's hard drive, we'll have to install MemeGen on this new instance again.
 
 1. Go to `Services -> EC2 -> Instances`
-1. Select your own instance named `lab_instance1_<your_ID>`.
+1. Select your own instance named `server_instance1_student<your_ID>`.
 1. Press the `Actions` dropdown button above the EC2 Instances list and in the dropdown that appears press `Launch More Like This`.
 1. You immediately get the same launch configurations listed as your previous virtual machine.
 1. Go back to the `5. Add Tags` section.
-    * Change the `Name` tag to `lab_instance2_<your_ID>`.
+    * Change the `Name` tag to `server_instance2_student<your_ID>`.
     * Press `Review and Launch`.
 1. Press `Launch`.
 1. Choose your own key pair, acknowledge and press `Launch Instances`.
@@ -86,7 +86,7 @@ Let's create a load balancer to share the network load between our two separate 
     * Change `Ping Path` to `/index.php`.
     * Change `Healthy threshold` to `4`.
 1. Press `Next: Add EC2 Instances`.
-    * Select your instances named `lab_instance1_<your_ID>` and `lab_instance2_<your_ID>`.
+    * Select your instances named `server_instance1_student<your_ID>` and `server_instance2_student<your_ID>`.
 1. Press `Next: Add Tags`.
     * Add a tag with key `Name` and value `lab-ELB-<your_ID>`.
 1. Press `Review and Create`.
@@ -101,20 +101,20 @@ Now that we've linked both the instances to one load balancer we can browse to t
 
 1. Copy the DNS URL provided by the Load Balancer.
 
-    ![](../Images/ELBCopyURL.png?raw=true) 
+    ![](../Images/ELBCopyURL.png?raw=true)
 
 1. Paste it into your browser titlebar.
     * The Load Balancer is pretty quick, but linking the instances and getting the DNS changes to take effect could take up to 1-3 minutes.
-    
-    ![](../Images/ELBLinkIntoBrowser.png?raw=true) 
+
+    ![](../Images/ELBLinkIntoBrowser.png?raw=true)
 
 ### 6. Differentiate the Instances ###
-To show both instances are actually being used by the Load Balancer we've changed the site color of the second instance's app to differentiate the two instances from each other. 
+To show both instances are actually being used by the Load Balancer we've changed the site color of the second instance's app to differentiate the two instances from each other.
 
 1. Try to hard refresh the Load Balancer site (`CTRL` + `SHIFT` + `R`) a few times. About 50% of the time the site color will visibly change meaning we've reached different instances.
 
     ![](../Images/ELBButtonChange1.png?raw=true)
-    
+
     ![](../Images/ELBButtonChange2.png?raw=true)
 
 

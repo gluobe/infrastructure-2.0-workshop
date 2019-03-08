@@ -4,9 +4,9 @@
 You should have one EC2 Instance with MemeGen installed on it which is reachable and works with its local MongoDB.
 
 ## Visual Interpretation ##
-Now that we've shown everything can be installed and configured on one machine, we'll slowly extract every local service we're running and use more of AWS' services to create a more managed, safer and more scriptable version of our all-in-one server setup. 
+Now that we've shown everything can be installed and configured on one machine, we'll slowly extract every local service we're running and use more of AWS' services to create a more managed, safer and more scriptable version of our all-in-one server setup.
 
-Let's create a DynamoDB table (Amazon's NoSQL Solution) to replace MongoDB. This is an Amazon Managed Service, meaning Amazon takes more responsibility for the database being available. Previously on our EC2 instance we had pretty much no safeguards in place for making sure the Mongo database was kept running. 
+Let's create a DynamoDB table (Amazon's NoSQL Solution) to replace MongoDB. This is an Amazon Managed Service, meaning Amazon takes more responsibility for the database being available. Previously on our EC2 instance we had pretty much no safeguards in place for making sure the Mongo database was kept running.
 
 ![](../Images/Lab3.png?raw=true)
 
@@ -36,7 +36,7 @@ Next let's add some records that will pull some pre-fabricated memes from the re
 
     ![](../Images/DynamoDBAddRecord.png?raw=true)
 
-* You can do the same for `badluckbrian`, `willywonka`, `yodawg` and `archer` if you want. 
+* You can do the same for `badluckbrian`, `willywonka`, `yodawg` and `archer` if you want.
 
     ![](../Images/DynamoDBAddedRecords.png?raw=true)
 
@@ -50,7 +50,7 @@ In lab 2 we already installed the necessary PHP SDK that AWS provides so our cod
 Your account has restricted permissions. We're telling PHP to go and change data in DynamoDB, but nowhere have we specified any of our account credentials in the EC2 instance. This is why we have to give our EC2 instance a role so it has permissions to change things in other AWS services like adding a record in DynamoDB.
 
 1. Go to `Services -> EC2 -> Instances`.
-1. Select your instance `lab_instance1_<your_ID>`.
+1. Select your instance `server_instance1_student<your_ID>`.
 1. Click `Actions`.
     1. Hover over `Instance Settings`.
     1. Click `Attach/Replace IAM Role`.
@@ -64,7 +64,7 @@ Your account has restricted permissions. We're telling PHP to go and change data
 1. Create another awesome meme through the website.
 
 ### 6. Show DynamoDB Data ###
-After you created a new meme we can go to DynamoDB and see the added record. 
+After you created a new meme we can go to DynamoDB and see the added record.
 
 1. Go to `Services -> DynamoDB`.
 1. Click `Tables` in the sidebar.

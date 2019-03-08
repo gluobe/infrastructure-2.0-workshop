@@ -21,11 +21,11 @@ AWS provides many different Cloud services, of which we'll only see a small hand
 
 * We'll begin by creating a simple EC2 instance or cloud virtual machine, which has some simple firewall rules assigned via a EC2 Security Group and has your own private SSH key assigned to login with instead of the lab_ManagementKey one. We'll always use the management instance as a proxy to access instances we've created.
     * You are here:
-    
+
     ![](../Images/ManagementProxyStep1.png?raw=true)
-    
+
     * After this lab you'll be here:
-    
+
     ![](../Images/ManagementProxyStep2.png?raw=true)
 
 ### 1. Create your own key pair ###
@@ -36,15 +36,15 @@ The key pair consists of a public and private key. The public key is put onto a 
     * Generate a key pair.
 1. `ls -l ~/.ssh/`
     * Look at the key pair. The private key is `id_rsa`, the public key is `id_rsa.pub` and they're located under your current user home's .ssh directory `/home/ubuntu/.ssh/`.
-    * Note that the private key's permissions (-rw-------) are stricter than the public key's permissions (-rw-r--r--). 
-    
+    * Note that the private key's permissions (-rw-------) are stricter than the public key's permissions (-rw-r--r--).
+
     > *ubuntu@management-server1:~$* **ssh-keygen**
     >
     > Generating public/private rsa key pair.
     >
-    > Enter file in which to save the key (/root/.ssh/id_rsa): 
+    > Enter file in which to save the key (/root/.ssh/id_rsa):
     >
-    > Enter passphrase (empty for no passphrase): 
+    > Enter passphrase (empty for no passphrase):
     >
     > Enter same passphrase again:
     >
@@ -68,7 +68,7 @@ The key pair consists of a public and private key. The public key is put onto a 
     >
     > -rw------- 1 ubuntu ubuntu  554 Dec 22 12:21 authorized_keys
     >
-    > **-rw-------** 1 ubuntu ubuntu 1679 Dec 22 13:12 **id_rsa** 
+    > **-rw-------** 1 ubuntu ubuntu 1679 Dec 22 13:12 **id_rsa**
     >
     > **-rw-r--r--** 1 ubuntu ubuntu  404 Dec 22 13:12 **id_rsa.pub**
 
@@ -85,7 +85,7 @@ We then need to import this public key into AWS so we can link Instances to this
     ![](../Images/EC2PublicKeyUpload.png?raw=true)
 
 ### 3. Create a Security Group ###
-One more step before we can create our own instance. We need some firewall rules to link our instance with. In AWS, a group of security rules is called a Security Group and can be linked to multiple instances and even other AWS services. 
+One more step before we can create our own instance. We need some firewall rules to link our instance with. In AWS, a group of security rules is called a Security Group and can be linked to multiple instances and even other AWS services.
 
 In AWS you can also create your own Virtual Network, also called VPC, which has its own Subnets but you can forget that for now. We'll be using one that's provided for you already (defaultVPC).
 
@@ -114,7 +114,7 @@ Now we can finally spawn an instance and link it to our created security group a
 1. Press `Next: Add Storage`.
 1. Press `Next: Add Tags`
 1. With Tags, you can reference the instance from many different AWS services. The tag "Name" will make sure it is properly named when looking at the EC2 Instances list.
-    * Add a tag with key `Name` and value `lab_instance1_<your_ID>`.
+    * Add a tag with key `Name` and value `server_instance1_student<your_ID>`.
     * Add a tag with key `Id` and value `<your_ID>`.
 1. Press `Next: Configure Security Group`
 1. We opened port 22 for SSH access and port 80 for HTTP access via the browser. Let's link the Security Group to the instance.
@@ -128,7 +128,7 @@ Now we can finally spawn an instance and link it to our created security group a
     ![](../Images/EC2NewInstanceCreated.png?raw=true)
 
 ### 5. Log in the created Instance ###
-Let's log in to our EC2 Instance from the management EC2 Instance using our own private key (~/.ssh/id_rsa). 
+Let's log in to our EC2 Instance from the management EC2 Instance using our own private key (~/.ssh/id_rsa).
 
 1. Copy the `IPv4 Public IP` of your new instance from the AWS console in `Services -> EC2 -> Instances`.
 1. From your management instance use the command `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
@@ -187,7 +187,7 @@ To update your score, `exit` to your management instance and run this command `s
 
 ![](../Images/EC2RunScoringScriptLab1.png?raw=true)
 
-And then continue to the [next lab](../Lab%202%20-%20Manual%20installation%20(Infra%200.0)). 
+And then continue to the [next lab](../Lab%202%20-%20Manual%20installation%20(Infra%200.0)).
 
 ### More info ###
 
