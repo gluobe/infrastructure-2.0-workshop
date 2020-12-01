@@ -12,6 +12,12 @@ Let's create a DynamoDB table (Amazon's NoSQL Solution) to replace MongoDB. This
 
 ![](../Images/Lab3.png?raw=true)
 
+### 0. Use new DynamoDB Interface ###
+AWS has been updating the AWS Console. We will want to use the preview for the DynamoDB service. So press this button if it is available:
+
+![](../Images/DynamoDBNewConsole.png?raw=true)
+
+
 ### 1. Create a DynamoDB table ###
 Unlike MongoDB, in DynamoDB there aren't multiple databases, there are just multiple tables or collections in one giant infinitely scalable database.
 

@@ -70,7 +70,7 @@ Now we need to import this public key into AWS so we can link Instances to this 
     1. Change the `Key pair name` to `lab_key_student<your_ID>`.
     1. Print the public key's contents with `cat ~/.ssh/id_rsa.pub`
     1. Copy and paste the public key's contents in the multiline input box.
-    1. Click `Import`.
+    1. Click `Import key pair`.
 
     ![](../Images/EC2PublicKeyUpload.png?raw=true)
 
@@ -91,7 +91,7 @@ In AWS you can also create your own Virtual Network, also called VPC, which has 
         * `HTTP` on port `80`, `source: anywhere`
         * `All ICMP - IPv4` on port `0-65535`, `source: anywhere`
         * Since security groups are stateful, traffic that is allowed in (inbound) is automatically allowed back out (outbound).
-1. Click `Create`.
+1. Click `Create security group`.
 
     ![](../Images/EC2SecurityGroup.png?raw=true)
 
