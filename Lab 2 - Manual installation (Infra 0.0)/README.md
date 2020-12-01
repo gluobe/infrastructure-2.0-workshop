@@ -38,11 +38,17 @@ Our database is called MongoDB. It stores data in a NoSQL, document oriented man
 
 There's advantages and disadvantages to this type of database. For the purposes of this tutorial there isn't a real benefit to using SQL or NoSQL, we just like to switch it up.
 
-1. `apt-get update -y`
-    * Update the package manager's repositories.
-1. `apt-get install -y mongodb mongodb-server`
+1. `apt update -y && apt upgrade -y`
+    * Update the package manager's repositories and upgrade the system.
+1. `wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -`
+    * Add a MongoDB GPG key to verify the repository we are about to add.
+1. `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list`
+    * Add an apt repository for MongoDB packages which are not available in the default Ubuntu repositories.
+1. `apt update -y`
+    * Update the package manager repositories again to pull information about packages from the new repository.
+1. `apt-get install -y mongodb-org mongodb-org-server`
     * Install MongoDB.
-1. `systemctl start mongodb`
+1. `systemctl start mongod`
     * Start MongoDB.
 1. `mongo`
     * When you first install MongoDB, anyone can log in without credentials. Enter the MongoDB CLI without credentials. Your prompt will change.
@@ -52,9 +58,9 @@ There's advantages and disadvantages to this type of database. For the purposes 
     * Create a student user with root privileges to any db. It should say `Successfully added user`.
 1. `exit`
     * Exit the shell.
-1. `echo "security:" >> /etc/mongodb.conf && echo "  authorization: enabled" >> /etc/mongodb.conf`
+1. `echo "security:" >> /etc/mongod.conf && echo "  authorization: enabled" >> /etc/mongod.conf`
     * Enable MongoDB's access control.
-1. `systemctl restart mongodb`
+1. `systemctl restart mongod`
     * Restart MongoDB so access control is enabled.
 1. `mongo memegen -u student --password=Cloud247`
     * Test access control by logging in with the right credentials...
@@ -93,11 +99,11 @@ PHP is a server side language that will interact with the filesystem and databas
 ### 5. (Re)Start & enable all services ###
 Everything has been installed and may or may not be running. Restart and check the status of the Apache and MongoDB services with the following commands to make sure it's stable.
 
-1. `systemctl enable mongodb apache2`
+1. `systemctl enable mongod apache2`
     * Make sure the services start when the system reboots.
-1. `systemctl restart mongodb apache2`
+1. `systemctl restart mongod apache2`
     * Start the Apache and MongoDB servers if they weren't already.
-1. `systemctl status mongodb apache2`
+1. `systemctl status mongod apache2`
     * View the status of both services. They should both be `Running`.
 
     ![](../Images/ManualInstallStateRunning.png?raw=true)
