@@ -19,7 +19,7 @@ S3 is a service for storing files in a folder like structure.
 ### 2. Installing AWSCLI ###
 AWS has its AWS Console (which we've been working in) to access AWS via your browser, but it's also accessible via a commandline tool named AWSCLI. It can be installed via a Python package manager called Pip.
 
-Do this on **both** instances. (It might already be installed on your second instance.)
+Do this on **ONE** of your instances.
 
 1. `pip3 install awscli`
     *  Install AWSCLI with the python package manager pip.
