@@ -15,7 +15,7 @@ AWS provides many different Cloud services, of which we'll only see a small hand
 
     ![](../Images/AWSConsoleEC2Overview.png?raw=true)
 
-* You can list instances with your specific ID from the EC2 list by filtering on the `Id` tag and using `<your_id>` as the value.
+* You can list instances with your specific ID from the EC2 list by filtering on `<your_ID>`. (It's a bit finicky, you should be able to fill in `<your_ID>`, it will show `ID: <your_ID>` and you can press `ENTER`. If it doesn't work just move on.)
 
     ![](../Images/EC2FilterOnTag.png?raw=true)
 
