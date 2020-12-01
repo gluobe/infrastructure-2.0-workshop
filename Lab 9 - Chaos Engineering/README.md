@@ -20,7 +20,7 @@ If you have some time left, we can have some fun with the instances.
 Normally deleting a Cloudformation Stack is as simple as setting it up, but our bucket still needs to be emptied manually sadly.
 
 1. Go to `Services -> S3`.
-1. Click the list item but do not open your bucket `Cloudformation-<your_ID>-bucket`.
+1. Click the list item but do not open your bucket `lab-cf-images-bkt-<your_ID>`.
 1. Above the table click `Empty Bucket`.
     1. Type `permanently delete`.
     1. Press `Confirm`.
