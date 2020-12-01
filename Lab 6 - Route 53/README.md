@@ -19,7 +19,8 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
 1. We'll use `Simple routing`, press `Next`. If you want you can read what the different options are.
 1. Click `Define simple record`
     * Set `Record name:` to `<your_ID>`. (Example: 1.gluo.cloud)
-    * Set `Value:` to `<Load Balancer DNS url>`.
+    * Set the `Value/Route traffic to` dropdown to `IP address or another value...`
+        * Then fill in the text box with the `<Load Balancer URL>` you copied above.
         * This cannot contain `http://` or trailing slashes like `/` at the end.
     * Set `Type:` to `CNAME - Canonical name`.
     * Click `Define simple record`.
@@ -27,7 +28,7 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
 
 * Go to `<your_ID>.gluo.cloud` to view your Load Balanced MemeGen site.
     * The record can take up to 5 minutes to be registered by the top DNS servers. 
-    * If you want you can view the dns record value using `watch dig <your_ID>.gluo.cloud`, `ctrl+c` to cancel.
+    * If you want you can view the dns record value via the commandline using `watch dig <your_ID>.gluo.cloud`, `ctrl+c` to cancel.
     
 ![](../Images/Route53BrowseToLoadBalancer.png?raw=true)
 
