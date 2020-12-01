@@ -15,11 +15,11 @@ AWS provides many different Cloud services, of which we'll only see a small hand
 
     ![](../Images/AWSConsoleEC2Overview.png?raw=true)
 
-* You can list only your instances from the EC2 list by filtering on the `Id` tag and using `<your_id>` as the value.
+* You can list instances with your specific ID from the EC2 list by filtering on the `Id` tag and using `<your_id>` as the value.
 
     ![](../Images/EC2FilterOnTag.png?raw=true)
 
-* We'll begin by creating a simple EC2 instance or cloud virtual machine, which has some simple firewall rules assigned via a EC2 Security Group and has your own private SSH key assigned to login with instead of the lab_ManagementKey one. We'll always use the management instance as a proxy to access instances we've created.
+* We'll begin by creating an EC2 instance, which has some simple firewall rules assigned via an EC2 Security Group and has your own private SSH key assigned to login with instead of the `management_key` you were given to access the management instance. You'll always use the management instance as a proxy to access instances you've created.
     * You are here:
 
     ![](../Images/ManagementProxyStep1.png?raw=true)
@@ -29,20 +29,20 @@ AWS provides many different Cloud services, of which we'll only see a small hand
     ![](../Images/ManagementProxyStep2.png?raw=true)
 
 ### 1. Create your own key pair ###
-Amazon Web Services does not allow default password access to new EC2 Instances. Instead, everything is done with key pairs, which is very safe (if used correctly) and not very difficult once you get the hang of it.
-The key pair consists of a public and private key. The public key is put onto a remote server and the private key is used to log in to these servers.
+While you can configure your instance to allow users to log in via a password, the default configuration requires you to use key pairs. These key pairs are a bit more complicated than a simple password but are a lot safer and not very difficult once you get the hang of it.
+A key pair consists of a **public** and **private key**. The public key is put onto a remote server and the private key is used to log in to that server. 
 
-1. `ssh-keygen` (Press `Enter` a couple of times without filling in anything until your prompt returns.)
-    * Generate a key pair.
+1. `ssh-keygen`
+    * Press `Enter` a couple of times without filling in anything until your prompt returns to generate a key pair with default parameters.
 1. `ls -l ~/.ssh/`
-    * Look at the key pair. The private key is `id_rsa`, the public key is `id_rsa.pub` and they're located under your current user home's .ssh directory `/home/ubuntu/.ssh/`.
-    * Note that the private key's permissions (-rw-------) are stricter than the public key's permissions (-rw-r--r--).
+    * The private key is `id_rsa`, the public key is `id_rsa.pub` and they're located under your current user's .ssh directory `/home/ubuntu/.ssh/` or `~/.ssh/`. 
+    * Note that the private key's permissions (-rw-------) are stricter than the public key's permissions (-rw-r--r--). 
 
-    > *ubuntu@management-server1:~$* **ssh-keygen**
+    > *ubuntu@management0:~$* **ssh-keygen**
     >
     > Generating public/private rsa key pair.
     >
-    > Enter file in which to save the key (/root/.ssh/id_rsa):
+    > Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa):
     >
     > Enter passphrase (empty for no passphrase):
     >
@@ -52,19 +52,9 @@ The key pair consists of a public and private key. The public key is put onto a 
     >
     > Your **public key** has been saved in **/home/ubuntu/.ssh/id_rsa.pub**.
     >
-    > The key fingerprint is:
-    >
-    > SHA256:E2C2C+Jho1+VdPLUqXLhKFD9e6PZGTe1ATpV6CNbOq8 ubuntu@management-server1
-    >
-    > The key's randomart image is:
-    >
     >...
     >
-    > [RANDOM ART]
-    >
-    >...
-    >
-    > *ubuntu@management-server1:~$* **ls -l ~/.ssh/**
+    > *ubuntu@management0:~$* **ls -l ~/.ssh/**
     >
     > -rw------- 1 ubuntu ubuntu  554 Dec 22 12:21 authorized_keys
     >
@@ -73,11 +63,11 @@ The key pair consists of a public and private key. The public key is put onto a 
     > **-rw-r--r--** 1 ubuntu ubuntu  404 Dec 22 13:12 **id_rsa.pub**
 
 ### 2. Import public key in AWS ###
-We then need to import this public key into AWS so we can link Instances to this key and log in to the Instances with the private key.
+Now we need to import this public key into AWS so we can link Instances to this key and log in to the instances with the private key.
 
 1. Go to `Services -> EC2 -> Key Pairs` under `Network & Security`.
-1. Click the `Import Key Pair` button.
-    1. Change the `Key pair name` to `lab_key_<your_ID>`.
+1. Click `Actions`, then `Import Key Pair`.
+    1. Change the `Key pair name` to `lab_key_student<your_ID>`.
     1. Print the public key's contents with `cat ~/.ssh/id_rsa.pub`
     1. Copy and paste the public key's contents in the multiline input box.
     1. Click `Import`.
@@ -85,7 +75,7 @@ We then need to import this public key into AWS so we can link Instances to this
     ![](../Images/EC2PublicKeyUpload.png?raw=true)
 
 ### 3. Create a Security Group ###
-One more step before we can create our own instance. We need some firewall rules to link our instance with. In AWS, a group of security rules is called a Security Group and can be linked to multiple instances and even other AWS services.
+One more step before we can create our own instance. We need some firewall rules to link our instance with. In AWS, a group of firewall rules is called a Security Group and can be linked to multiple instances and even other AWS services.
 
 In AWS you can also create your own Virtual Network, also called VPC, which has its own Subnets but you can forget that for now. We'll be using one that's provided for you already (defaultVPC).
 
@@ -93,13 +83,14 @@ In AWS you can also create your own Virtual Network, also called VPC, which has 
 1. On the left pane, click `Security Groups` under `Network & Security`.
 1. Click `Create Security Group (Button)`.
 1. Fill in the Security Group information:
-    * Name: `lab_SecGroup_EC2_<your_ID>`
+    * Name: `lab_sg_ec2_student<your_ID>`
     * Description: `Security Group for EC2 Instances`
     * VPC: `defaultVPC`
     * Add some **inbound** rules
         * `SSH` on port `22`, `source: anywhere`
         * `HTTP` on port `80`, `source: anywhere`
         * `All ICMP - IPv4` on port `0-65535`, `source: anywhere`
+        * Since security groups are stateful, traffic that is allowed in (inbound) is automatically allowed back out (outbound).
 1. Click `Create`.
 
     ![](../Images/EC2SecurityGroup.png?raw=true)
@@ -107,22 +98,22 @@ In AWS you can also create your own Virtual Network, also called VPC, which has 
 ### 4. Launch an instance ###
 Now we can finally spawn an instance and link it to our created security group and created key pair.
 
-1. Go to: `Services -> EC2 -> Instances -> Launch Instance (Button)`.
-1. Select `Ubuntu Server 16.04 LTS`.
-1. Instance type refers to how many virtual resources are allocated to the instance we're about to create. Memory and vCPUs are probably the deciding factor here.
+1. Go to: `Services -> EC2 -> Instances -> Launch Instances (Button)`.
+1. Select `Ubuntu Server 20.04 LTS (ami-0aef57767f5404a3c)`.
+1. Instance type refers to how many virtual resources are allocated to the instance we're about to create. Memory and vCPUs are most often the deciding factor here.
     * Make sure to choose `t2.micro` and press `Next: Configure Instance Details`
 1. Press `Next: Add Storage`.
 1. Press `Next: Add Tags`
 1. With Tags, you can reference the instance from many different AWS services. The tag "Name" will make sure it is properly named when looking at the EC2 Instances list.
-    * Add a tag with key `Name` and value `server_instance1_student<your_ID>`.
+    * Add a tag with key `Name` and value `lab_instance1_student<your_ID>`.
     * Add a tag with key `Id` and value `<your_ID>`.
 1. Press `Next: Configure Security Group`
 1. We opened port 22 for SSH access and port 80 for HTTP access via the browser. Let's link the Security Group to the instance.
     * Select `Select an existing security group`.
-    * Check `lab_SecGroup_EC2_<your_ID>`.
+    * Check `lab_sg_ec2_student<your_ID>`.
 1. Press `Review and Launch`
 1. Press `Launch`
-1. Choose the **existing** key `lab_key_<your_ID>`, acknowledge it and press `Launch Instances`.
+1. Choose the **existing** key `lab_key_student<your_ID>`, acknowledge it and press `Launch Instances`.
 1. Press `View Instances`.
 
     ![](../Images/EC2NewInstanceCreated.png?raw=true)
@@ -135,7 +126,7 @@ Let's log in to our EC2 Instance from the management EC2 Instance using our own 
 1. Accept the fingerprint by entering `yes`.
 1. Once you see a green prompt you've logged in your new instance.
 
-    >ubuntu@*management-server1*:~$ **ls ~/.ssh**
+    >ubuntu@*management0*:~$ **ls ~/.ssh**
     >
     >authorized_keys  
     >
@@ -144,7 +135,7 @@ Let's log in to our EC2 Instance from the management EC2 Instance using our own 
     >id_rsa.pub
     >
     >
-    >ubuntu@*management-server1*:~$ **ssh -i ~/.ssh/id_rsa ubuntu@18.218.40.45**
+    >ubuntu@*management0*:~$ **ssh -i ~/.ssh/id_rsa ubuntu@18.218.40.45**
     >
     >The authenticity of host '18.218.40.45 (18.218.40.45)' can't be established.
     >ECDSA key fingerprint is SHA256:XltK5+RljF2cuUGG4bnB4b6SQ/UM1CSN5QONehFhynE.
@@ -153,30 +144,9 @@ Let's log in to our EC2 Instance from the management EC2 Instance using our own 
     >
     >Warning: Permanently added '18.218.40.45' (ECDSA) to the list of known hosts.
     >
-    >Welcome to Ubuntu 16.04.3 LTS (GNU/Linux 4.4.0-1041-aws x86_64)
+    >Welcome to Ubuntu 20.04.1 LTS (GNU/Linux 5.4.0-1029-aws x86_64)
     >
-    > * Documentation:  https://help.ubuntu.com
-    > * Management:     https://landscape.canonical.com
-    > * Support:        https://ubuntu.com/advantage
-    >
-    >  Get cloud support with Ubuntu Advantage Cloud Guest:
-    >    http://www.ubuntu.com/business/services/cloud
-    >
-    >0 packages can be updated.
-    >0 updates are security updates.
-    >
-    >
-    >
-    >The programs included with the Ubuntu system are free software;
-    >the exact distribution terms for each program are described in the
-    >individual files in /usr/share/doc/copyright.
-    >
-    >Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
-    >applicable law.
-    >
-    >To run a command as administrator (user "root"), use "sudo <command>".
-    >See "man sudo_root" for details.
-    >
+    >...
     >
     >ubuntu@*ip-172-31-25-78*:~$
 
