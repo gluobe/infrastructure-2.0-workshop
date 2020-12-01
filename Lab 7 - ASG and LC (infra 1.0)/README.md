@@ -112,7 +112,7 @@ Feeling like the load on your servers is getting too high? We can easily add ano
     * Change `Desired` to `2`.
     * Change `Max` to `2`.
 1. Scroll down and click `Update`.
-1. An `i` should appear in the `Instances` column of your ASG. This means an Instance is being started or stopped.
+1. The status of your autoscaling group should change to `Updating capacity`. This means an Instance is being started or stopped.
     ![](../Images/ASGPendingNewInstance.png?raw=true)  
 1. You can go to `Services -> EC2 -> Instances` to verify the creation of your new Instance.
 1. You can also go to `Services -> EC2 -> Load Balancers` and look at your ELB's linked instances as they go into service (might take some time):
