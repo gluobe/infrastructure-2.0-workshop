@@ -122,7 +122,7 @@ Once the application finishes installing the memegen application, it will become
 
 
 ## End of Lab 7 ##
-If not everything's working you may continue anyway, but normally you should have 2 autoscaling instances with the MemeGen application, which are both reachable via the Load Balancer and have DynamoDB and S3 as a backend.  
+If not everything's working you may continue anyway, but normally you should have 1 or 2 autoscaling instances with the MemeGen application, which are both reachable via the Load Balancer and have DynamoDB and S3 as a backend.  
 
 Run this command on the management instance to update your score: `sudo checkscore`.
 
