@@ -21,6 +21,8 @@ AWS has its AWS Console (which we've been working in) to access AWS via your bro
 
 Do this on **ONE** of your instances.
 
+1. `sudo su -` 
+    * Become root
 1. `pip3 install awscli`
     *  Install AWSCLI with the python package manager pip.
 1. `aws --version`
