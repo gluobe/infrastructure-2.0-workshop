@@ -16,7 +16,7 @@ Parameters:
     ConstraintDescription: Value must be the name of an existing EC2 KeyPair.
   AmiParam:
     Type: String
-    Default: "ami-8fd760f6" # EU-WEST-1
+    Default: "ami-0aef57767f5404a3c" # ubuntu 20.04, eu-west-1
     Description: Ami Id to run the application.
   Ec2InstanceTypeParam:
     Type: String
@@ -28,7 +28,8 @@ Parameters:
       - t2.small
   DomainNameParam:
     Type: String
-    Default: "gluo.cloud" # EU-WEST-1
+    # Default: "gluo.io" # xpg
+    Default: "gluo.cloud" # gluoworkshop
     Description: Hostname to create Route53 subdomain
   VpcIdParam:
     Type: AWS::EC2::VPC::Id
@@ -58,7 +59,7 @@ Resources:
   appDynamodbTable:
     Type: "AWS::DynamoDB::Table"
     Properties:
-      TableName: !Sub "cloudformation-images-${StudentIdParam}"
+      TableName: !Sub "lab-cf-images-table-${StudentIdParam}"
       AttributeDefinitions:
         -
           AttributeName: "id"
@@ -72,7 +73,7 @@ Resources:
         WriteCapacityUnits: "5"
       Tags:
         - Key: "Name"
-          Value: !Sub "cloudformation-images-${StudentIdParam}"
+          Value: !Sub "lab-cf-images-table-${StudentIdParam}"
 
   # S3 bucket
 
@@ -89,12 +90,12 @@ Resources:
             Action:
               - "s3:GetObject"
             Resource: 
-              - !Sub "arn:aws:s3:::cloudformation-images-bucket-${StudentIdParam}/*"
+              - !Sub "arn:aws:s3:::lab-cf-images-bkt-${StudentIdParam}/*"
 
   appS3Bucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Sub "cloudformation-images-bucket-${StudentIdParam}"
+      BucketName: !Sub "lab-cf-images-bkt-${StudentIdParam}"
       VersioningConfiguration:
         Status: Suspended
 
@@ -104,7 +105,7 @@ Resources:
     # Needs permission to push: S3, CloudWatch
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "Cloudformation-${AWS::StackName}-Role"
+      RoleName: !Sub "lab-cf-${StudentIdParam}-rl"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -116,7 +117,7 @@ Resources:
               - "sts:AssumeRole"
       Path: "/"
       Policies:
-        - PolicyName: !Sub "Cloudformation-${AWS::StackName}-Policies"
+        - PolicyName: !Sub "lab-cf-${StudentIdParam}-pol"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -134,9 +135,10 @@ Resources:
                   - "dynamodb:*"
                 Resource: "*"
 
-  cfnInstanceProfile:
+  appInstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
+      InstanceProfileName: !Sub "lab-cf-${StudentIdParam}-ip"
       Roles:
         - !Ref appRole
 
@@ -147,6 +149,7 @@ Resources:
   appElbSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
+      GroupName: !Sub "lab-cf-${StudentIdParam}-elb-sg"
       GroupDescription: "Allow all/tcp out, http/tcp in"
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -156,13 +159,14 @@ Resources:
       VpcId: !Ref VpcIdParam
       Tags:
         - Key: Name
-          Value: !Sub "CloudFormation-${AWS::StackName}-ElbSecurityGroup"
+          Value: !Sub "lab-cf-${StudentIdParam}-elb-sg"
 
     # LoadBalancer
 
   appElb:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
+      LoadBalancerName: !Sub "lab-cf-${StudentIdParam}-elb"
       SecurityGroups:
         - !Ref appElbSecurityGroup
       Listeners:
@@ -172,7 +176,7 @@ Resources:
       Subnets: !Ref PublicSubnetsParam
       Tags:
         - Key: Name
-          Value: !Sub "CloudFormation-${AWS::StackName}-ElasticLoadBalancer"
+          Value: !Sub "lab-cf-${StudentIdParam}-elb"
 
   # Instance
 
@@ -181,6 +185,7 @@ Resources:
   appSecuritygroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
+      GroupName: !Sub "lab-cf-${StudentIdParam}-asg-sg"
       GroupDescription: "Allow all/tcp out and ssh/tcp, http/tcp in"
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -194,7 +199,7 @@ Resources:
       VpcId: !Ref VpcIdParam
       Tags:
         - Key: Name
-          Value: !Sub "CloudFormation-${AWS::StackName}-AppSecurityGroup"
+          Value: !Sub "lab-cf-${StudentIdParam}-asg-sg"
 
     # AutoscalingGroup
 
@@ -207,6 +212,7 @@ Resources:
         Count: "1"
         Timeout: 'PT20M'
     Properties:
+      AutoScalingGroupName: !Sub "lab-cf-${StudentIdParam}-asg"
       HealthCheckType: EC2
       LaunchConfigurationName: !Ref appLaunchConfiguration
       LoadBalancerNames:
@@ -216,7 +222,7 @@ Resources:
       MaxSize: "3"
       Tags:
         - Key: Name
-          Value: !Sub "CloudFormation-${AWS::StackName}-AutoscalingGroup"
+          Value: !Sub "lab-cf-${StudentIdParam}-asg"
           PropagateAtLaunch: 'true'
         - Key: Id
           Value: !Ref StudentIdParam
@@ -238,9 +244,13 @@ Resources:
               content: !Sub |
                 #!/bin/bash
                 # Installs MemeGen, modified to be used for cloudformation.
+                
+                # Print each command and exit as soon as something fails.
+                set -ex
 
                 YOURID=$1
                 REGION=$2
+                PHP_VERSION=7.4
 
                 # Set a settings for non interactive mode
                   export DEBIAN_FRONTEND=noninteractive
@@ -248,26 +258,31 @@ Resources:
                   export PATH=$PATH:/usr/sbin/
                   export PATH=$PATH:/sbin
 
-                # Install packages (apache, mongo, php, python and other useful packages)
-                  # Mongodb repo commands + apt refresh
-                  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5 && echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" >> /etc/apt/sources.list.d/mongodb-org-3.6.list;
-                  apt-get update -y;
-                  # Install all
-                  apt-get install -y apache2 mongodb-org mongodb-org-server php7.0 php7.0-dev libapache2-mod-php7.0 php-pear pkg-config libssl-dev libsslcommon2-dev python-minimal python-pip imagemagick composer wget unzip;
-                  # Mongodb config
-                  pecl install mongodb
+                # Update the server
+                  apt-get update -y && apt-get upgrade -y
+                  apt-get install -y jq
 
-                  echo "extension=mongodb.so" >> /etc/php/7.0/apache2/php.ini && echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
+                # Install latest mongodb repo
+                  wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
+                  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+                  apt-get update -y
+
+                # Install packages (apache, mongo, php, python and other useful packages)
+                  apt-get install -y apache2 composer mongodb-org mongodb-org-server php$PHP_VERSION php$PHP_VERSION-dev libapache2-mod-php$PHP_VERSION php-pear pkg-config libssl-dev libssl-dev python3-pip imagemagick wget unzip;
+
+                # Mongodb config
+                  pecl install mongodb
+                  echo "extension=mongodb.so" >> /etc/php/$PHP_VERSION/apache2/php.ini && echo "extension=mongodb.so" >> /etc/php/$PHP_VERSION/cli/php.ini
 
                 # Pip install meme creation packages and awscli for syncing s3 to local fs
-                # pip install --upgrade pip
-                  pip install wand awscli
+                  pip3 install wand awscli
 
                 # Enable and start services
                   # Enable
                   systemctl enable mongod apache2
                   # Start
                   systemctl start mongod apache2
+                  
                   # Wait for mongod start
                   until nc -z localhost 27017
                   do
@@ -294,7 +309,7 @@ Resources:
 
                 # Download and install MemeGen
                   # Git clone the repository in your home directory
-                  git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp
+                  git clone --single-branch --branch 2020-version https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp
                   # Clone the application out of the repo to the web folder.
                   cp -r ~/memegen-webapp/* /var/www/html/
                   # Set permissions for apache
@@ -306,7 +321,7 @@ Resources:
                       echo 'Sleep till Composer has been run.' | systemd-cat
                       export HOME=/root
                       export COMPOSER_HOME=/var/www/html
-                      composer -d="/var/www/html" require aws/aws-sdk-php
+                      composer -d "/var/www/html" require aws/aws-sdk-php
                       sleep 2
                   done
 
@@ -324,8 +339,8 @@ Resources:
                   # Alter user id
                   sed -i "s@^\$yourId.*@\$yourId = \"$YOURID\"; # (Altered by sed)@g" /var/www/html/config.php
                   sed -i "s@^\$awsRegion.*@\$awsRegion = \"$REGION\"; # (Altered by sed)@g" /var/www/html/config.php
-                  sed -i "s@^\$dynamoDBTable.*@\$dynamoDBTable = \"cloudformation-images-\$yourId\"; # (Altered by sed)@g" /var/www/html/config.php
-                  sed -i "s@^\$s3Bucket.*@\$s3Bucket = \"cloudformation-images-bucket-\$yourId\"; # (Altered by sed)@g" /var/www/html/config.php
+                  sed -i "s@^\$dynamoDBTable.*@\$dynamoDBTable = \"lab-cf-images-table-\$yourId\"; # (Altered by sed)@g" /var/www/html/config.php
+                  sed -i "s@^\$s3Bucket.*@\$s3Bucket = \"lab-cf-images-bkt-\$yourId\"; # (Altered by sed)@g" /var/www/html/config.php
 
                 # Please go to http://
                   echo -e "Automatic MemeGen installation complete."
@@ -341,7 +356,8 @@ Resources:
                 REGION: !Ref "AWS::Region"
               cwd: "~"
     Properties:
-      IamInstanceProfile: !GetAtt cfnInstanceProfile.Arn
+      LaunchConfigurationName: !Sub "lab-cf-${StudentIdParam}-lc"
+      IamInstanceProfile: !GetAtt appInstanceProfile.Arn
       AssociatePublicIpAddress: true
       ImageId: !Ref AmiParam
       InstanceMonitoring: true
@@ -354,7 +370,7 @@ Resources:
           #!/bin/bash -xe
 
           # Update and install pip and cfn-... commands to trigger asg wait and start executing scripts
-          apt-get -y update && apt-get -y install python-pip && pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+          apt-get -y update && apt-get install -y python3-pip && pip3 install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-py3-latest.tar.gz
 
           # Start executing scripts defined above
           /usr/local/bin/cfn-init -v \
@@ -375,7 +391,7 @@ Resources:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneName: !Sub "${DomainNameParam}."
-      Name: !Sub "${AWS::StackName}.${DomainNameParam}."
+      Name: !Sub "lab-cf-${StudentIdParam}.${DomainNameParam}."
       Type: CNAME
       TTL: '300'
       ResourceRecords:
@@ -385,15 +401,9 @@ Outputs:
   ElbDnsNameExport:
     Description: Export of the Elb endpoint
     Value: !GetAtt appElb.DNSName
-    Export:
-      Name: !Sub "CloudFormation-${AWS::StackName}-ElbDnsUrl"
   Route53NameExport:
     Description: Export of the Route53 endpoint pointed to the load balancer
-    Value: !Sub "${AWS::StackName}.${DomainNameParam}"
-    Export:
-      Name: !Sub "CloudFormation-${AWS::StackName}-Route53DnsUrl"
+    Value: !Sub "lab-cf-${StudentIdParam}.${DomainNameParam}."
   S3BucketExport:
     Description: Export of the name of the created S3 bucket
     Value: !Ref appS3Bucket
-    Export:
-      Name: !Sub "CloudFormation-${AWS::StackName}-BucketName"
