@@ -1,4 +1,4 @@
-# **LAB 2 - Manual installation (SKIP WITH SCRIPT)** #
+# **LAB 2 - Manual installation** #
 
 ## Start of Lab 2 ##
 You should be logged in to your own EC2 Instance.
@@ -14,50 +14,191 @@ You might call it a LAMP stack (Linux, Apache, MySQL, PHP), but with MongoDB ins
 
 ![](../Images/Lab2.png?raw=true)
 
-## Skipping manual installation
+### 1. Install Gluo MemeGen ###
+Our application is a meme generator, but this could be any application. It will create memes, store the files on the local filesystem and store the image data in the local database.
 
-Normally our workshop is 4 hours long. If you're reading this it probably means that the workshop is under 2.5 hours long. 
+1. `sudo su -`
+    * Enter the superuser's shell. Your prompt should turn from green to white.
+1. `mkdir -p /var/www/html`
+    * Create the folder structure to house our application.
+1. `git clone --single-branch --branch 2020-version https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
+    * Git clone the repository to the server in a specific directory.
+1. `ls ~/memegen-webapp`
+    * Show local repository contents.
+1. `cp -r ~/memegen-webapp/* /var/www/html/`
+    * Move our application to the Apache web directory /var/www/html/.
+1. `ls /var/www/html/`
+    * Show the meme generator application contents.
+1. **Change the site to have your ID.**
+    1. Enter `/var/www/html/config.php` using your favorite editor. `nano` is a good one for beginners.
+    1. Change the `$yourId` variable to your own ID.
 
-To save time we're going to be skipping the manual installation of the application to get to the juicy parts quicker.
+### 2. Install & configure MongoDB ###
+Our database is called MongoDB. It stores data in a NoSQL, document oriented manner. This means that it's not a relational SQL-like database and avoids joins. Instead it is more object oriented and groups the data together, without spreading it over a number of tables.
 
-You won't be missing out on much, the manual installation was meant to be an irritating and long process where students make a lot of mistakes, to later point out the importance of scripting and automation so manual mistakes cannot happen.
+There's advantages and disadvantages to this type of database. For the purposes of this tutorial there isn't a real benefit to using SQL or NoSQL, we just like to switch it up.
 
-**You should be logged in to your own created instance.**
+1. `apt update -y && apt upgrade -y`
+    * Update the package manager's repositories and upgrade the system.
+1. `wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -`
+    * Add a MongoDB GPG key to verify the repository we are about to add.
+1. `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list`
+    * Add an apt repository for MongoDB packages which are not available in the default Ubuntu repositories.
+1. `apt update -y`
+    * Update the package manager repositories again to pull information about packages from the new repository.
+1. `apt-get install -y mongodb-org mongodb-org-server`
+    * Install MongoDB.
+1. `systemctl start mongod`
+    * Start MongoDB.
+1. `mongo`
+    * When you first install MongoDB, anyone can log in without credentials. Enter the MongoDB CLI without credentials. Your prompt will change.
+1. `use memegen`
+    * Switch to the "memegen" database.
+1. `db.createUser({ user: "student", pwd: "Cloud247", roles: [ { role: "root", db: "admin" } ] })` 
+    * Create a student user with root privileges to any db. It should say `Successfully added user`.
+1. `exit`
+    * Exit the shell.
+1. `echo "security:" >> /etc/mongod.conf && echo "  authorization: enabled" >> /etc/mongod.conf`
+    * Enable MongoDB's access control.
+1. `systemctl restart mongod`
+    * Restart MongoDB so access control is enabled.
+1. `mongo memegen -u student --password=Cloud247`
+    * Test access control by logging in with the right credentials...
+1. `exit`
+1. `mongo memegen -u student --password=wrongcredentials`
+    * ...and the wrong credentials.
 
-* `sudo su -`
-  * Become root user
+Our database with the student user is now up and running and access control is enabled.
 
-* `export MYID=<your_ID> && export MYREGION=eu-west-1`
-  * Set environment variables so our next commands know what id we are and region we're in. **Replace** `<your_ID>` with your ID!
+### 3. Install & configure Apache ###
+Apache is used to host web files and show web pages on the internet.
 
-* `git clone --single-branch --branch 2020-version https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
-  * Clone the memegen application repository.
+1. `apt-get install -y apache2`
+    * Install Apache.
+1. `chown -R www-data:www-data /var/www/html/`
+    * Change the owner of the web directory so memes can be saved by the Apache user.
+1. `ls -la /var/www/html`
+    * The files now have a new group and owner.
 
-* `chmod 755 ~/memegen-webapp/scripts/InstallMemeGen-php.sh`
-  * Give the memegen installation script execution permissions.
+The application is now available from the web via the public IP-address but won't work yet since PHP hasn't been installed yet.
 
-* `~/memegen-webapp/scripts/InstallMemeGen-php.sh`
-  * Execute the memegen installation script. This can take a while so go grab a drink if you don't have one ;)
+### 4. Install & configure PHP ###
+PHP is a server side language that will interact with the filesystem and database to make our application work.
 
-* `sed -i "s@^\$yourId.*@\$yourId = \"$MYID\"; # (Altered by sed)@g" /var/www/html/config.php`
-  * Alter a parameter in the application config file.
+1. `apt-get install -y composer php7.4 php7.4-dev libapache2-mod-php7.4 php-pear pkg-config libssl-dev libssl-dev python3-pip imagemagick wget unzip`
+    * Install PHP 7.4 & other application packages.
+1. `pip3 install wand`
+    * Install a Python picture editor package.
+1. `pecl install mongodb`    
+    * Install the MongoDB PHP driver.
+1. `echo "extension=mongodb.so" >> /etc/php/7.4/apache2/php.ini && echo "extension=mongodb.so" >> /etc/php/7.4/cli/php.ini`
+    * Enable the MongoDB extention for PHP.
+1. `composer -d "/var/www/html" require aws/aws-sdk-php`
+    * Download the PHP SDK for AWS into /var/www/html, so our site can interact with AWS.
 
-* `sed -i "s@^\$awsRegion.*@\$awsRegion = \"$MYREGION\"; # (Altered by sed)@g" /var/www/html/config.php`
-  * Alter a parameter in the application config file.
+### 5. (Re)Start & enable all services ###
+Everything has been installed and may or may not be running. Restart and check the status of the Apache and MongoDB services with the following commands to make sure it's stable.
 
-## Testing script execution result
+1. `systemctl enable mongod apache2`
+    * Make sure the services start when the system reboots.
+1. `systemctl restart mongod apache2`
+    * Start the Apache and MongoDB servers if they weren't already.
+1. `systemctl status mongod apache2`
+    * View the status of both services. They should both be `Running`.
 
-* Browse to the public IP of your created instance and create a meme.
+    ![](../Images/ManualInstallStateRunning.png?raw=true)
 
-* Once you've create a meme, you should be able to see the image was added to the database and as a file to our instance using the following commands:
-  * `echo "db.images.find()" | mongo memegen -u student --password=Cloud247`
+### 6. Use Gluo MemeGen ###
+We can now go to the server's public IP-address in your web browser. If everything works you should see the MemeGen application. Let's create a meme.
 
-  * `ls -la /var/www/html/meme-generator/memes`
-  
+1. Select a meme from the dropdown box.
+1. Fill in both fields.
+1. Click `Generate!`.
+
+    ![](../Images/ManualInstallCreatedMeme.png?raw=true)
+
+### 7. Verify MemeGen is working (Optional) ###
+If you're curious if MemeGen has actually written any data to the database or saved files to the filesystem we can check this out.
+
+1. `ls /var/www/html/meme-generator/memes/`
+    * Look at your created meme. Images are saved locally.
+1. `mongo memegen -u student --password=Cloud247`
+    * Enter the MongoDB Shell in the memegen database. The database will save the id (id), image name (name) and date of creation (date).
+1. `show databases`
+    * Show all databases.
+1. `db`
+    * Show current database.
+1. `use memegen`
+    * Enter the memegen database if you aren't already in it.
+1. `show collections`
+    * Show all collections from your current database.
+1. `db.images.find()`
+    * Get all data from the images collection. You should see your created meme in here.
+1. `db.getUsers()`
+    * Get the users from your current database.
+1. `exit`
+    * Exit the shell.
+
+    >root@ip-172-31-42-6:/var/www/html# **mongo memegen -u student --password=Cloud247**
+    >
+    >MongoDB shell version v3.6.1
+    >
+    >connecting to: mongodb://127.0.0.1:27017/memegen
+    >
+    >MongoDB server version: 3.6.1
+    >
+    >Welcome to the MongoDB shell.
+    >
+    > **...**
+    >
+    > \> **show databases**
+    >
+    >admin    0.000GB
+    >
+    >config   0.000GB
+    >
+    >local    0.000GB
+    >
+    >memegen  0.000GB
+    >
+    > \> **use memegen**
+    >
+    >switched to db memegen
+    >
+    > \> **db**
+    >
+    >memegen
+    >
+    > \> **show collections**
+    >
+    >images
+    >
+    > \> **db.images.find()**
+    >
+    >{ "\_id" : ObjectId("5a44f3cd67716674d11d2db2"), "id" : { "N" : 25835481 }, "name" : { "S" : "badluckbrian-firstdayonthejob-cryptolocker-397" }, "date" : { "S" : "1514468301" } }
+    >
+    >{ "\_id" : ObjectId("5a44f72f67716674b0174182"), "id" : { "N" : 41757927 }, "name" : { "S" : "buzzlightyear-memes-memeseverywhere-951" }, "date" : { "S" : "1514469167" } }
+    >
+    > \> **db.getUsers()**
+    >
+    >[{
+    >
+    >	"\_id" : "memegen.student",
+    >
+    >	"user" : "student",
+    >
+    >	"db" : "memegen",
+    >
+    >	"roles" : [{"role" : "root", "db" : "admin"}]
+    >
+    >	}]
+    >
+    > \> **exit**
+
 ## End of Lab 2 ##
-Congratulations! You've successfully installed the memegen application!
+Congratulations! You've successfully manually installed an application!
 
-To update your score, `exit` (maybe multiple times) to your management instance and run this command `sudo checkscore`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
+To update your score, `exit` to your management instance and run this command `sudo checkscore`, then log back in to your own instance `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.
 
 Once your MemeGen application works and your local MongoDB receives records, you can continue to the [next lab](../Lab%203%20-%20DynamoDB).
 
@@ -65,4 +206,3 @@ Once your MemeGen application works and your local MongoDB receives records, you
 
 * What is MongoDB? (https://www.mongodb.com/what-is-mongodb)
 * MongoDB vs MySQL (https://www.mongodb.com/compare/mongodb-mysql?jmp=docs)
-
