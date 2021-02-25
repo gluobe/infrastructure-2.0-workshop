@@ -27,6 +27,7 @@ Let's create a table for our image data to be stored in.
 1. Click `Create table`.
     1. Table name: `lab-images-table-<your_ID>`
     1. Partition key: `id`
+        * Do **NOT** replace this with your own ID. It should simply be the word `id`.
     1. Press the dropdown box next to `id` and select `Number`.
 1. Press `Create`.
 

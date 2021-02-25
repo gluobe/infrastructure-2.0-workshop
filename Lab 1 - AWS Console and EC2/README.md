@@ -100,6 +100,7 @@ Now we can finally spawn an instance and link it to our created security group a
 
 1. Go to: `Services -> EC2 -> Instances -> Launch Instances (Button)`.
 1. Select `Ubuntu Server 20.04 LTS (ami-0aef57767f5404a3c)`.
+  * If it's not on the front page you may have to search for the AMI with the search box. It will be a `community AMI`. The AMI ID is unique so if you find an AMI with that ID you'll have found the correct one.
 1. Instance type refers to how many virtual resources are allocated to the instance we're about to create. Memory and vCPUs are most often the deciding factor here.
     * Make sure to choose `t2.micro` and press `Next: Configure Instance Details`
 1. Press `Next: Add Storage`.
