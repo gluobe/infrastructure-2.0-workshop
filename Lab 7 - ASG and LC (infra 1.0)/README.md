@@ -11,7 +11,7 @@ We've been slowly extracting every service used by what used to be one EC2 Insta
 ### 1. Configuring an LC ###
 First we'll need the MemeGen installation script from the corresponding repository on github. Execute the following commands from your management instance.
 
-1. `git clone --single-branch --branch 2020-version https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
+1. `git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
     * Clone the git repo.
 1. `cat ~/memegen-webapp/scripts/InstallMemeGen-php-LC.sh`
     * Print out the memegen installation script for the launch configuration using cat, and copy the script to your clipboard.
@@ -20,7 +20,7 @@ A Launch configuration (LC) will contain all the EC2 Instance details and can ev
 
 1. Go to `Services -> EC2 -> Launch Configurations -> Create launch configuration`.
 1. Name it `lab-lc-<your_ID>`.
-1. In the **AMI** box search for `ami-0aef57767f5404a3c`.
+1. In the **AMI** box search for `ami-08ca3fed11864d6bb`.
 1. Under **Instance type**, select `t2.micro`.
 
     ![](../Images/LCFullConfigurationPage.png?raw=true)
@@ -91,12 +91,12 @@ Let's destroy our old EC2 Instances. **Make sure you're deleting your own instan
 1. Go to `Services -> EC2 -> Instances`.
 1. Select your first instance:
     * `lab_instance1_student<your_ID>`
-1. Click on `Actions -> Instance State -> Terminate -> Yes, Terminate`.
+1. Click on `Instance State -> Terminate Instance -> Terminate`.
 1. Select your second instance:
     * `lab_instance2_student<your_ID>`
-1. Click on `Actions -> Instance State -> Terminate -> Yes, Terminate`.
+1. Click on `Instance State -> Terminate Instance -> Terminate`.
 
-It could a minute but the load balancer should automatically recognize some instances have terminated and won't route traffic to them anymore. Instead it will route traffic to the `lab-asg-<your_ID>` instance, created by the ASG, which we linked to the ELB.
+It will take a couple of minutes but the load balancer should automatically recognize some instances have terminated and won't route traffic to them anymore. Instead it will route traffic to the `lab-asg-<your_ID>` instance, created by the ASG, which we linked to the ELB.
     ![](../Images/EC2ViewTerminatedInstances.png?raw=true)
 
 1. Go to `<your_ID>.gluo.cloud`.
@@ -118,7 +118,7 @@ Feeling like the load on your servers is getting too high? We can easily add ano
 1. You can also go to `Services -> EC2 -> Load Balancers` and look at your ELB's linked instances as they go into service (might take some time):
     ![](../Images/ELBInstancesOutOfService.png?raw=true)  
     
-Once the application finishes installing the memegen application, it will become available and `InService`. 
+Once the application finishes installing the memegen application, it will become available and `InService`.
 
 
 ## End of Lab 7 ##

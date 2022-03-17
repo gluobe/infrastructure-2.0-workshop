@@ -30,7 +30,7 @@ You won't be missing out on much, the manual installation was meant to be an irr
 * `export MYID=<your_ID> && export MYREGION=eu-west-1`
   * Set environment variables so our next commands know what id we are and region we're in. **Replace** `<your_ID>` with your ID!
 
-* `git clone --single-branch --branch 2020-version https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
+* `git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
   * Clone the memegen application repository.
 
 * `chmod 755 ~/memegen-webapp/scripts/InstallMemeGen-php.sh`

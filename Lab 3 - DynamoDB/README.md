@@ -12,12 +12,6 @@ Let's create a DynamoDB table (Amazon's NoSQL Solution) to replace MongoDB. This
 
 ![](../Images/Lab3.png?raw=true)
 
-### 0. Use new DynamoDB Interface ###
-AWS has been updating the AWS Console. We will want to use the preview for the DynamoDB service. So press this button if it is available:
-
-![](../Images/DynamoDBNewConsole.png?raw=true)
-
-
 ### 1. Create a DynamoDB table ###
 Unlike MongoDB, in DynamoDB there aren't multiple databases, there are just multiple tables or collections in one giant infinitely scalable database.
 
@@ -35,9 +29,9 @@ Let's create a table for our image data to be stored in.
 Next let's add some records that will pull some pre-fabricated memes from the repository and show them on the site.
 
 1. Once your new table is created, click it `lab-images-table-<your_ID>`.
-1. Click the `Items` tab.
-1. Click `Create Item`.
-1. Enter the following .json into the box.
+1. Click the orange `Explore Table Items` button in the top right.
+1. Click the `Create item` button.
+1. Click the `JSON` button and enter the following .json into the box:
 
 ```
 {
@@ -77,7 +71,7 @@ Your account has restricted permissions. We're telling PHP to go and change data
     1. Click `Modify IAM Role`.
 1. Click the dropdown box.
 1. Select the `lab-management-ip` role.
-1. Click `Apply`.
+1. Click `Save`.
 
 ### 5. Use site again ###
 

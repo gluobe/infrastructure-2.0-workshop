@@ -1,11 +1,11 @@
 # **LAB 9 - Chaos Engineering** #
 
 ## Visual Interpretation ##
-The streaming giant Netflix is widely known to be an implementor of public cloud infrastructure and innovator in infrastructure reliability software. They created the [Chaos Monkey](https://github.com/Netflix/chaosmonkey/) project for example. 
+The streaming giant Netflix is widely known to be an implementor of public cloud infrastructure and innovator in infrastructure reliability software. They created the [Chaos Monkey](https://github.com/Netflix/chaosmonkey/) project for example.
 
 >Chaos Monkey randomly terminates virtual machine instances and containers that run inside of your production environment. Exposing engineers to failures more frequently incentivizes them to build resilient services.
 
-Yes, you read that right: **production**. One of the ways to know your infrastructure is reliable is to regularly destroy key services in a controlled and monitored environment to see if things regenerate and run properly. 
+Yes, you read that right: **production**. One of the ways to know your infrastructure is reliable is to regularly destroy key services in a controlled and monitored environment to see if things regenerate and run properly.
 
 ![](../Images/ChaosEngineeringVisualised.png?raw=true)
 
@@ -29,7 +29,7 @@ Now for deleting the Cloudformation Stack.
 
 1. Go to `Services -> Cloudformation`.
 1. Select your stack `lab-cf-<your_ID>`.
-1. Press `Actions`, then `Delete Stack` and confirm with `Yes, Delete`.
+1. Press `Delete`, then `Delete Stack`.
     * If the stack deletion fails, try again but do not check any boxes that could appear on this step, as doing so will skip the deletion of services. We don't want any stragglers, only total deletion.
     
 

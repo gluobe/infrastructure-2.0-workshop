@@ -15,7 +15,7 @@ AWS provides many different Cloud services, of which we'll only see a small hand
 
     ![](../Images/AWSConsoleEC2Overview.png?raw=true)
 
-* You can list instances with your specific ID from the EC2 list by filtering on `<your_ID>`. (It's a bit finicky, you should be able to fill in `<your_ID>`, it will show `ID: <your_ID>` and you can press `ENTER`. If it doesn't work just move on.)
+* You can list instances with your specific ID from the EC2 list by filtering on `<your_ID>`. (It's a bit finicky, you should be able to fill in `id:<your_ID>` and press `ENTER`. If it doesn't work just move on.)
 
     ![](../Images/EC2FilterOnTag.png?raw=true)
 
@@ -30,13 +30,13 @@ AWS provides many different Cloud services, of which we'll only see a small hand
 
 ### 1. Create your own key pair ###
 While you can configure your instance to allow users to log in via a password, the default configuration requires you to use key pairs. These key pairs are a bit more complicated than a simple password but are a lot safer and not very difficult once you get the hang of it.
-A key pair consists of a **public** and **private key**. The public key is put onto a remote server and the private key is used to log in to that server. 
+A key pair consists of a **public** and **private key**. The public key is put onto a remote server and the private key is used to log in to that server.
 
 1. `ssh-keygen`
     * Press `Enter` a couple of times without filling in anything until your prompt returns to generate a key pair with default parameters.
 1. `ls -l ~/.ssh/`
-    * The private key is `id_rsa`, the public key is `id_rsa.pub` and they're located under your current user's .ssh directory `/home/ubuntu/.ssh/` or `~/.ssh/`. 
-    * Note that the private key's permissions (-rw-------) are stricter than the public key's permissions (-rw-r--r--). 
+    * The private key is `id_rsa`, the public key is `id_rsa.pub` and they're located under your current user's .ssh directory `/home/ubuntu/.ssh/` or `~/.ssh/`.
+    * Note that the private key's permissions (-rw-------) are stricter than the public key's permissions (-rw-r--r--).
 
     > *ubuntu@management0:~$* **ssh-keygen**
     >
@@ -87,9 +87,9 @@ In AWS you can also create your own Virtual Network, also called VPC, which has 
     * Description: `Security Group for EC2 Instances`
     * VPC: `defaultVPC`
     * Add some **inbound** rules
-        * `SSH` on port `22`, `source: anywhere`
-        * `HTTP` on port `80`, `source: anywhere`
-        * `All ICMP - IPv4` on port `0-65535`, `source: anywhere`
+        * `SSH` on port `22`, `source: anywhere-ipv4`
+        * `HTTP` on port `80`, `source: anywhere-ipv4`
+        * `All ICMP - IPv4` on port `0-65535`, `source: anywhere-ipv4`
         * Since security groups are stateful, traffic that is allowed in (inbound) is automatically allowed back out (outbound).
 1. Click `Create security group`.
 
@@ -99,7 +99,7 @@ In AWS you can also create your own Virtual Network, also called VPC, which has 
 Now we can finally spawn an instance and link it to our created security group and created key pair.
 
 1. Go to: `Services -> EC2 -> Instances -> Launch Instances (Button)`.
-1. Select `Ubuntu Server 20.04 LTS (ami-0aef57767f5404a3c)`.
+1. Select `Ubuntu Server 20.04 LTS (ami-08ca3fed11864d6bb)`.
   * If it's not on the front page you may have to search for the AMI with the search box. It will be a `community AMI`. The AMI ID is unique so if you find an AMI with that ID you'll have found the correct one.
 1. Instance type refers to how many virtual resources are allocated to the instance we're about to create. Memory and vCPUs are most often the deciding factor here.
     * Make sure to choose `t2.micro` and press `Next: Configure Instance Details`
@@ -117,10 +117,10 @@ Now we can finally spawn an instance and link it to our created security group a
 1. Choose the **existing** key `lab_key_student<your_ID>`, acknowledge it and press `Launch Instances`.
 1. Press `View Instances`.
 
-    ![](../Images/EC2NewInstanceCreated.png?raw=true)
-
 ### 5. Log in the created Instance ###
 Let's log in to our EC2 Instance from the management EC2 Instance using our own private key (~/.ssh/id_rsa).
+
+  ![](../Images/EC2NewInstanceCreated.png?raw=true)
 
 1. Copy the `IPv4 Public IP` of your new instance from the AWS console in `Services -> EC2 -> Instances`.
 1. From your management instance use the command `ssh -i ~/.ssh/id_rsa ubuntu@<public IP-address>`.

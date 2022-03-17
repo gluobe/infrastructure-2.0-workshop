@@ -21,7 +21,7 @@ Our application is a meme generator, but this could be any application. It will 
     * Enter the superuser's shell. Your prompt should turn from green to white.
 1. `mkdir -p /var/www/html`
     * Create the folder structure to house our application.
-1. `git clone --single-branch --branch 2020-version https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
+1. `git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
     * Git clone the repository to the server in a specific directory.
 1. `ls ~/memegen-webapp`
     * Show local repository contents.

@@ -11,23 +11,21 @@ Using the randomly generated ELB URL isn't too user friendly. That's why the AWS
 ### 1. Creating a new DNS record via Route53 ###
 
 1. Copy your Load Balancer's DNS record (in `Services -> EC2 -> Load Balancers`).
+
 1. Go to `Services -> Route 53` under `Networking and Content Delivery`.
     * You might see some permission errors here. Ignore them.
-1. Under `DNS Management`, click `Hosted zones`.
+1. In the sidebar, click `Hosted zones`.
 1. Click on `gluo.cloud`.
 1. Click `Create Record`
-1. We'll use `Simple routing`, press `Next`. If you want you can read what the different options are.
-1. Click `Define simple record`
-    * Set `Record name:` to `<your_ID>`. (Example: 1.gluo.cloud)
-    * Set the `Value/Route traffic to` dropdown to `IP address or another value...`
-        * Then fill in the text box with the `<Load Balancer URL>` you copied above.
+    1. Set `Record name:` to `<your_ID>`. (The full URL should be: 1.gluo.cloud)
+    1. Set `Record type:` to `CNAME`.
+    1. Set `Value:` to the `<Load Balancer URL>` you copied above.
         * This cannot contain `http://` or trailing slashes like `/` at the end.
-    * Set `Type:` to `CNAME - Canonical name`.
-    * Click `Define simple record`.
-1. Click `Create records`.
+    1. Set `TTL (seconds)` to `60` seconds.
+    1. Click `Create records`.
 
 * Go to `<your_ID>.gluo.cloud` to view your Load Balanced MemeGen site.
-    * The record can take up to 5 minutes to be registered by the top DNS servers. 
+    * The record can take up to 5 minutes to be registered by the top DNS servers.
     * If you want you can view the dns record value via the commandline using `watch dig <your_ID>.gluo.cloud`, `ctrl+c` to cancel.
     
 ![](../Images/Route53BrowseToLoadBalancer.png?raw=true)

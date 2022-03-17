@@ -19,7 +19,7 @@ We'll need a firewall configuration for the Load Balancer. It simply forwards po
     * Description: `Security Group for a Load Balancer`
     * VPC: `defaultVPC`
     * Add an **inbound** rule:
-        * `HTTP` on port `80`, `source anywhere`
+        * `HTTP` on port `80`, `source: anywhere-ipv4`
 1. Click `Create`
 
 ### 2. Create a second EC2 Instance ###
@@ -46,7 +46,7 @@ Next we'll install the MemeGen app on the second instance via a bash script inst
     * Log in to your **second** instance.
 1. `sudo su -`
     * Become the root user.
-1. `git clone --single-branch --branch 2020-version https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
+1. `git clone https://github.com/gluobe/memegen-webapp-aws.git ~/memegen-webapp`
     * Clone the repository to your home directory.
 1. `chmod 755 ~/memegen-webapp/scripts/InstallMemeGen-php.sh`
     * Change permissions on the script to make it executable.
@@ -117,7 +117,7 @@ To show both instances are actually being used by the Load Balancer we've change
 
     ![](../Images/ELBButtonChange2.png?raw=true)
     
-    * If you do not observe the button changing color, go to the `Instances` tab on your load balancer to see if both instances are `InService`. If they are, try refreshing some more. 
+    * If you do not observe the button changing color, go to the `Instances` tab on your load balancer to see if both instances are `InService`. If they are, try refreshing some more.
     * If you still don't observe this, go to each instance's public IP address and create some memes this way.
     
 If you created memes on each instance, you may have noticed that memes created on one instance are not showing up on the other instance. This is because we've centralized the data storage to store information about images, but we've not yet centralized the file storage to store the memes themselves. The memes are currently created and stored on the instances' filesystem. Instances do not have access to each other's filesystem so they cannot see each other's memes. This is what we'll solve in the next lab.
