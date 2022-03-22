@@ -16,7 +16,7 @@ Parameters:
     ConstraintDescription: Value must be the name of an existing EC2 KeyPair.
   AmiParam:
     Type: String
-    Default: "ami-0aef57767f5404a3c" # ubuntu 20.04, eu-west-1
+    Default: "ami-08ca3fed11864d6bb" # ubuntu 20.04, eu-west-1
     Description: Ami Id to run the application.
   Ec2InstanceTypeParam:
     Type: String
